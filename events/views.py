@@ -62,7 +62,7 @@ def add(request, society_name):
 					db_shift.wage = shift.cleaned_data['wage']
 					db_shift.hours = shift.cleaned_data['hours']
 					db_shift.save()
-					return redirect(index, society_name=society_name)
+				return redirect(index, society_name=society_name)
 	else:
 		event_formset = eventform(prefix="event")
 		shift_formset = shiftform(prefix="shift")
