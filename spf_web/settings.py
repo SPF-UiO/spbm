@@ -90,6 +90,6 @@ from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 TEMPLATE_CONTEXT_PROCESSORS =  TCP + ('django.core.context_processors.request', )
 
 try:
-	from local_settings import *
+	from spf_web.local_settings import *
 except ImportError as e:
 	pass
