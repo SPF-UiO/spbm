@@ -1,0 +1,19 @@
+{% extends "base.jinja" %}
+
+{% block content %}
+<style>
+.new
+{
+	padding: 10px;
+}
+</style>
+<h1>Edit worker</h1>
+<form action="{{ add_url }}" method="POST">
+{% csrf_token %}
+<table>
+{{ form.as_table() }}
+</table>
+
+<input type="submit" value="Save" />
+</form>
+{% endblock %}

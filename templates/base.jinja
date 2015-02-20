@@ -1,0 +1,45 @@
+{% set navigation = [('Society', 'society'), ('Workers', 'workers'), ('Events', 'events'), ('Invoices', 'invoices')] %}
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>SPF</title>
+		<link href="{{ static("css/bootstrap.min.css") }}" rel="stylesheet">
+		<link href="{{ static("css/bootstrap-theme.min.css") }}" rel="stylesheet">
+	</head>
+
+	<body role="document">
+		<h1 style="color: red;">ALLE DATA BLIR SLETTET SNART</h1>
+		<div style="padding-bottom: 10px">
+			<h1>SPF</h1>
+			<h3>Logget inn som {{ user }} ({{ user.spfuser.society.name }})</h3>
+		</div>
+		<ul class="nav nav-tabs" role="tablist">
+			{% for nav in navigation %}
+				<li role="presentation" {% if nav[1] == cur_page %}class="active"{% endif %}>
+					<a href="{{ url(nav[1]) }}">
+						{{ nav[0] }}
+					</a>
+				</li>
+			{% endfor %}	
+			{% if user.is_staff %}
+				<li role="presentation" style="float: right;">
+					<a href="/admin">Admin panel</a>
+				</li>
+			{% endif %}
+			{% if user.has_perm('close_period') %}
+				<li role="presentation" style="float: right;">
+					<a href="/invoices/all/">Invoice management</a>
+				</li>
+			{% endif %}
+		</ul>
+		</div>
+		{% block content %}
+		Content here!
+		{% endblock %}
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="{{ static("js/bootstrap.min.js") }}"></script>
+	</body>
+</html>

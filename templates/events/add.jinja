@@ -1,0 +1,15 @@
+{% extends "base.jinja" %}
+
+{% block content %}
+<form method="post" action="">
+{% csrf_token %}
+{% autoescape off %}
+<table>
+{{ event_formset }}
+</table>
+<table>
+{{ shift_formset }}
+</table>
+<input type="submit" value="Submit" />
+{% endautoescape %}
+{% endblock %}

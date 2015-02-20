@@ -1,0 +1,7 @@
+{% extends "base.jinja" %}
+
+{% block content %}
+{% for proc in proc_vals %}
+	<p><a href="{{ proc['processed'] }}.pdf">{{ proc['processed'] }}</a></p>
+{% endfor %}
+{% endblock %}

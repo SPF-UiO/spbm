@@ -1,0 +1,26 @@
+{% extends "base.jinja" %}
+
+{% block content %}
+<div>
+<p>Unprocessed events: {{ unprocessed_events }}</p>
+<form method="POST" action="">
+{% csrf_token %}
+<input type='hidden' name='action' value='close_period' />
+<input type='submit' value='Close period' />
+</form>
+</div>
+<div>
+<h3>Unpaid invoices:</h3>
+{% for invoice in invoices %}
+<div>
+{{ invoice.society.shortname }} - {{ invoice.period }} - {{ invoice.get_total_cost() }}
+<form method="POST" action="">
+{% csrf_token %}
+<input type='hidden' name='action' value='mark_paid' />
+<input type='hidden' name='inv_id' value='{{ invoice.id }}' />
+<input type='submit' value='Mark as paid' />
+</form>
+</div>
+{% endfor %}
+</div>
+{% endblock %}

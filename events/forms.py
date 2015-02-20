@@ -1,0 +1,34 @@
+from django.core.exceptions import ValidationError
+
+from decimal import Decimal
+
+from django.forms import ModelForm,Form
+from events.models import Event,Shift
+from workers.models import Worker
+
+from django.forms import ModelChoiceField,DecimalField,DateInput
+
+class MyDateInput(DateInput):
+    input_type = 'date'
+
+class EventForm(ModelForm):
+	def __init__(self, *args, **kwargs):
+		super(EventForm, self).__init__(*args, **kwargs)
+		self.fields['date'].widget = MyDateInput(attrs={'class':'date'})
+
+	class Meta:
+		model = Event
+		fields = ['name', 'date' ]
+
+def MakeShiftBase(society):
+	class ShiftForm(Form):
+		def __init__(self, *args, **kwargs):
+			super(ShiftForm, self).__init__(*args, initial = { 'wage': society.default_wage }, **kwargs)
+			self.fields['worker'].queryset = Worker.objects.filter(society=society, active=1)
+		
+		worker = ModelChoiceField(queryset = Worker.objects.filter(society=society))
+		wage = DecimalField(max_digits=10, decimal_places=2)
+		hours = DecimalField(max_digits=10, decimal_places=2)
+	
+	return ShiftForm
+
