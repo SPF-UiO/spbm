@@ -4,3 +4,4 @@ static_files/*
 *.swp
 *.swo
 *.sqlite3
+local_settings.py
