@@ -13,6 +13,8 @@ from invoices.models import Invoice
 import datetime
 import time
 
+from decimal import Decimal
+
 from invoices.f60 import f60
 
 @login_required
@@ -62,8 +64,13 @@ def generate(request, society_name, date):
 	})
 
 	linjer = []
+	totcost = 0
 	for e in events:
 		linjer.append([""+str(e.date)+": "+e.name, 1, e.get_cost(), 0])
+		totcost += e.get_cost()
+
+	spf_fee = totcost*Decimal("0.3")
+	linjer.append(["SPF-avgift: "+str(totcost)+"*0.3", 1, spf_fee, 0])
 
 	invoice.settOrdrelinje(linjer)
 	invoice.lagEpost()
