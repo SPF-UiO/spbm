@@ -1,5 +1,7 @@
 from django.contrib import admin
 from events.models import Event,Shift
+from workers.models import Worker
+from society.models import Society
 
 class ShiftInline(admin.TabularInline):
 	model = Shift
@@ -14,6 +16,14 @@ class ShiftInline(admin.TabularInline):
 
 class EventAdmin(admin.ModelAdmin):
 	inlines = [ShiftInline]
+
+	def formfield_for_foreignkey(self, db_field, request, **kwargs):
+		if db_field.name == "society":
+			if not request.user.is_superuser:
+				kwargs['queryset'] = Society.objects.filter(id=request.user.spfuser.society.id)
+		return super(EventAdmin,self).formfield_for_choice_field(db_field, request, **kwargs)
+	
+
 	
 	def get_queryset(self, request):
 		qs = super(EventAdmin, self).get_queryset(request)
