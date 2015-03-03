@@ -41,6 +41,7 @@ def generate(request, society_name, date):
 		return render(request, "errors/unauthorized.jinja")
 
 	events = Event.objects.filter(society=society, processed=date)
+	invoice_obj = Invoice.objects.get(society=society, period=date)
 	
 	filename = "/tmp/f.pdf"
 	invoice = f60(filename, overskriv=True)
@@ -49,7 +50,7 @@ def generate(request, society_name, date):
 		fakturanr=1, 
 		utstedtEpoch=unix_time(events[0].processed),
 		forfallEpoch=unix_time(events[0].processed)+3600*24*7,
-		fakturatekst="Faktura fra SPF for utlån")
+		fakturatekst="Faktura fra SPF for utlan.\nFaktura nr "+str(invoice_obj.invoice_number))
 	invoice.settFirmainfo(
 	{
 		'firmanavn': "Studentkjellernes Personalforening",
@@ -69,7 +70,8 @@ def generate(request, society_name, date):
 		linjer.append([""+str(e.date)+": "+e.name, 1, e.get_cost(), 0])
 		totcost += e.get_cost()
 
-	spf_fee = totcost*Decimal("0.3")
+	totcost = totcost.quantize(Decimal(10)**-2)
+	spf_fee = totcost*Decimal("0.30")
 	linjer.append(["SPF-avgift: "+str(totcost)+"*0.3", 1, spf_fee, 0])
 
 	invoice.settOrdrelinje(linjer)
