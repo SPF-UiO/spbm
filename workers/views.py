@@ -16,7 +16,7 @@ def index(request, society_name):
 	if not user_allowed_society(request.user, society):
 		return render(request, "errors/unauthorized.jinja") 
 
-	workers = Worker.objects.filter(society=society)
+	workers = Worker.objects.filter(society=society).order_by("norlonn_number")
 	inactive_workers = workers.filter(active=False)
 	workers = workers.filter(active=True)
 	return render(request, "workers/index.jinja", { 'workers': workers, 'cur_page': 'workers', 'form': WorkerForm(), 'add_url': 'add/', 'old_workers': inactive_workers})
