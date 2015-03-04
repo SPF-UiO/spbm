@@ -5,7 +5,7 @@ from society.models import Society
 
 class ShiftInline(admin.TabularInline):
 	model = Shift
-	extra = 3
+	extra = 0
 
 	def formfield_for_foreignkey(self, db_field, request, **kwargs):
 		if db_field.name == "worker":
