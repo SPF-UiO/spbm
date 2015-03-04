@@ -6,6 +6,7 @@ class Society(models.Model):
 	shortname = models.CharField(max_length=10)
 	invoice_email = models.EmailField(default="")
 	default_wage = models.DecimalField(max_digits=10, decimal_places=2)
+	logo = models.FileField(null=True)
 
 	def __str__(self):
 		return self.shortname
