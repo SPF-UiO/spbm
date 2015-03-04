@@ -4,6 +4,8 @@ from accounts.models import SpfUser
 from society.models import Society
 
 class WorkersModelAdmin(admin.ModelAdmin):
+	list_filter = ('society', )
+
 	def formfield_for_foreignkey(self, db_field, request, **kwargs):
 		if db_field.name == "society":
 			if not request.user.is_superuser:
