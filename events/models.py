@@ -18,6 +18,7 @@ class Event(models.Model):
 		total = Decimal(0)
 		for s in self.shift_set.all():
 			total += s.get_total()
+		total = total.quantize(Decimal(".01"))
 		return total
 
 	def clean(self):
@@ -42,5 +43,5 @@ class Shift(models.Model):
 			raise ValidationError("No worker or event")
 
 	def get_total(self):
-		return self.wage*self.hours
+		return (self.wage*self.hours).quantize(Decimal(".01"))
 
