@@ -7,13 +7,13 @@
 		<title>SPF</title>
 		<link href="{{ static("css/bootstrap.min.css") }}" rel="stylesheet">
 		<link href="{{ static("css/bootstrap-theme.min.css") }}" rel="stylesheet">
+		<link href="{{ static("css/jquery-ui.min.css") }}" rel="stylesheet">
 	</head>
-
-	<body role="document">
+	<script src="{{ static("js/modern.js") }}"></script>	
+		<body role="document">
 		<div style="padding-bottom: 10px">
 			<h1>SPF</h1>
 			<h3>Logget inn som {{ user }} ({{ user.spfuser.society.name }})</h3>
-			<p><img src="{{ user.spfuser.society.logo.url }}" /></p>
 		</div>
 		<ul class="nav nav-tabs" role="tablist">
 			{% for nav in navigation %}
@@ -41,5 +41,14 @@
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script src="{{ static("js/bootstrap.min.js") }}"></script>
+		<script>
+		Modernizr.load({
+        test: Modernizr.inputtypes.date,
+        nope: "/static/js/jquery-ui.min.js",
+        callback: function() {
+          $("input[type=date]").datepicker();
+        }
+      });
+	</script>
 	</body>
 </html>
