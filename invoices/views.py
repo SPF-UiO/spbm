@@ -37,8 +37,6 @@ def unix_time(dt):
 
 def generate(request, society_name, date):
 	society = get_object_or_404(Society, shortname=society_name)
-	if not user_allowed_society(request.user, society):
-		return render(request, "errors/unauthorized.jinja")
 
 	events = Event.objects.filter(society=society, processed=date)
 	invoice_obj = Invoice.objects.get(society=society, period=date)
