@@ -78,6 +78,11 @@ def generate(request, society_name, date):
 	return HttpResponse(open("/tmp/f.pdf", "rb"), content_type="application/pdf")
 
 @login_required
+def invoices_list(request):
+	invoices = Invoice.objects.all().order_by('invoice_number')
+	return render(request, "invoices/list.jinja", {'invoices': invoices })
+
+@login_required
 @transaction.atomic
 def invoices_all(request):
 	if request.method == "POST":
