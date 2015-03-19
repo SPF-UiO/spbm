@@ -25,7 +25,7 @@ def get_report(request, date):
 	
 		total = total*Decimal("100")	
 		total = total.quantize(Decimal("10"))
-		linjer.append(";"+str(s.worker.norlonn_number)+";H1;;;"+str(total))
+		linjer.append(";"+str(s.worker.norlonn_number)+";H1;100;"+str(total)+";")
 
-	return HttpResponse("\n".join(linjer), content_type="text/plain")
+	return HttpResponse("\n".join(linjer), content_type="text/plain; charset=utf-8")
 # Create your views here.
