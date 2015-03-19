@@ -25,3 +25,6 @@ class Invoice(models.Model):
 
 		return cost*Decimal('1.3')
 
+	def __str__(self):
+		return "Number: "+str(self.invoice_number)+": "+str(self.period)
+
