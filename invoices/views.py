@@ -29,8 +29,9 @@ def index(request, society_name):
 
 	events = Event.objects.filter(society=society)
 	proc_vals = events.values('processed').distinct().exclude(processed__isnull=True).order_by('-processed')
-	
-	return render(request, "invoices/index.jinja", {'proc_vals': proc_vals, 'cur_page': 'invoices'})
+	invoices = Invoice.objects.filter(society=society).order_by('-period')	
+
+	return render(request, "invoices/index.jinja", {'proc_vals': proc_vals, 'cur_page': 'invoices', 'invoices': invoices})
 
 def unix_time(dt):
 	return int(time.mktime(dt.timetuple()))
