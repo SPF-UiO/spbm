@@ -23,7 +23,7 @@ class Invoice(models.Model):
 		for event in events:
 			cost += event.get_cost()
 
-		return cost*Decimal('1.3')
+		return (cost*Decimal('1.3')).quantize(Decimal('.01'))
 
 	def __str__(self):
 		return "Number: "+str(self.invoice_number)+": "+str(self.period)
