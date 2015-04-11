@@ -36,7 +36,7 @@
 			<th><a href="edit/{{ worker.id }}">{{ worker.name }}</a></th>
 			<th>{{ worker.address }}</th>
 			<th>{{ worker.account_no }}</th>
-			<th>{{ worker.person_id }}</th>
+			<th>{% if worker.person_id %} Yes {% else %} No {% endif %}</th>
 			<th>{{ worker.norlonn_number }}</th>
 		</tr>
 	{% endfor %}	
