@@ -16,6 +16,7 @@ import time
 from decimal import Decimal
 
 from invoices.f60 import f60
+import os.path
 
 @login_required
 def redirect_society(request):
@@ -42,7 +43,10 @@ def generate(request, society_name, date):
 	events = Event.objects.filter(society=society, processed=date)
 	invoice_obj = Invoice.objects.get(society=society, period=date)
 	
-	filename = "/tmp/f.pdf"
+	filename = os.path.join("static_invoice", society.shortname+"-"+str(date)+".pdf")
+	if os.path.isfile(filename):
+		return HttpResponse(open(filename, "rb"), content_type="application/pdf")
+
 	invoice = f60(filename, overskriv=True)
 	invoice.settKundeinfo(1, society.name)
 	invoice.settFakturainfo(
@@ -76,11 +80,11 @@ def generate(request, society_name, date):
 	invoice.settOrdrelinje(linjer)
 	invoice.lagEpost()
 
-	return HttpResponse(open("/tmp/f.pdf", "rb"), content_type="application/pdf")
+	return HttpResponse(open(filename, "rb"), content_type="application/pdf")
 
 @login_required
 def invoices_list(request):
-	invoices = Invoice.objects.all().order_by('invoice_number')
+	invoices = Invoice.objects.all().order_by('-invoice_number')
 	return render(request, "invoices/list.jinja", {'invoices': invoices })
 
 @login_required
