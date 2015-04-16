@@ -91,6 +91,8 @@ DEFAULT_JINJA2_TEMPLATE_EXTENSION = '.jinja'
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 TEMPLATE_CONTEXT_PROCESSORS =  TCP + ('django.core.context_processors.request', )
 
+AUTHENTICATION_BACKENDS = ('accounts.backend.SPFBackend', )
+
 try:
 	from spf_web.local_settings import *
 except ImportError as e:
