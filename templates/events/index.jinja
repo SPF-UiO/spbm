@@ -15,7 +15,7 @@
 {% for event in events[proc['processed']] %}
 <div class="event" style="padding-top: 10px">
 <table class="table table-striped">
-<thead><tr><th>Event</th><th>Navn</th><th>Sats</th><th>Timer</th><th>Sum</th></thead>
+<thead><tr><th style="width: 20%;">Event</th><th style="width: 20%;">Navn</th><th style="width: 10%">Sats</th><th style="width: 10%">Timer</th><th style="width: 10%">Sum</th></thead>
 <tbody>
 {% for shift in event.shift_set.all() %}
 <tr><td>{% if loop.first %}{{event.date}}: {{event.name}}{% endif %}</td><td>{{ shift.worker.name }}</td><td>{{ shift.wage }}</td><td>{{ shift.hours }}</td><td>{{ shift.get_total() }}</td></tr>
