@@ -37,6 +37,7 @@ INSTALLED_APPS = (
 		'events',
 		'accounts',
 		'invoices',
+		'norlonn',
 )
 
 MIDDLEWARE_CLASSES = (

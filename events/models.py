@@ -31,6 +31,7 @@ class Shift(models.Model):
 	worker = models.ForeignKey('workers.Worker', on_delete=models.PROTECT)
 	wage = models.DecimalField(max_digits=10, decimal_places=2)
 	hours = models.DecimalField(max_digits=10, decimal_places=2)
+	norlonn_report = models.ForeignKey('norlonn.NorlonnReport', blank=True, null=True, on_delete=models.SET_NULL)
 
 	class Meta:
 		unique_together = ("event", "worker")
