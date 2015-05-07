@@ -1,0 +1,32 @@
+{% extends "base.jinja" %}
+
+{% block content %}
+<h3>Norlonn reports</h3>
+
+{% if errors %}
+<p>
+Current report errors
+<ul>
+{% for error in errors %}
+<li>{{ error }}</li>
+{% endfor %}
+</ul>
+</p>
+{% endif %}
+
+<p>
+<form action="/norlonn/generate_report/" method="post">
+{% csrf_token %}
+<input type="submit" value="Generate new report" />
+</form>
+</p>
+
+<p>
+<h3>Existing reports</h3>
+<ul>
+{% for report in reports %}
+<li> <a href="/norlonn/get_report/{{ report.date }}">{{ report.date }}</a></li>
+{% endfor %}
+</ul>
+</p>
+{% endblock %}
