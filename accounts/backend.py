@@ -7,8 +7,9 @@ class SPFBackend(object):
 			user = User.objects.get(username__iexact=username)
 			pwd_valid = user.check_password(password)
 		except User.DoesNotExist:
+			user = False
 			pwd_valid = check_password(password, "sha1$4e987$afbcf42e21bd417fb71db8c66b321e9fc33051tt")	
-		if user and pwd_valid:
+		if user and pwd_valid and user.is_active:
 			return user
 		return None
 
