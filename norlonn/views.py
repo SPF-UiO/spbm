@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
 from django.utils import timezone
-from django.contrib.auth.decorators import login_required,user_passes_test
+from django.contrib.auth.decorators import login_required,user_passes_test,permission_required
 
 from events.models import Shift,Event
 from decimal import Decimal
@@ -12,7 +12,12 @@ def index(request):
 	reports = NorlonnReport.objects.all().order_by('-date')
 	errors = []
 
-	for s in Shift.objects.filter(norlonn_report__isnull=True, event__processed__isnull=False):
+	if request.user.has_perm('norlonn.generate_report'):
+		shifts = Shift.objects.filter(norlonn_report__isnull=True, event__processed__isnull=False)
+	else:
+		shifts = Shift.objects.filter(norlonn_report__isnull=True, event__processed__isnull=False, event__society=request.user.spfuser.society)
+
+	for s in shifts:
 		if s.worker.norlonn_number is None:
 			errors.append("Worker %s lacks norlonn number!" % s.worker)
 
@@ -22,7 +27,7 @@ def index(request):
 	return render(request, 'norlonn/index.jinja', { 'reports': reports, 'errors': errors })
 
 @login_required
-@user_passes_test(lambda u: u.is_superuser)
+@permission_required('norlonn.generate_report')
 def generate_report(request):
 	if request.method != "POST":
 		return redirect(index)
@@ -60,6 +65,7 @@ def generate_report(request):
 	return render(request, 'norlonn/report.jinja', { 'errors': errors, 'success': succ })	
 
 @login_required
+@permission_required('norlonn.view_report')
 def get_report(request, date):
 	nr = get_object_or_404(NorlonnReport, date=date)
 	linjer = []

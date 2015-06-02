@@ -5,6 +5,7 @@ from django.db import transaction
 from django.db.models import Max
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 
 from society.models import Society
 from events.models import Event
@@ -92,6 +93,9 @@ def invoices_list(request):
 def invoices_all(request):
 	if request.method == "POST":
 		if request.POST.get('action') == "close_period":
+			if not request.user.has_perm("invoice.close_period"):
+				raise PermissionDenied()
+
 			events = Event.objects.filter(processed__isnull=True)
 			societies = events.values('society').distinct()
 			period = timezone.now()
@@ -118,6 +122,8 @@ def invoices_all(request):
 					event.save()
 			return redirect(invoices_all)
 		elif request.POST.get('action') == 'mark_paid':
+			if not request.user.has_perm('invoice.mark_paid'):
+				raise PermissionDenied()
 			invoice = Invoice.objects.get(id=request.POST.get('inv_id'))
 			invoice.paid = True
 			invoice.save()

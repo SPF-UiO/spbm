@@ -6,7 +6,7 @@ from decimal import Decimal
 class Event(models.Model):
 	society = models.ForeignKey('society.Society', null=False, on_delete=models.PROTECT)
 	name = models.CharField(max_length=100)
-	date = models.DateField()
+	date = models.DateField(verbose_name="Event date")
 	registered = models.DateField(auto_now_add=True, editable=False)
 	processed = models.DateField(null=True, blank=True)
 	invoice = models.ForeignKey('invoices.Invoice', null=True, blank=True)
@@ -20,11 +20,14 @@ class Event(models.Model):
 			total += s.get_total()
 		total = total.quantize(Decimal(".01"))
 		return total
+	
+	get_cost.short_description = "Total cost"
 
 	def clean(self):
 		if self.invoice is not None:
 			if self.invoice.society != self.society:
 				raise ValidationError("Cannot add event to another society invoice!")	
+
 
 class Shift(models.Model):
 	event = models.ForeignKey(Event)
@@ -32,6 +35,8 @@ class Shift(models.Model):
 	wage = models.DecimalField(max_digits=10, decimal_places=2)
 	hours = models.DecimalField(max_digits=10, decimal_places=2)
 	norlonn_report = models.ForeignKey('norlonn.NorlonnReport', blank=True, null=True, on_delete=models.SET_NULL)
+
+	norlonn_report.short_description = "Sent to norlønn"
 
 	class Meta:
 		unique_together = ("event", "worker")

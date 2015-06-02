@@ -8,6 +8,8 @@ class ShiftInline(admin.TabularInline):
 	model = Shift
 	extra = 0
 
+	exclude = ('norlonn_report', )
+
 	def formfield_for_foreignkey(self, db_field, request, **kwargs):
 		if db_field.name == "worker":
 			if not request.user.is_superuser:
@@ -16,8 +18,8 @@ class ShiftInline(admin.TabularInline):
 
 	def get_readonly_fields(self, request, obj=None):
 		if obj is not None and obj.processed is not None:
-			return ('worker', 'wage', 'hours')
-		return list()
+			return ('worker', 'wage', 'hours', 'norlonn_report', )
+		return ('norlonn_report',)
 
 	def has_delete_permission(self, request, obj=None):
 		if obj is None or obj.processed is None:
@@ -27,7 +29,7 @@ class ShiftInline(admin.TabularInline):
 class EventAdmin(admin.ModelAdmin):
 	inlines = [ShiftInline]
 	list_filter = ('society',)
-	list_display = ('__str__', 'date', 'processed',)
+	list_display = ('__str__', 'get_cost', 'registered', 'date', 'processed',)
 	readonly_fields = ('processed', 'society', )
 	exclude = ('invoice', )
 
