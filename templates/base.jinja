@@ -29,7 +29,7 @@
 					<a href="/admin">Admin panel</a>
 				</li>
 			{% endif %}
-			{% if user.has_perm('close_period') %}
+			{% if user.has_perm('invoices.close_period') %}
 				<li role="presentation" style="float: right;">
 					<a href="/invoices/all/">Invoice management</a>
 				</li>
