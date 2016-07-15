@@ -1,0 +1,9 @@
+# Main framework
+Django<1.9
+django-admin
+django-jinja
+
+# PDF-generation
+reportlab
+# Localisation and handling local input
+django-localflavor

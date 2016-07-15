@@ -20,7 +20,6 @@ SECRET_KEY = 's_#vkn6zj^713q2x37dajjp44*mr9q**j)p!3o#z4a&jynt3-a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -31,13 +30,13 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-		'django_jinja',
-		'society',
-		'workers',
-		'events',
-		'accounts',
-		'invoices',
-		'norlonn',
+                'django_jinja',
+                'society',
+                'workers',
+                'events',
+                'accounts',
+                'invoices',
+                'norlonn',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -77,24 +76,72 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static_files")
-TEMPLATE_DIRS = (os.path.join(BASE_DIR, "templates"), )
+#TEMPLATE_DIRS = (os.path.join(BASE_DIR, "templates"), )
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"), )
 MEDIA_ROOT = os.path.join(BASE_DIR, "media_files")
 MEDIA_URL = "/media_files/"
 
-TEMPLATE_LOADERS = (
-	'django_jinja.loaders.FileSystemLoader',
-	'django_jinja.loaders.AppLoader',
-)
+#TEMPLATE_LOADERS = (
+#        'django_jinja.loaders.FileSystemLoader',
+#        'django_jinja.loaders.AppLoader',
+#)
 
-DEFAULT_JINJA2_TEMPLATE_EXTENSION = '.jinja'
+TEMPLATES = [
+    {
+        'BACKEND': 'django_jinja.backend.Jinja2',
+        'DIRS': [
+            os.path.join(BASE_DIR, "templates")
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'match_extension': '.jinja',
+            'context_processors': [
+                # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
+                # list if you haven't customized them:
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+                # Added from old SPF
+                'django.template.context_processors.request'
+            ]
+        }
+    },
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(BASE_DIR, "templates")
+        ],
+        'OPTIONS': {
+            'context_processors': [
+                # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
+                # list if you haven't customized them:
+                'django.contrib.auth.context_processors.auth',
+#                'django.template.context_processors.debug',
+#                'django.template.context_processors.i18n',
+#                'django.template.context_processors.media',
+#                'django.template.context_processors.static',
+#                'django.template.context_processors.tz',
+#                'django.contrib.messages.context_processors.messages',
+#                # Added from old SPF
+#                'django.template.context_processors.request'
+            ],
+            'loaders': [
+                # insert your TEMPLATE_LOADERS here
+                'django_jinja.loaders.FileSystemLoader',
+                'django_jinja.loaders.AppLoader'
+            ]
+        },
+    },
+]
 
-from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
-TEMPLATE_CONTEXT_PROCESSORS =  TCP + ('django.core.context_processors.request', )
 
 AUTHENTICATION_BACKENDS = ('accounts.backend.SPFBackend', 'django.contrib.auth.backends.ModelBackend',)
 
 try:
-	from spf_web.local_settings import *
+        from spf_web.local_settings import *
 except ImportError as e:
-	pass
+        pass
