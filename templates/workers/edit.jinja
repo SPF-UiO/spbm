@@ -1,19 +1,22 @@
 {% extends "base.jinja" %}
-
+{% block title %}Edit worker{% endblock %}
 {% block content %}
-<style>
-.new
-{
-	padding: 10px;
-}
-</style>
-<h1>Edit worker</h1>
-<form action="" method="POST">
-{% csrf_token %}
-<table>
-{{ form.as_table() }}
-</table>
+    <style>
+        .new {
+            padding: 10px;
+        }
+    </style>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <table class="table">
+            {{ form }}
+        </table>
 
-<input type="submit" value="Save" />
-</form>
+        <button class="btn btn-primary" type="submit">
+            Save worker
+        </button>
+        <a href="{{ url("workers") }}" title="Cancel editing worker" class="btn btn-warning">
+            Cancel editing
+        </a>
+    </form>
 {% endblock %}
