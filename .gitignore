@@ -1,6 +1,7 @@
 __pycache__
 *.pyc
 static_files/*
+media_files/*
 *.swp
 *.swo
 *.sqlite3
