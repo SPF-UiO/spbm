@@ -96,6 +96,9 @@ TEMPLATES = [
             'filters': {
                 'attr': 'widget_tweaks.templatetags.widget_tweaks.set_attr'
             },
+            'globals': {
+                'get_language': 'django.utils.translation.get_language'
+            },
             'context_processors': [
                 # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
                 # list if you haven't customized them:
