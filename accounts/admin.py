@@ -4,12 +4,15 @@ from django.contrib.auth.models import User
 
 from accounts.models import SpfUser
 
+
 class SpfUserInline(admin.StackedInline):
-	model = SpfUser
-	can_delete = False
+    model = SpfUser
+    can_delete = False
+
 
 class UserAdmin(UserAdmin):
-	inlines = (SpfUserInline, )
+    inlines = (SpfUserInline,)
+
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
