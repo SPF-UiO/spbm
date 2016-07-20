@@ -10,6 +10,8 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+# Import default extensions to extend furthermore for Jinja2 and puente
+from django_jinja.builtins import DEFAULT_EXTENSIONS
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -32,6 +34,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_jinja',
+    'django_jinja.contrib._humanize',
+    'puente',
     'widget_tweaks',
     'society',
     'workers',
@@ -92,7 +96,11 @@ TEMPLATES = [
         ],
         'APP_DIRS': True,
         'OPTIONS': {
+            'newstyle_gettext': True,
             'match_extension': '.jinja',
+            'extensions': [
+                'puente.ext.i18n',
+            ] + DEFAULT_EXTENSIONS,
             'filters': {
                 'attr': 'widget_tweaks.templatetags.widget_tweaks.set_attr'
             },
@@ -141,6 +149,20 @@ TEMPLATES = [
         },
     },
 ]
+
+PUENTE = {
+    'BASE_DIR': BASE_DIR,
+    'DOMAIN_METHODS': {
+        'django': [
+            ('**.py', 'python'),
+            ('**.jinja', 'jinja2'),
+            ('fjord/**/templates/**.html', 'django'),
+        ],
+        'djangojs': [
+            ('**.js', 'javascript'),
+        ]
+    }
+}
 
 AUTHENTICATION_BACKENDS = ('accounts.backend.SPFBackend', 'django.contrib.auth.backends.ModelBackend',)
 
