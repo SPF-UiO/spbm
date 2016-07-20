@@ -10,9 +10,16 @@
             padding: 10px;
         }
     </style>
-    <h2>{{ _("Add new worker") }}</h2>
-    {% set action_label = _("Add user") %}
-    {% include "form.jinja" %}
+    <h2>{{ _('Add new worker') }}</h2>
+    <form class="form-horizontal" role="form" action="{{ post_url }}" method="POST">
+        {% csrf_token %}
+        {% include "form-loop.jinja" %}
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">{{ _('Add worker') }}</button>
+            </div>
+        </div>
+    </form>
     <h2>{{ _("List of workers") }}</h2>
     <table class="table table-striped">
         <thead>

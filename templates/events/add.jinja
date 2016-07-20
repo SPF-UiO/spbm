@@ -1,15 +1,39 @@
 {% extends "base.jinja" %}
 
+{% block title -%}
+    {{ _("Add event") }}
+{%- endblock %}
+
 {% block content %}
-<form method="post" action="">
-{% csrf_token %}
-{% autoescape off %}
-<table>
-{{ event_formset }}
-</table>
-<table>
-{{ shift_formset }}
-</table>
-<input type="submit" value="Submit" />
-{% endautoescape %}
-{% endblock %}
+<form class="form-horizontal" method="post" action="">
+    {% csrf_token %}
+    {% autoescape off %}
+    {% for form in event_formset %}
+        {% include 'form-loop.jinja' %}
+    {% endfor %}
+    {{ event_formset.management_form }}
+
+    {% for form in shift_formset %}
+        {% include 'form-loop.jinja' %}
+    {% endfor %}
+    {{ shift_formset.management_form }}
+    {# <table>
+        {{ event_formset }}
+    </table>
+    <table>
+        {{ shift_formset }}
+    </table>
+    #}
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-success">
+                {{ _('Create event') }}
+            </button>
+            <a href="{{ url("events") }}" title="{{ _('Cancel creating this event') }}" class="btn btn-warning">
+                {{ _('Cancel creating this event') }}
+            </a>
+        </div>
+    </div>
+    {% endautoescape %}
+    {% endblock %}
+</form>

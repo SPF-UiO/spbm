@@ -1,6 +1,10 @@
 {% extends "base.jinja" %}
 
+{% block title -%}
+    {{ _('Society overview') }}
+{%- endblock %}
+
 {% block content %}
-{{ society.name }} ({{ society.shortname }})
-    {{ page | pprint }}
+    <p>{{ _("You're logged into an account associated with:") }} {{ society.name }} ({{ society.shortname }})</p>
+    <p>{{ _('As of right now, this page exactly doesn\'t really do anything, so take a look at the navigation bar!.') }}</p>
 {% endblock %}

@@ -1,22 +1,25 @@
 {% extends "base.jinja" %}
-{% block title %}Edit worker{% endblock %}
+{% block title -%}
+    {{ _('Edit worker') }}
+{%- endblock %}
 {% block content %}
     <style>
         .new {
             padding: 10px;
         }
     </style>
-    <form action="" method="POST">
+    <form class="form-horizontal" action="" method="POST">
         {% csrf_token %}
-        <table class="table">
-            {{ form }}
-        </table>
-
-        <button class="btn btn-primary" type="submit">
-            Save worker
-        </button>
-        <a href="{{ url("workers") }}" title="Cancel editing worker" class="btn btn-warning">
-            Cancel editing
-        </a>
+        {% include 'form-loop.jinja' %}
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-primary" type="submit">
+                    {{ _('Save changes') }}
+                </button>
+                <a href="{{ url("workers") }}" title="{{ _('Cancel editing this worker') }}" class="btn btn-warning">
+                    {{ _('Cancel editing & changes') }}
+                </a>
+            </div>
+        </div>
     </form>
 {% endblock %}
