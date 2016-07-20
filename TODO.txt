@@ -1,0 +1,2 @@
+- Correctly finish requirements.txt
+- Check for python-virtualenv and python-virtualenvwrapper
