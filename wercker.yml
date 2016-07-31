@@ -31,7 +31,7 @@ build:
         name: alpine pre-requisites
         code: |
           apk update
-          apk install zlib gettext libjpeg
+          apk add zlib gettext libjpeg
     - script:
         name: virtualenv-install
         code: |
