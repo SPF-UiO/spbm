@@ -6,7 +6,9 @@
 # If you want Google's container you would reference google/python
 # Read more about containers on our dev center
 # http://devcenter.wercker.com/docs/containers/index.html
-box: python:3.5-alpine
+box: 
+  id: python:3.5-alpine
+  cmd: /bin/sh
 # You can also use services such as databases. Read more on our dev center:
 # http://devcenter.wercker.com/docs/services/index.html
 # services:
@@ -63,3 +65,5 @@ build:
         apk update
         apk add gettext
         python ./manage.py compilemessages
+
+
