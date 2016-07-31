@@ -1,21 +1,25 @@
 {% extends "base.jinja" %}
 
-{% block content %}
-{% if errors %}
-<h3>Errors</h3>
-<ul>
-{% for error in errors %}
-<li>{{ error }}</li>
-{% endfor %}
-</ul>
-{% endif %}
+{% block title -%}
+    {{ _("Report result") }}
+{%- endblock %}
 
-{% if success %}
-<h3>Success</h3>
-<ul>
-{% for s in success %}
-<li>{{ s }}</li>
-{% endfor %}
-</ul>
-{% endif %}
+{% block content %}
+    {% if errors %}
+        <h3>{{ _("Elements with errors") }}</h3>
+        <ul>
+            {% for item in errors %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if success %}
+        <h3>{{ _("Successful elements") }}</h3>
+        <ul>
+            {% for item in success %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}

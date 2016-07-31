@@ -2,19 +2,21 @@
 Django settings for spf_web project.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/1.7/topics/settings/
+https://docs.djangoproject.com/en/1.8/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.7/ref/settings/
+https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+# Import default extensions to extend furthermore for Jinja2 and puente
+from django_jinja.builtins import DEFAULT_EXTENSIONS
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
+# See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 's_#vkn6zj^713q2x37dajjp44*mr9q**j)p!3o#z4a&jynt3-a'
@@ -32,6 +34,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_jinja',
+    'django_jinja.contrib._humanize',
+    'puente',
     'widget_tweaks',
     'society',
     'workers',
@@ -92,9 +96,16 @@ TEMPLATES = [
         ],
         'APP_DIRS': True,
         'OPTIONS': {
+            'newstyle_gettext': True,
             'match_extension': '.jinja',
+            'extensions': [
+                'puente.ext.i18n',
+            ] + DEFAULT_EXTENSIONS,
             'filters': {
                 'attr': 'widget_tweaks.templatetags.widget_tweaks.set_attr'
+            },
+            'globals': {
+                'get_language': 'django.utils.translation.get_language'
             },
             'context_processors': [
                 # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
@@ -138,6 +149,20 @@ TEMPLATES = [
         },
     },
 ]
+
+PUENTE = {
+    'BASE_DIR': BASE_DIR,
+    'DOMAIN_METHODS': {
+        'django': [
+            ('**.py', 'python'),
+            ('**.jinja', 'jinja2'),
+            ('fjord/**/templates/**.html', 'django'),
+        ],
+        'djangojs': [
+            ('**.js', 'javascript'),
+        ]
+    }
+}
 
 AUTHENTICATION_BACKENDS = ('accounts.backend.SPFBackend', 'django.contrib.auth.backends.ModelBackend',)
 

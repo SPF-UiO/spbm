@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="{{ get_language() }}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        {%- block title %}{% endblock -%}
+        {%- if self.title() %} · {% endif -%}
+        SPFs ❝SPBM❞
+    </title>
+    <link href="{{ static("css/bootstrap.min.css") }}" rel="stylesheet">
+    <link href="{{ static("css/jquery-ui.min.css") }}" rel="stylesheet">
+    <link href="{{ static("css/spbm.css") }}" rel="stylesheet">
+</head>
+
+<body role="document">
+{% block content %}
+    Content here!
+{% endblock %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="{{ static("js/bootstrap.min.js") }}"></script>
+</body>
+</html>

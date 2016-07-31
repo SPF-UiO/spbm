@@ -1,26 +1,62 @@
-{% extends "accounts/base.jinja" %}
+{% extends "base-barebones.jinja" %}
+
+{% block title -%}
+    {{ _("Sign in") }}
+{%- endblock %}
 
 {% block content %}
+    <div class="container">
+    <div id="login" style="margin-top:50px;" class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">{{ _("Sign in") }}</div>
+            </div>
 
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
+            <div style="padding-top:20px" class="panel-body">
+                {% if form.errors -%}
+                    <div class="alert alert-danger">
+                        <p>
+                            <strong>{{ _("Login failed!") }}</strong> {{ _("Your username or password didn't match. Please try again.") }}
+                        </p>
+                    </div>
+                {%- endif %}
 
-<form method="post" action="">
-{% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag() }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag() }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
+                {% if logged_out %}
+                    Hiiaoeuaoe
+                {% endif %}
 
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
+                <form id="loginform" method="POST" action="" class="form-horizontal" role="form">
+                    {% csrf_token %}
 
+                    {{ form.username.label_tag() }}
+                    <div class="input-group {% if form.errors %}has-error{% endif %}" style="margin-bottom: 20px;">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        {{ form.username | attr("class:form-control") | attr("placeholder:username") }}
+                    </div>
+
+                    {{ form.password.label_tag() }}
+                    <div class="input-group {% if form.errors %}has-error{% endif %}">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                        {{ form.password | attr("class:form-control") | attr("placeholder:password") }}
+                    </div>
+
+                    <div class="input-group">
+                        <div class="checkbox">
+                            <label>
+                                <input id="login-remember" type="checkbox" name="remember" value="1"> Remember me
+                            </label>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:10px" class="form-group">
+                        <div class="col-sm-12 controls">
+                            <button type="submit" id="btn-login" href="#" class="btn btn-success">
+                                {{ _("Sign in to SPF") }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock content %}

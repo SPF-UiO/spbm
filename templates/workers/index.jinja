@@ -1,64 +1,69 @@
 {% extends "base.jinja" %}
 
+{% block title -%}
+    {{ _("Workers") }}
+{%- endblock %}
+
 {% block content %}
-<style>
-.new
-{
-	padding: 10px;
-}
-</style>
-<h1>Add new worker</h1>
-<form action="{{ add_url }}" method="POST">
-{% csrf_token %}
-<table>
-{{ form.as_table() }}
-</table>
-<!--
-<table style="td { padding: 5px; }">
-<tr><td class="new">Name:</td><td> <input type="text" name="name" /></td>
-<td class="new">Address: </td><td><input type="text" name="address" /></td></tr>
-<tr><td class="new">Account no.:</td><td><input type="number" name="accno" /></td>
-<td class="new">Person ID: <td><input type="number" name="personid" /></td></tr>
-<tr><td class="new">Norlønn no.:</td><td><input type="number" name="norlonn" /></tr></tr>
-</table>-->
-<input type="submit" value="Save" />
-</form>
-<h1>List of workers</h1>
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<th>Navn</th><th>Addresse</th><th>Kontonr</th><th>Personnummer</th><th>Norlønn</th>
-		</tr>
-	</thead>
-	<tbody>
-	{% for worker in workers %}
-		<tr>
-			<th><a href="edit/{{ worker.id }}">{{ worker.name }}</a></th>
-			<th>{{ worker.address }}</th>
-			<th>{{ worker.account_no }}</th>
-			<th>{% if worker.person_id %} Yes {% else %} No {% endif %}</th>
-			<th>{{ worker.norlonn_number }}</th>
-		</tr>
-	{% endfor %}	
-	</tbody>
-</table>
-<h1>List of inactive workers</h1>
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<th>Navn</th><th>Addresse</th><th>Kontonr</th><th>Personnummer</th><th>Norlønn</th>
-		</tr>
-	</thead>
-	<tbody>
-	{% for worker in old_workers %}
-		<tr>
-			<th><a href="edit/{{ worker.id }}">{{ worker.name }}</a></th>
-			<th>{{ worker.address }}</th>
-			<th>{{ worker.account_no }}</th>
-			<th>{{ worker.person_id }}</th>
-			<th>{{ worker.norlonn_number }}</th>
-		</tr>
-	{% endfor %}	
-	</tbody>
-</table>
+    <style>
+        .new {
+            padding: 10px;
+        }
+    </style>
+    <h2>{{ _('Add new worker') }}</h2>
+    <form class="form-horizontal" role="form" action="{{ post_url }}" method="POST">
+        {% csrf_token %}
+        {% include "form-loop.jinja" %}
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">{{ _('Add worker') }}</button>
+            </div>
+        </div>
+    </form>
+    <h2>{{ _("List of workers") }}</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>{{ _("Name") }}</th>
+            <th>{{ _("Address") }}</th>
+            <th>{{ _("Account No.") }}</th>
+            <th>{{ _("National ID") }}</th>
+            <th>Norlønn</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for worker in workers %}
+            <tr>
+                <th><a href="edit/{{ worker.id }}">{{ worker.name }}</a></th>
+                <th>{{ worker.address }}</th>
+                <th>{{ worker.account_no }}</th>
+                <th>{% if worker.person_id %} Yes {% else %} No {% endif %}</th>
+                <th>{{ worker.norlonn_number }}</th>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <h2>{{ _("List of inactive workers") }}</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>{{ _("Name") }}</th>
+            <th>{{ _("Address") }}</th>
+            <th>{{ _("Account No.") }}</th>
+            <th>{{ _("National ID") }}</th>
+            <th>Norlønn</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for worker in old_workers %}
+            <tr>
+                <th><a href="edit/{{ worker.id }}">{{ worker.name }}</a></th>
+                <th>{{ worker.address }}</th>
+                <th>{{ worker.account_no }}</th>
+                <th>{{ worker.person_id }}</th>
+                <th>{{ worker.norlonn_number }}</th>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

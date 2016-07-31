@@ -1,8 +1,20 @@
+# Ignore build cache
 __pycache__
 *.pyc
+
+# Ignore site files created/uploaded 
 static_files/*
 media_files/*
+
+# Ignore all and any compiled translations
+*.mo
+
+# Ignore swapfiles from vi(m)
 *.swp
 *.swo
+
+# Ignore any and all sqlite3 databases
 *.sqlite3
+
+# Ignore the local settings for the app(s)
 local_settings.py

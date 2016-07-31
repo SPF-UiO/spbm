@@ -2,15 +2,24 @@ from decimal import Decimal
 
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 
 class Event(models.Model):
     society = models.ForeignKey('society.Society', null=False, on_delete=models.PROTECT)
-    name = models.CharField(max_length=100)
-    date = models.DateField(verbose_name="Event date")
-    registered = models.DateField(auto_now_add=True, editable=False)
-    processed = models.DateField(null=True, blank=True)
-    invoice = models.ForeignKey('invoices.Invoice', null=True, blank=True)
+    name = models.CharField(max_length=100,
+                            verbose_name=_('name'))
+    date = models.DateField(verbose_name=_('event date'))
+    registered = models.DateField(auto_now_add=True,
+                                  editable=False,
+                                  verbose_name=_('registered'))
+    processed = models.DateField(null=True,
+                                 blank=True,
+                                 verbose_name=_('processed'))
+    invoice = models.ForeignKey('invoices.Invoice',
+                                null=True,
+                                blank=True,
+                                verbose_name=_('invoice'))
 
     def __str__(self):
         return self.society.shortname + " - " + str(self.date) + ": " + self.name
@@ -22,7 +31,7 @@ class Event(models.Model):
         total = total.quantize(Decimal(".01"))
         return total
 
-    get_cost.short_description = "Total cost"
+    get_cost.short_description = _("Total cost")
 
     def clean(self):
         if self.invoice is not None:
@@ -32,10 +41,20 @@ class Event(models.Model):
 
 class Shift(models.Model):
     event = models.ForeignKey(Event)
-    worker = models.ForeignKey('workers.Worker', on_delete=models.PROTECT)
-    wage = models.DecimalField(max_digits=10, decimal_places=2)
-    hours = models.DecimalField(max_digits=10, decimal_places=2)
-    norlonn_report = models.ForeignKey('norlonn.NorlonnReport', blank=True, null=True, on_delete=models.SET_NULL)
+    worker = models.ForeignKey('workers.Worker',
+                               on_delete=models.PROTECT,
+                               verbose_name=_('worker'))
+    wage = models.DecimalField(max_digits=10,
+                               decimal_places=2,
+                               verbose_name=_('wage'))
+    hours = models.DecimalField(max_digits=10,
+                                decimal_places=2,
+                                verbose_name=_('hours'))
+    norlonn_report = models.ForeignKey('norlonn.NorlonnReport',
+                                       blank=True,
+                                       null=True,
+                                       on_delete=models.SET_NULL,
+                                       verbose_name=_('norl&oslash;nn report'))
 
     norlonn_report.short_description = "Sent to norlønn"
 

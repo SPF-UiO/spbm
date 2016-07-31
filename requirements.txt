@@ -1,10 +1,12 @@
 # Main framework
-Django<1.9
-django-jinja
+Django==1.8.13
+django-jinja==2.1.3
 
+# Jinja2 improved translation tags
+puente==0.4.1
 # PDF-generation
-reportlab
+reportlab==3.3.0
 # Localisation and handling local input
-django-localflavor
+django-localflavor==1.3
 # Widget tweaks to avoid editing forms in code
-django-widget-tweaks
+django-widget-tweaks==1.4.1

@@ -1,0 +1,424 @@
+# SPFs SPBM Norsk versjon.
+# Copyright (C) 2016
+# This file is distributed under the same license as the SPF package.
+# Thor K. Høgås <thor@roht.no>, 2016.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: SPF SPBM v0.1\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2016-07-20 13:12+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Thor K. Høgås <thor@roht.no>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: Norwegian bokmål\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: events/models.py:11 workers/models.py:18
+msgid "name"
+msgstr "navn"
+
+#: events/models.py:12
+msgid "event date"
+msgstr "arrangementdato"
+
+#: events/models.py:15
+msgid "registered"
+msgstr "registrert"
+
+#: events/models.py:18
+msgid "processed"
+msgstr "behandlet"
+
+#: events/models.py:22
+msgid "invoice"
+msgstr "faktura"
+
+#: events/models.py:34
+msgid "Total cost"
+msgstr "Total kostnad"
+
+#: events/models.py:46
+msgid "worker"
+msgstr "arbeider"
+
+#: events/models.py:49
+msgid "wage"
+msgstr "timelønn"
+
+#: events/models.py:52
+msgid "hours"
+msgstr "timer"
+
+#: events/models.py:57
+msgid "norl&oslash;nn report"
+msgstr "norlønn-rapport"
+
+#: templates/base.jinja:22
+msgid "Toggle navigation"
+msgstr "Vis/skjul navigasjon"
+
+#: templates/base.jinja:33
+msgid "Your Society"
+msgstr "Din forening"
+
+#: templates/base.jinja:35
+msgid "Financials"
+msgstr "Økonomi"
+
+#: templates/base.jinja:37
+msgid "Invoices and status"
+msgstr "Fakturaer og status"
+
+#: templates/base.jinja:40
+msgid "Settings"
+msgstr "Innstillinger"
+
+#: templates/base.jinja:41
+msgid "The society"
+msgstr "Foreningen"
+
+#: templates/base.jinja:46
+msgid "Bookings"
+msgstr "Utlån / utleie"
+
+#: templates/base.jinja:48
+msgid "Workers and registrations"
+msgstr "Arbeidere og registreringer"
+
+#: templates/base.jinja:49 templates/workers/index.jinja:4
+msgid "Workers"
+msgstr "Arbeidere"
+
+#: templates/base.jinja:51
+msgid "Events and registrations"
+msgstr "Arrangementer og registreringer"
+
+#: templates/base.jinja:52 templates/events/index.jinja:4
+msgid "Events"
+msgstr "Arrangementer"
+
+#: templates/base.jinja:57
+msgid "Invoicing"
+msgstr "Fakturering"
+
+#: templates/base.jinja:59
+msgid "Overview"
+msgstr "Oversikt"
+
+#: templates/base.jinja:62 templates/invoices/list.jinja:4
+msgid "Invoice list"
+msgstr "Fakturaliste"
+
+#: templates/base.jinja:65
+msgid "Registrating"
+msgstr "Registrering"
+
+#: templates/base.jinja:71
+msgid "Periodes and status"
+msgstr "Perioder og status"
+
+#: templates/base.jinja:78
+msgid "Wages"
+msgstr "Lønn"
+
+#: templates/base.jinja:80
+msgid "Reporting"
+msgstr "Rapportering"
+
+#: templates/base.jinja:88
+msgid "Log out of SPFs SPBM"
+msgstr "Logg ut av SPFs SPBM"
+
+#: templates/base.jinja:95
+msgid "Administration"
+msgstr "Administrasjon"
+
+#: templates/accounts/login.jinja:4 templates/accounts/login.jinja:12
+msgid "Sign in"
+msgstr "Logg inn"
+
+#: templates/accounts/login.jinja:19
+msgid "Login failed!"
+msgstr "Innlogging feilet!"
+
+#: templates/accounts/login.jinja:19
+msgid "Your username or password didn't match. Please try again."
+msgstr "Brukernavn eller passord samsvarte ikke. Prøv igjen."
+
+#: templates/accounts/login.jinja:54
+msgid "Sign in to SPF"
+msgstr "Logg inn på SPF"
+
+#: templates/events/add.jinja:4
+msgid "Add event"
+msgstr "Legg til arrangement"
+
+#: templates/events/add.jinja:30
+msgid "Create event"
+msgstr ""
+
+#: templates/events/add.jinja:32 templates/events/add.jinja:33
+msgid "Cancel creating this event"
+msgstr "Avbryt opprettelse"
+
+#: templates/events/index.jinja:8
+msgid "Add new event"
+msgstr "Legg til nytt arrangement"
+
+#: templates/events/index.jinja:13
+msgid "Not processed yet"
+msgstr "Ennå ikke behandlet"
+
+#: templates/events/index.jinja:15
+#, python-format
+msgid "Processed on %(date)s"
+msgstr "Behandlet på %(date)s"
+
+#: templates/events/index.jinja:24
+msgid "Event"
+msgstr "Arrangement"
+
+#: templates/events/index.jinja:25 templates/workers/index.jinja:27 templates/workers/index.jinja:50
+msgid "Name"
+msgstr "Navn"
+
+#: templates/events/index.jinja:26
+msgid "Hourly"
+msgstr "Timespris"
+
+#: templates/events/index.jinja:27
+msgid "Hours"
+msgstr "Timer"
+
+#: templates/events/index.jinja:28
+msgid "Sum"
+msgstr "Sum"
+
+#: templates/events/index.jinja:37 templates/events/index.jinja:42 templates/invoices/all.jinja:51 templates/invoices/index.jinja:17
+#, python-format
+msgid "NOK %(cost)s"
+msgstr "Kr. %(cost)s"
+
+#: templates/events/index.jinja:42
+msgid "Total"
+msgstr "Totalt"
+
+#: templates/invoices/all.jinja:3
+msgid "Invoice management"
+msgstr "Fakturabehandling"
+
+#: templates/invoices/all.jinja:10
+#, python-format
+msgid "%(num)d unprocessed event"
+msgid_plural "%(num)d unprocessed events"
+msgstr[0] "%(num)d ubehandlet arrangement"
+msgstr[1] "%(num)d ubehandlede arrangementer"
+
+#: templates/invoices/all.jinja:13
+msgid "There are unprocessed events, which means you can close the period. Only close the period <strong>once a month</strong>, and do it at the date agreed upon."
+msgstr "Det er ubehandlede arrangementer, som betyr at du kan lukke perioden. Lukk periden <strong>kun én gang i måneden</strong>, og gjør det på den bestemte datoen."
+
+#: templates/invoices/all.jinja:20
+msgid "Close period"
+msgstr "Lukk periode"
+
+#: templates/invoices/all.jinja:25
+msgid "There aren't any unprocessed events available for you to close the period with. Register some events <em>or</em> wait until next month."
+msgstr "Det er ingen ubehandlede arrangementer for deg å lukke perioden med. Registrer noen, <em>eller</em> vent til neste måned."
+
+#: templates/invoices/all.jinja:31
+msgid "Unpaid invoices"
+msgstr "Ubetalte fakturaer"
+
+#: templates/invoices/all.jinja:42
+msgid "Mark as paid"
+msgstr "Markér som betalt"
+
+#: templates/invoices/all.jinja:47
+msgid "Date"
+msgstr "Dato"
+
+#: templates/invoices/all.jinja:50 templates/invoices/index.jinja:11 templates/invoices/list.jinja:13
+msgid "Amount"
+msgstr "Sum"
+
+#: templates/invoices/all.jinja:57
+msgid "There aren't any unpaid invoices! That's great!"
+msgstr "Det er ingen ubetalte fakturaer! Flotters!"
+
+#: templates/invoices/index.jinja:4
+msgid "Society invoices"
+msgstr "Foreningens fakturaer"
+
+#: templates/invoices/index.jinja:10
+msgid "Period date"
+msgstr "Periodedato"
+
+#: templates/invoices/index.jinja:12 templates/invoices/list.jinja:14
+msgid "Paid?"
+msgstr "Betalt?"
+
+#: templates/invoices/index.jinja:20
+msgid "Yes"
+msgstr "Ja"
+
+#: templates/invoices/index.jinja:22
+msgid "No"
+msgstr "Nei"
+
+#: templates/invoices/list.jinja:11
+msgid "Invoice no."
+msgstr "Fakturanr."
+
+#: templates/invoices/list.jinja:12
+msgid "Society - period"
+msgstr "Forening - periode"
+
+#. Title for reports page.
+#: templates/norlonn/index.jinja:5
+msgid "Norlønn Reports"
+msgstr "Norlønn-rapporter"
+
+#: templates/norlonn/index.jinja:9
+msgid "Current report errors"
+msgstr "Eksisterende rapportfeil"
+
+#: templates/norlonn/index.jinja:11
+msgid ""
+"There are some errors present. Please fix the errors before you attempt generating a report, as to avoid workers missing out on their wages. If the errors are associated with a different society "
+"than yours, get in touch with them over the mailing list."
+msgstr ""
+"Det er noen feil med arbeidere eller faktura. Rett på disse feilene før du forsøker å opprette en rapport, slik at ingen arbeidere går glipp av deres lønn.Hvis feilene er assosiert med en annen "
+"forening, så anbefales at det at du <strong>kontakter dem</strong> med e-postlisten."
+
+#: templates/norlonn/index.jinja:33
+msgid "Generate new wage report"
+msgstr "Generér ny lønnsrapport"
+
+#: templates/norlonn/index.jinja:34
+msgid "Not easily reversible!"
+msgstr "Vanskelig å angre!"
+
+#: templates/norlonn/index.jinja:43
+msgid ""
+"The following is the list of the payment reports that have been created in the past. They detail the amount of money and payments for each worker, and should only <strong>be imported once</strong> "
+"into Norlønn."
+msgstr "Følgende er en liste over lønnsrapporter som har blitt generert tidligere. De beskriver betalingssummen for hver arbeider, og burde kun importeres <strong>én gang per rapport</strong>."
+
+#: templates/norlonn/report.jinja:4
+msgid "Report result"
+msgstr "Rapporteringsresultat"
+
+#: templates/norlonn/report.jinja:9
+msgid "Elements with errors"
+msgstr "Rapportelementer med feil"
+
+#: templates/norlonn/report.jinja:18
+msgid "Successful elements"
+msgstr "Vellykkede elementer"
+
+#: templates/society/index.jinja:4
+msgid "Society overview"
+msgstr "Foreningsoversikt"
+
+#: templates/society/index.jinja:8
+msgid "You're logged into an account associated with:"
+msgstr ""
+
+#: templates/society/index.jinja:9
+msgid "As of right now, this page exactly doesn't really do anything, so take a look at the navigation bar!."
+msgstr ""
+
+#: templates/workers/edit.jinja:3
+msgid "Edit worker"
+msgstr "Rediger arbeider"
+
+#: templates/workers/edit.jinja:17
+msgid "Save changes"
+msgstr "Lagre endringer"
+
+#: templates/workers/edit.jinja:19
+msgid "Cancel editing this worker"
+msgstr "Avbryt redigering"
+
+#: templates/workers/edit.jinja:20
+msgid "Cancel editing & changes"
+msgstr "Avbryt redigering & endringer"
+
+#: templates/workers/index.jinja:13
+msgid "Add new worker"
+msgstr "Legg til ny arbeider"
+
+#: templates/workers/index.jinja:19
+msgid "Add worker"
+msgstr "Legg til arbeider"
+
+#: templates/workers/index.jinja:23
+msgid "List of workers"
+msgstr "Oversikt over arbeidere"
+
+#: templates/workers/index.jinja:28 templates/workers/index.jinja:51
+msgid "Address"
+msgstr "Adresse"
+
+#: templates/workers/index.jinja:29 templates/workers/index.jinja:52
+msgid "Account No."
+msgstr "Kontonr."
+
+#: templates/workers/index.jinja:30 templates/workers/index.jinja:53 workers/forms.py:14
+msgid "National ID"
+msgstr "Personnummer"
+
+#: templates/workers/index.jinja:46
+msgid "List of inactive workers"
+msgstr "Oversikt over inaktive arbeidere"
+
+#: workers/forms.py:15
+msgid "National social security ID, 11 digits."
+msgstr "Fødselsnummer, 11 siffer."
+
+#: workers/models.py:15
+msgid "active"
+msgstr "aktiv"
+
+#: workers/models.py:16
+msgid "Check off if the worker is still actively working."
+msgstr ""
+
+#: workers/models.py:19
+msgid "Full name, with first name first."
+msgstr "Fullt navn, med fornavnet først."
+
+#: workers/models.py:21
+msgid "address"
+msgstr "addresse"
+
+#: workers/models.py:22
+msgid "Full address including postal code and area."
+msgstr "Full bostedsadresse, inkl. postkode og område."
+
+#: workers/models.py:25
+msgid "account no."
+msgstr "kontonr."
+
+#: workers/models.py:26
+msgid "Norwegian bank account number, no periods, 11 digits."
+msgstr "Norsk bankkontonummer, uten punktum, 11 siffer."
+
+#: workers/models.py:32
+msgid "norl&oslash;nn number"
+msgstr "norlønn-nummer"
+
+#: workers/models.py:33
+msgid "Employee number in the wage system, Norl&oslash;nn. <strong>Must</strong> exist and be correct!"
+msgstr "Asattnummeret i lønnssystemet Norlønn. <strong>Må</strong> eksistere og være korrekt satt opp!"
+
+#~ msgid "Add user"
+#~ msgstr "Legg til bruker"
+
+#~ msgid "Cost"
+#~ msgstr "Kostnad"

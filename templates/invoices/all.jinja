@@ -1,27 +1,61 @@
 {% extends "base.jinja" %}
+{% block title -%}
+    {{ _("Invoice management") }}
+{%- endblock %}
 
 {% block content %}
-<div>
-<p>Unprocessed events: {{ unprocessed_events }}</p>
-<form method="POST" action="">
-{% csrf_token %}
-<input type='hidden' name='action' value='close_period' />
-<input type='submit' value='Close period' />
-</form>
-</div>
-<div>
-<h3><a href="/invoices/list/">List all invoices</a></h3>
-<h3>Unpaid invoices:</h3>
-{% for invoice in invoices %}
-<div>
-{{ invoice.society.shortname }} - {{ invoice.period }} - {{ invoice.get_total_cost() }}
-<form method="POST" action="">
-{% csrf_token %}
-<input type='hidden' name='action' value='mark_paid' />
-<input type='hidden' name='inv_id' value='{{ invoice.id }}' />
-<input type='submit' value='Mark as paid' />
-</form>
-</div>
-{% endfor %}
-</div>
+    {% if unprocessed_events %}
+        <div class="panel panel-primary">
+            <h2 class="panel-heading panel-title">
+                {{ ngettext('%(num)d unprocessed event', '%(num)d unprocessed events', unprocessed_events) }}
+            </h2>
+            <form class="panel-body" method="POST" action="">
+                <p>{% trans -%}
+                    There are unprocessed events, which means you can close the period.
+                    Only close the period <strong>once a month</strong>, and do it at the date agreed upon.
+                {%- endtrans %}</p>
+                {% csrf_token %}
+                <input type='hidden' name='action' value='close_period'/>
+                <button class="btn btn-lg btn-danger" type='submit'>
+                    {{ _("Close period") }}
+                </button>
+            </form>
+        </div>
+    {%- else -%}
+        <div class="panel panel-info panel-body">{% trans -%}
+            There aren't any unprocessed events available for you to close the period with. Register some events
+            <em>or</em> wait until next month.
+        {%- endtrans %}</div>
+    {% endif %}
+    <div>
+        <h2>{{ _("Unpaid invoices") }}</h2>
+        {% if invoices -%}
+            <div class="list-group">
+                {% for invoice in invoices %}
+                    <div class="list-group-item clearfix">
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <input type='hidden' name='action' value='mark_paid'/>
+                            <input type='hidden' name='inv_id' value='{{ invoice.id }}'/>
+                            <button class="btn pull-right btn-primary" type='submit'>
+                                <span class="glyphicon glyphicon-ok big"></span>
+                                {{ _("Mark as paid") }}
+                            </button>
+                        </form>
+                        <strong>{{ invoice.society.name }}</strong> <br/>
+                        <span class="glyphicon glyphicon-calendar"></span>
+                            <span class="sr-only">{{ _("Date") }}:</span>
+                            {{ invoice.period }}
+                        <span class="glyphicon glyphicon-transfer" style="margin-left: 10px;"></span>
+                            <span class="sr-only">{{ _("Amount") }}:</span>
+                            {{ _("NOK %(cost)s", cost=invoice.get_total_cost()|intcomma) }}
+                    </div>
+                {% endfor %}
+            </div>
+        {%- else -%}
+            <div class="panel panel-success">
+                {{ _("There aren't any unpaid invoices! That's great!") }}
+            </div>
+        {%- endif -%}
+    </div>
 {% endblock %}

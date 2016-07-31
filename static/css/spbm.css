@@ -1,0 +1,8 @@
+/*
+ * Custom changes & adaptations for the magic that is the SPMB.
+ */
+
+body {
+   /* due to fixed navbar */
+   padding-top: 70px;
+}
