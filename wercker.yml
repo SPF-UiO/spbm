@@ -60,4 +60,6 @@ build:
     # Once that's done, let's compile the current translation
     - script: compile translation messages
       code: |
+        apk update
+        apk add gettext
         python ./manage.py compilemessages
