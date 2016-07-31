@@ -17,4 +17,4 @@ django-localflavor==1.3
 django-widget-tweaks==1.4.1
 
 # Execution for the moment
-uwsgi=2.0.13.1
+uwsgi==2.0.13.1
