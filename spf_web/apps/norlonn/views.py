@@ -1,11 +1,12 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
-from django.utils import timezone
-from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
-
-from events.models import Shift, Event
 from decimal import Decimal
-from norlonn.models import NorlonnReport
+
+from django.contrib.auth.decorators import login_required, permission_required
+from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
+
+from .models import NorlonnReport
+from ..events.models import Shift
 
 
 @login_required
@@ -23,7 +24,7 @@ def index(request):
         if s.worker.norlonn_number is None:
             errors.append("Worker %s lacks norlonn number!" % s.worker)
 
-        if s.event.invoice.paid == False:
+        if not s.event.invoice.paid:
             errors.append("Invoice not paid for worker %s" % s.worker)
 
     return render(request, 'norlonn/index.jinja', {'reports': reports, 'errors': errors})

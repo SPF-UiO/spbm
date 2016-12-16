@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django.db import models
 
-from events.models import Event
+from ..events.models import Event
 
 
 class Invoice(models.Model):

@@ -1,23 +1,20 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from helpers.auth import user_allowed_society
-from django.http import HttpResponse
-from django.db import transaction
-from django.db.models import Max
-from django.utils import timezone
-from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
-
-from society.models import Society
-from events.models import Event
-from invoices.models import Invoice
-
-import datetime
+import os.path
 import time
-
 from decimal import Decimal
 
-from invoices.f60 import f60
-import os.path
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+from django.db import transaction
+from django.db.models import Max
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
+from django.utils import timezone
+
+from helpers.auth import user_allowed_society
+from spf_web.apps.events.models import Event
+from spf_web.apps.invoices.models import Invoice
+from spf_web.apps.society.models import Society
+from .f60 import f60
 
 
 @login_required

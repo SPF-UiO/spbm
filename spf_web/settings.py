@@ -37,12 +37,12 @@ INSTALLED_APPS = (
     'django_jinja.contrib._humanize',
     'puente',
     'widget_tweaks',
-    'society',
-    'workers',
-    'events',
-    'accounts',
-    'invoices',
-    'norlonn',
+    'spf_web.apps.society',
+    'spf_web.apps.workers',
+    'spf_web.apps.events',
+    'spf_web.apps.accounts',
+    'spf_web.apps.invoices',
+    'spf_web.apps.norlonn',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -164,7 +164,7 @@ PUENTE = {
     }
 }
 
-AUTHENTICATION_BACKENDS = ('accounts.backend.SPFBackend', 'django.contrib.auth.backends.ModelBackend',)
+AUTHENTICATION_BACKENDS = ('spf_web.apps.accounts.backend.SPFBackend', 'django.contrib.auth.backends.ModelBackend',)
 
 try:
     from spf_web.local_settings import *

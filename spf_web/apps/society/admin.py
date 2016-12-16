@@ -1,4 +1,5 @@
 from django.contrib import admin
-from society.models import Society
+
+from spf_web.apps.society.models import Society
 
 admin.site.register(Society)

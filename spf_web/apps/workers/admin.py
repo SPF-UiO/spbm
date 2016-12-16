@@ -1,7 +1,8 @@
 from django.contrib import admin
-from workers.models import Worker
-from accounts.models import SpfUser
-from society.models import Society
+
+from spf_web.apps.society.models import Society
+from spf_web.apps.workers.models import Worker
+
 
 class WorkersModelAdmin(admin.ModelAdmin):
 	list_filter = ('society', )

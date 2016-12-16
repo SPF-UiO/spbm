@@ -1,9 +1,9 @@
 from django.contrib import admin
 from django.contrib.admin.utils import flatten_fieldsets
 
-from events.models import Event, Shift
-from society.models import Society
-from workers.models import Worker
+from spf_web.apps.events.models import Event, Shift
+from spf_web.apps.society.models import Society
+from spf_web.apps.workers.models import Worker
 
 
 class ShiftInline(admin.TabularInline):

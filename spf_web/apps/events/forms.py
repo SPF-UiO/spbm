@@ -1,8 +1,8 @@
 from django.forms import ModelChoiceField, DecimalField, DateInput
 from django.forms import ModelForm, Form
 
-from events.models import Event
-from workers.models import Worker
+from spf_web.apps.events.models import Event
+from spf_web.apps.workers.models import Worker
 
 
 class MyDateInput(DateInput):

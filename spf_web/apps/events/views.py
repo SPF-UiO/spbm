@@ -2,11 +2,11 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.forms.formsets import formset_factory
 from django.shortcuts import render, redirect
+from .models import Event, Shift
 
-from events.forms import EventForm, MakeShiftBase
-from events.models import Event, Shift
 from helpers.auth import user_allowed_society
-from society.models import Society
+from spf_web.apps.events.forms import EventForm, MakeShiftBase
+from spf_web.apps.society.models import Society
 
 
 @login_required

@@ -24,7 +24,7 @@
 
     {% if user.has_perm('norlonn.generate_report') %}
         <p>
-        <form action="/norlonn/generate_report/" method="post">
+        <form action="/spf_web/apps/norlonn/generate_report/" method="post">
             {% csrf_token %}
             <button class="btn
                 {%- if errors %} btn-warning
