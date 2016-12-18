@@ -41,7 +41,7 @@ class Event(models.Model):
 
 class Shift(models.Model):
     event = models.ForeignKey(Event)
-    worker = models.ForeignKey('workers.Worker',
+    worker = models.ForeignKey('society.Worker',
                                on_delete=models.PROTECT,
                                verbose_name=_('worker'))
     wage = models.DecimalField(max_digits=10,
