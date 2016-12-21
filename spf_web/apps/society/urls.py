@@ -1,8 +1,8 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
-from . import views
+from .views import views_overview
 
-urlpatterns = patterns('',
-                       url(r'^$', views.redirect_society, name='society'),
-                       url(r'^(?P<society_name>[A-Za-z]+)/$', views.index, name="index"),
-                       )
+urlpatterns = [
+    url(r'^$', views_overview.redirect_society, name='society'),
+    url(r'^(?P<society_name>[A-Za-z]+)/$', views_overview.index, name="index")
+]

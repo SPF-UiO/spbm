@@ -2,7 +2,7 @@ from django.forms import ModelChoiceField, DecimalField, DateInput
 from django.forms import ModelForm, Form
 
 from spf_web.apps.events.models import Event
-from spf_web.apps.workers.models import Worker
+from spf_web.apps.society.models import Worker
 
 
 class MyDateInput(DateInput):

@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
 from helpers.auth import user_allowed_society
-from spf_web.apps.society.models import Society
+from ..models import Society
 
 
 @login_required

@@ -1,14 +1,18 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import WorkerForm, WorkerEditForm
 
 from helpers.auth import user_allowed_society
-from spf_web.apps.society.models import Society
-from spf_web.apps.workers.models import Worker
+from spf_web.apps.society.forms.worker import WorkerForm, WorkerEditForm
+from spf_web.apps.society.models import Society, Worker
 
 
 @login_required
 def redirect_society(request):
+    """
+    Simply passes all requests to the index for the society, despite its lack of content.
+    :param request:
+    :return:
+    """
     return redirect(index, society_name=request.user.spfuser.society.shortname)
 
 
