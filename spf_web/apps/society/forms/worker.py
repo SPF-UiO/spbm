@@ -2,7 +2,7 @@ from django.forms import ModelForm
 from django.utils.translation import ugettext as _
 from localflavor.no.forms import NOSocialSecurityNumber
 
-from spf_web.apps.workers.models import Worker
+from ..models import Worker
 
 
 class WorkerForm(ModelForm):
