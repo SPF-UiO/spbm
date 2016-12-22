@@ -1,2 +1,2 @@
+__all__ = ['society', 'worker', 'events']
 from . import *
-__all__ = ['society', 'worker']
