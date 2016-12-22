@@ -4,8 +4,8 @@ from django.forms.formsets import formset_factory
 from django.shortcuts import render, redirect
 
 from helpers.auth import user_allowed_society
-from ..society.forms.events import EventForm, MakeShiftBase
-from ..society.models import Society, Event, Shift
+from ..forms.events import EventForm, MakeShiftBase
+from ..models import Society, Event, Shift
 
 
 @login_required
