@@ -28,7 +28,7 @@
                         <th style="width: 10%">{{ _("Sum") }}</th>
                     </thead>
                     <tbody>
-                    {% for shift in event.shift_set.all() %}
+                    {% for shift in event.shifts.all() %}
                         <tr>
                             <td>{% if loop.first %}{{ event.date }}: {{ event.name }}{% endif %}</td>
                             <td>{{ shift.worker.name }}</td>

@@ -67,7 +67,7 @@ class Event(models.Model):
     invoice = models.ForeignKey('invoices.Invoice',
                                 null=True,
                                 blank=True,
-                                related_name="in_invoice",
+                                related_name="events",
                                 verbose_name=_('invoice'))
 
     def __str__(self):
@@ -75,7 +75,7 @@ class Event(models.Model):
 
     def get_cost(self):
         total = Decimal(0)
-        for s in self.shift_set.all():
+        for s in self.shifts.all():
             total += s.get_total()
         total = total.quantize(Decimal(".01"))
         return total
@@ -89,10 +89,10 @@ class Event(models.Model):
 
 
 class Shift(models.Model):
-    event = models.ForeignKey(Event, related_name="event")
+    event = models.ForeignKey(Event, related_name="shifts")
     worker = models.ForeignKey(Worker,
                                on_delete=models.PROTECT,
-                               related_name="worker",
+                               related_name="shifts",
                                verbose_name=_('worker'))
     wage = models.DecimalField(max_digits=10,
                                decimal_places=2,
@@ -104,7 +104,7 @@ class Shift(models.Model):
                                        blank=True,
                                        null=True,
                                        on_delete=models.SET_NULL,
-                                       related_name="in_report",
+                                       related_name="shifts",
                                        verbose_name=_('norl&oslash;nn report'))
 
     norlonn_report.short_description = "Sent to norlønn"
