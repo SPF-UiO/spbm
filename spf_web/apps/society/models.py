@@ -53,6 +53,32 @@ class Worker(models.Model):
         return self.name + " (" + self.society.shortname + ")"
 
 
+class Invoice(models.Model):
+    society = models.ForeignKey(Society, related_name="invoices")
+    invoice_number = models.IntegerField(unique=True)
+    period = models.DateField()
+    paid = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('period', 'society')
+        permissions = (
+            ('close_period', "Can close periods to generate invoices"),
+            ('mark_paid', "Can mark invoices as paid")
+        )
+
+    def get_total_cost(self):
+        cost = 0
+        events = Event.objects.filter(invoice=self)
+
+        for event in events:
+            cost += event.get_cost()
+
+        return (cost * Decimal('1.3')).quantize(Decimal('.01'))
+
+    def __str__(self):
+        return "Number: " + str(self.invoice_number) + ": " + str(self.period)
+
+
 class Event(models.Model):
     society = models.ForeignKey(Society, null=False, related_name="society", on_delete=models.PROTECT)
     name = models.CharField(max_length=100,
@@ -64,7 +90,7 @@ class Event(models.Model):
     processed = models.DateField(null=True,
                                  blank=True,
                                  verbose_name=_('processed'))
-    invoice = models.ForeignKey('invoices.Invoice',
+    invoice = models.ForeignKey(Invoice,
                                 null=True,
                                 blank=True,
                                 related_name="events",

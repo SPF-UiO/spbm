@@ -11,8 +11,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
 from helpers.auth import user_allowed_society
-from spf_web.apps.invoices.models import Invoice
-from spf_web.apps.society.models import Society, Event
+from spf_web.apps.society.models import Society, Event, Invoice
 from .f60 import f60
 
 
@@ -35,7 +34,13 @@ def index(request, society_name):
                   {'proc_vals': proc_vals, 'cur_page': 'invoices', 'invoices': invoices})
 
 
-def unix_time(dt):
+def unix_time(dt) -> int:
+    """
+    Returns unix time (epoch) based on given datetime.
+
+    :param dt: datetime object.
+    :return: UNIX time.
+    """
     return int(time.mktime(dt.timetuple()))
 
 
