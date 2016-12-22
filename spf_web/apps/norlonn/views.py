@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
 from .models import NorlonnReport
-from ..events.models import Shift
+from ..society.models import Shift
 
 
 @login_required
