@@ -11,9 +11,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
 from helpers.auth import user_allowed_society
-from spf_web.apps.events.models import Event
 from spf_web.apps.invoices.models import Invoice
-from spf_web.apps.society.models import Society
+from spf_web.apps.society.models import Society, Event
 from .f60 import f60
 
 
