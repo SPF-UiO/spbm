@@ -28,10 +28,19 @@ build:
   # http://devcenter.wercker.com/docs/steps/index.html
   steps:
     - script:
+        name: alpine cache
+        code: |
+          echo "Trying to create cache"
+          mkdir -p $WERCKER_CACHE_DIR/apk-cache
+          ln -s $WERCKER_CACHE_DIR/apk-cache /etc/apk/cache
+          echo "Cache at $WERCKER_CACHE_DIR/apk-cache"
+          apk cache clean
+          echo "Cleaned the cache"
+    - script:
         name: alpine pre-requisites
         code: |
           apk update
-          apk add zlib-dev gettext jpeg-dev
+          apk add zlib-dev gettext jpeg-dev postgresql-dev gcc musl-dev
     - script:
         name: virtualenv-install
         code: |
@@ -47,7 +56,8 @@ build:
     #     python_location: /usr/bin/python3.2
 
     # A step that executes `pip install` command.
-    - pip-install
+    - pip-install:
+        auto_run_wheel: False
 
     # # This pip-install clears the local wheel cache
     # - pip-install:
