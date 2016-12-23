@@ -40,7 +40,7 @@ build:
         name: alpine pre-requisites
         code: |
           apk update
-          apk add zlib-dev gettext jpeg-dev postgresql-dev gcc musl-dev
+          apk add zlib-dev gettext jpeg-dev postgresql-dev gcc musl-dev linux-headers
     - script:
         name: virtualenv-install
         code: |
