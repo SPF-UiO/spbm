@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin.utils import flatten_fieldsets
 
-from spf_web.apps.society.models import Society, Worker, Event, Shift
+from spbm.apps.society.models import Society, Worker, Event, Shift
 
 
 class ShiftInline(admin.TabularInline):

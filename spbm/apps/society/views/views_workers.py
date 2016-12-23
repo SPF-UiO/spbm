@@ -2,8 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 
 from helpers.auth import user_allowed_society
-from spf_web.apps.society.forms.worker import WorkerForm, WorkerEditForm
-from spf_web.apps.society.models import Society, Worker
+from spbm.apps.society.forms.worker import WorkerForm, WorkerEditForm
+from spbm.apps.society.models import Society, Worker
 
 
 @login_required

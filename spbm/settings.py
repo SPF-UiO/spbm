@@ -37,12 +37,12 @@ INSTALLED_APPS = (
     'django_jinja.contrib._humanize',
     'puente',
     'widget_tweaks',
-    'spf_web.apps.society',
-    'spf_web.apps.workers',
-    'spf_web.apps.events',
-    'spf_web.apps.accounts',
-    'spf_web.apps.invoices',
-    'spf_web.apps.norlonn',
+    'spbm.apps.society',
+    'spbm.apps.workers',
+    'spbm.apps.events',
+    'spbm.apps.accounts',
+    'spbm.apps.invoices',
+    'spbm.apps.norlonn',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -56,8 +56,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'spf_web.urls'
-WSGI_APPLICATION = 'spf_web.wsgi.application'
+ROOT_URLCONF = 'spbm.urls'
+WSGI_APPLICATION = 'spbm.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
@@ -164,9 +164,9 @@ PUENTE = {
     }
 }
 
-AUTHENTICATION_BACKENDS = ('spf_web.apps.accounts.backend.SPFBackend', 'django.contrib.auth.backends.ModelBackend',)
+AUTHENTICATION_BACKENDS = ('spbm.apps.accounts.backend.SPFBackend', 'django.contrib.auth.backends.ModelBackend',)
 
 try:
-    from spf_web.local_settings import *
+    from spbm.local_settings import *
 except ImportError as e:
     pass
