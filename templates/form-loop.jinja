@@ -19,7 +19,7 @@
                 {{ field | attr("class:form-control") }}
                 {% if field.help_text %}
                     <p class="help-block">
-                        <small>{{ field.help_text }}</small>
+                        <small>{{ field.help_text | safe }}</small>
                     </p>
                 {% endif %}
             </div>
