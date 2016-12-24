@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import migrations, models
 import django.db.models.deletion
+from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('society', '0004_worker'),
         ('events', '0004_auto_20150602_1738'),
@@ -21,7 +20,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='event',
             name='invoice',
-            field=models.ForeignKey(null=True, verbose_name='invoice', to='invoices.Invoice', blank=True),
+            field=models.ForeignKey(null=True, verbose_name='invoice', to='invoices.Invoice', blank=True,
+                                    on_delete=models.PROTECT),
         ),
         migrations.AlterField(
             model_name='event',
@@ -46,7 +46,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='shift',
             name='norlonn_report',
-            field=models.ForeignKey(null=True, verbose_name='norl&oslash;nn report', on_delete=django.db.models.deletion.SET_NULL, to='norlonn.NorlonnReport', blank=True),
+            field=models.ForeignKey(null=True, verbose_name='norl&oslash;nn report',
+                                    on_delete=django.db.models.deletion.SET_NULL, to='norlonn.NorlonnReport',
+                                    blank=True),
         ),
         migrations.AlterField(
             model_name='shift',
@@ -56,6 +58,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='shift',
             name='worker',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, verbose_name='worker', to='society.Worker'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, verbose_name='worker',
+                                    to='society.Worker'),
         ),
     ]

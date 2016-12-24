@@ -17,11 +17,12 @@ class Migration(migrations.Migration):
                 ('invoice_number', models.IntegerField(unique=True)),
                 ('period', models.DateField()),
                 ('paid', models.BooleanField(default=False)),
-                ('society', models.ForeignKey(to='society.Society', related_name='invoices')),
+                ('society', models.ForeignKey(to='society.Society', related_name='invoices', on_delete=models.CASCADE)),
             ],
             options={
                 'permissions': (
-                ('close_period', 'Can close periods to generate invoices'), ('mark_paid', 'Can mark invoices as paid')),
+                    ('close_period', 'Can close periods to generate invoices'),
+                    ('mark_paid', 'Can mark invoices as paid')),
             },
         ),
         migrations.AlterUniqueTogether(

@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('date', models.DateField()),
                 ('registered', models.DateField(auto_now_add=True)),
                 ('processed', models.DateField(blank=True, null=True)),
-                ('invoice', models.ForeignKey(to='invoices.Invoice', null=True, blank=True)),
+                ('invoice', models.ForeignKey(to='invoices.Invoice', null=True, blank=True, on_delete=models.SET_NULL)),
                 ('society', models.ForeignKey(to='society.Society', on_delete=django.db.models.deletion.PROTECT)),
             ],
             options={
@@ -35,8 +35,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
                 ('wage', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('hours', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('event', models.ForeignKey(to='events.Event')),
-                ('worker', models.ForeignKey(to='workers.Worker')),
+                ('event', models.ForeignKey(to='events.Event', on_delete=models.CASCADE)),
+                ('worker', models.ForeignKey(to='workers.Worker', on_delete=models.PROTECT)),
             ],
             options={
             },

@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='shift',
             name='event',
-            field=models.ForeignKey(to='society.Event'),
+            field=models.ForeignKey(to='society.Event', on_delete=models.CASCADE),
         ),
     ]

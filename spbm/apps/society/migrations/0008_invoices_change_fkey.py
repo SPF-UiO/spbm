@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
             model_name='event',
             name='invoice',
             field=models.ForeignKey(to='society.Invoice', blank=True, related_name='events', null=True,
-                                    verbose_name='invoice'),
+                                    verbose_name='invoice', on_delete=models.CASCADE),
         ),
     ]
