@@ -1,21 +1,17 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: PROJECT 1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-12-24 13:29+0000\n"
+"POT-Creation-Date: 2016-12-24 13:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
 
 #: spbm/apps/norlonn/models.py:13
 msgid "norlÃ¸nn report"
@@ -82,7 +78,9 @@ msgid "norl&oslash;nn number"
 msgstr ""
 
 #: spbm/apps/society/models.py:61
-msgid "Employee number in the wage system, Norl&oslash;nn. <strong>Must</strong> exist and be correct!"
+msgid ""
+"Employee number in the wage system, Norl&oslash;nn. <strong>Must</strong> "
+"exist and be correct!"
 msgstr ""
 
 #: spbm/apps/society/models.py:75 spbm/apps/society/models.py:124
@@ -137,7 +135,8 @@ msgstr ""
 msgid "norl&oslash;nn report"
 msgstr ""
 
-#: spbm/apps/society/forms/worker.py:14 templates/workers/index.jinja:30 templates/workers/index.jinja:53
+#: spbm/apps/society/forms/worker.py:14 templates/workers/index.jinja:30
+#: templates/workers/index.jinja:53
 msgid "National ID"
 msgstr ""
 
@@ -270,7 +269,8 @@ msgstr ""
 msgid "Event"
 msgstr ""
 
-#: templates/events/index.jinja:25 templates/workers/index.jinja:27 templates/workers/index.jinja:50
+#: templates/events/index.jinja:25 templates/workers/index.jinja:27
+#: templates/workers/index.jinja:50
 msgid "Name"
 msgstr ""
 
@@ -286,7 +286,8 @@ msgstr ""
 msgid "Sum"
 msgstr ""
 
-#: templates/events/index.jinja:37 templates/events/index.jinja:42 templates/invoices/all.jinja:51 templates/invoices/index.jinja:17
+#: templates/events/index.jinja:37 templates/events/index.jinja:42
+#: templates/invoices/all.jinja:51 templates/invoices/index.jinja:17
 #, python-format
 msgid "NOK %(cost)s"
 msgstr ""
@@ -307,7 +308,10 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: templates/invoices/all.jinja:13
-msgid "There are unprocessed events, which means you can close the period. Only close the period <strong>once a month</strong>, and do it at the date agreed upon."
+msgid ""
+"There are unprocessed events, which means you can close the period. Only "
+"close the period <strong>once a month</strong>, and do it at the date agreed "
+"upon."
 msgstr ""
 
 #: templates/invoices/all.jinja:20
@@ -315,7 +319,9 @@ msgid "Close period"
 msgstr ""
 
 #: templates/invoices/all.jinja:25
-msgid "There aren't any unprocessed events available for you to close the period with. Register some events <em>or</em> wait until next month."
+msgid ""
+"There aren't any unprocessed events available for you to close the period "
+"with. Register some events <em>or</em> wait until next month."
 msgstr ""
 
 #: templates/invoices/all.jinja:31
@@ -330,7 +336,8 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: templates/invoices/all.jinja:50 templates/invoices/index.jinja:11 templates/invoices/list.jinja:13
+#: templates/invoices/all.jinja:50 templates/invoices/index.jinja:11
+#: templates/invoices/list.jinja:13
 msgid "Amount"
 msgstr ""
 
@@ -377,8 +384,10 @@ msgstr ""
 
 #: templates/norlonn/index.jinja:11
 msgid ""
-"There are some errors present. Please fix the errors before you attempt generating a report, as to avoid workers missing out on their wages. If the errors are associated with a different society "
-"than yours, get in touch with them over the mailing list."
+"There are some errors present. Please fix the errors before you attempt "
+"generating a report, as to avoid workers missing out on their wages. If the "
+"errors are associated with a different society than yours, get in touch with "
+"them over the mailing list."
 msgstr ""
 
 #: templates/norlonn/index.jinja:33
@@ -391,8 +400,9 @@ msgstr ""
 
 #: templates/norlonn/index.jinja:43
 msgid ""
-"The following is the list of the payment reports that have been created in the past. They detail the amount of money and payments for each worker, and should only <strong>be imported once</strong> "
-"into Norlønn."
+"The following is the list of the payment reports that have been created in "
+"the past. They detail the amount of money and payments for each worker, and "
+"should only <strong>be imported once</strong> into Norlønn."
 msgstr ""
 
 #: templates/norlonn/report.jinja:4
@@ -416,7 +426,9 @@ msgid "You're logged into an account associated with:"
 msgstr ""
 
 #: templates/society/index.jinja:9
-msgid "As of right now, this page exactly doesn't really do anything, so take a look at the navigation bar!."
+msgid ""
+"As of right now, this page exactly doesn't really do anything, so take a look"
+" at the navigation bar!."
 msgstr ""
 
 #: templates/workers/edit.jinja:3
@@ -458,3 +470,4 @@ msgstr ""
 #: templates/workers/index.jinja:46
 msgid "List of inactive workers"
 msgstr ""
+

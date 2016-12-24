@@ -11,6 +11,14 @@ mark_safe_lazy = lazy(mark_safe, six.text_type)
 
 
 class Society(models.Model):
+    """
+    Model for student societies -- and other members -- of SPF.
+    """
+
+    class Meta:
+        verbose_name = _('society')
+        verbose_name_plural = _('societies')
+
     name = models.CharField(max_length=100)
     shortname = models.CharField(max_length=10)
     invoice_email = models.EmailField(default="")
@@ -25,6 +33,11 @@ class Worker(models.Model):
     """
     Model for student -- and other types of -- workers.
     """
+
+    class Meta:
+        verbose_name = _('worker')
+        verbose_name_plural = _('workers')
+
     society = models.ForeignKey(Society, on_delete=models.PROTECT, related_name="workers")
     active = models.BooleanField(default=True,
                                  verbose_name=_('active'),
@@ -54,17 +67,23 @@ class Worker(models.Model):
 
 
 class Invoice(models.Model):
-    society = models.ForeignKey(Society, related_name="invoices")
-    invoice_number = models.IntegerField(unique=True)
-    period = models.DateField()
-    paid = models.BooleanField(default=False)
+    """
+    Model for the invoices associated with closing a period of events.
+    """
 
     class Meta:
+        verbose_name = _('invoice')
+        verbose_name_plural = _('invoices')
         unique_together = ('period', 'society')
         permissions = (
             ('close_period', "Can close periods to generate invoices"),
             ('mark_paid', "Can mark invoices as paid")
         )
+
+    society = models.ForeignKey(Society, related_name="invoices")
+    invoice_number = models.IntegerField(unique=True)
+    period = models.DateField()
+    paid = models.BooleanField(default=False)
 
     def get_total_cost(self):
         cost = 0
@@ -80,6 +99,14 @@ class Invoice(models.Model):
 
 
 class Event(models.Model):
+    """
+    Model for events, bookings and other sorts of works performed by societies.
+    """
+
+    class Meta:
+        verbose_name = _('event')
+        verbose_name_plural = _('events')
+
     society = models.ForeignKey(Society, null=False, related_name="society", on_delete=models.PROTECT)
     name = models.CharField(max_length=100,
                             verbose_name=_('name'))
@@ -115,6 +142,15 @@ class Event(models.Model):
 
 
 class Shift(models.Model):
+    """
+    Model for a worker's shift during an event.
+    """
+
+    class Meta:
+        verbose_name = _('shift')
+        verbose_name_plural = _('shifts')
+        unique_together = ("event", "worker")
+
     event = models.ForeignKey(Event, related_name="shifts")
     worker = models.ForeignKey(Worker,
                                on_delete=models.PROTECT,
@@ -134,9 +170,6 @@ class Shift(models.Model):
                                        verbose_name=_('norl&oslash;nn report'))
 
     norlonn_report.short_description = "Sent to norlønn"
-
-    class Meta:
-        unique_together = ("event", "worker")
 
     def clean(self):
         try:

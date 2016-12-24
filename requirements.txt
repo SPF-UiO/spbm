@@ -1,5 +1,5 @@
 # Main framework
-Django<1.9
+Django<1.10
 django-jinja==2.2.1
 
 # Data

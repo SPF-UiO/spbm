@@ -158,9 +158,10 @@ PUENTE = {
             ('**.jinja', 'jinja2'),
             ('fjord/**/templates/**.html', 'django'),
         ],
-        'djangojs': [
-            ('**.js', 'javascript'),
-        ]
+        # Feel free to uncomment once there's any JavaScript with i18n.
+        # 'djangojs': [
+        #     ('**.js', 'javascript'),
+        # ]
     }
 }
 
