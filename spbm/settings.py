@@ -103,7 +103,8 @@ TEMPLATES = [
                               'puente.ext.i18n',
                           ] + DEFAULT_EXTENSIONS,
             'filters': {
-                'attr': 'widget_tweaks.templatetags.widget_tweaks.set_attr'
+                'attr': 'widget_tweaks.templatetags.widget_tweaks.set_attr',
+                'localize': 'django.utils.formats.localize',
             },
             'globals': {
                 'get_language': 'django.utils.translation.get_language'
