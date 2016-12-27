@@ -2,28 +2,32 @@
 Django settings for spf_web project.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/1.8/topics/settings/
+https://docs.djangoproject.com/en/1.10/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.8/ref/settings/
+https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-# Import default extensions to extend furthermore for Jinja2 and puente
+
+# We need the default extensions
 from django_jinja.builtins import DEFAULT_EXTENSIONS
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
+# See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 's_#vkn6zj^713q2x37dajjp44*mr9q**j)p!3o#z4a&jynt3-a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+# When Debug is False, ALLOWED_HOSTS must be configured correctly.
 ALLOWED_HOSTS = []
+ROOT_URLCONF = 'spbm.urls'
+WSGI_APPLICATION = 'spbm.wsgi.application'
 
 # Application definition
 INSTALLED_APPS = (
@@ -38,10 +42,10 @@ INSTALLED_APPS = (
     'puente',
     'widget_tweaks',
     'spbm.apps.society',
-    'spbm.apps.workers',
-    'spbm.apps.events',
+    'spbm.apps.workers',  # deprecated
+    'spbm.apps.events',  # deprecated
     'spbm.apps.accounts',
-    'spbm.apps.invoices',
+    'spbm.apps.invoices',  # deprecated
     'spbm.apps.norlonn',
 )
 
@@ -56,12 +60,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'spbm.urls'
-WSGI_APPLICATION = 'spbm.wsgi.application'
-
 # Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
+# https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -70,7 +70,7 @@ DATABASES = {
 }
 
 # Internationalization
-# https://docs.djangoproject.com/en/1.8/topics/i18n/
+# https://docs.djangoproject.com/en/1.10/topics/i18n/
 LANGUAGE_CODE = 'en-uk'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -78,7 +78,7 @@ USE_L10N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.8/howto/static-files/
+# https://docs.djangoproject.com/en/1.10/howto/static-files/
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static_files")
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
@@ -87,7 +87,8 @@ MEDIA_URL = "/media_files/"
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale")
 ]
-
+# Template providers, as well as filters and more
+# https://docs.djangoproject.com/en/1.10/topics/templates/#configuration
 TEMPLATES = [
     {
         'BACKEND': 'django_jinja.backend.Jinja2',
@@ -99,8 +100,8 @@ TEMPLATES = [
             'newstyle_gettext': True,
             'match_extension': '.jinja',
             'extensions': [
-                'puente.ext.i18n',
-            ] + DEFAULT_EXTENSIONS,
+                              'puente.ext.i18n',
+                          ] + DEFAULT_EXTENSIONS,
             'filters': {
                 'attr': 'widget_tweaks.templatetags.widget_tweaks.set_attr'
             },
@@ -118,34 +119,22 @@ TEMPLATES = [
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
                 # Added from old SPF
-                'django.template.context_processors.request'
+                # 'django.template.context_processors.request'
             ]
         }
     },
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
+            # Useful to overwrite, say, django.contrib.admin templates
             os.path.join(BASE_DIR, "templates")
         ],
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
-                # list if you haven't customized them:
+                # Provided to support django.contrib.admin
                 'django.contrib.auth.context_processors.auth',
-                #                'django.template.context_processors.debug',
-                'django.template.context_processors.i18n',
-                #                'django.template.context_processors.media',
-                #                'django.template.context_processors.static',
-                #                'django.template.context_processors.tz',
-                #                'django.contrib.messages.context_processors.messages',
-                #                # Added from old SPF
-                #                'django.template.context_processors.request'
             ],
-            'loaders': [
-                # insert your TEMPLATE_LOADERS here
-                'django_jinja.loaders.FileSystemLoader',
-                'django_jinja.loaders.AppLoader'
-            ]
         },
     },
 ]
