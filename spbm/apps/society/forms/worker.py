@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from localflavor.no.forms import NOSocialSecurityNumber
 
 from ..models import Worker
@@ -7,7 +7,7 @@ from ..models import Worker
 
 class WorkerForm(ModelForm):
     """
-    Form for creating a worker.
+    Form for creating a new worker.
     """
     # This overwrites the meta definition.
     person_id = NOSocialSecurityNumber(required=False,
@@ -25,5 +25,4 @@ class WorkerEditForm(WorkerForm):
     """
 
     class Meta(WorkerForm.Meta):
-        model = Worker
         fields = ['name', 'address', 'account_no', 'person_id', 'norlonn_number', 'active']
