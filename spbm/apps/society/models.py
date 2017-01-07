@@ -19,11 +19,15 @@ class Society(models.Model):
         verbose_name = _('society')
         verbose_name_plural = _('societies')
 
-    name = models.CharField(max_length=100)
-    shortname = models.CharField(max_length=10)
-    invoice_email = models.EmailField(default="")
-    default_wage = models.DecimalField(max_digits=10, decimal_places=2)
-    logo = models.FileField(null=True, blank=True)
+    name = models.CharField(max_length=100,
+                            verbose_name=_('name'))
+    shortname = models.CharField(max_length=10,
+                                 verbose_name=_('abbreviated name'))
+    invoice_email = models.EmailField(default="",
+                                      verbose_name=_('invoice e-mail'))
+    default_wage = models.DecimalField(max_digits=10, decimal_places=2,
+                                       verbose_name=_('default wage per hour'))
+    logo = models.FileField(null=True, blank=True, verbose_name=_('logo'))
 
     def __str__(self):
         return self.shortname
@@ -38,7 +42,10 @@ class Worker(models.Model):
         verbose_name = _('worker')
         verbose_name_plural = _('workers')
 
-    society = models.ForeignKey(Society, on_delete=models.PROTECT, related_name="workers")
+    society = models.ForeignKey(Society,
+                                verbose_name=_('society'),
+                                on_delete=models.PROTECT,
+                                related_name="workers")
     active = models.BooleanField(default=True,
                                  verbose_name=_('active'),
                                  help_text=_('Check off if the worker is still actively working.'))
@@ -53,7 +60,8 @@ class Worker(models.Model):
                                   verbose_name=_('account no.'),
                                   help_text=_('Norwegian bank account number, no periods, 11 digits.'))
     person_id = models.CharField(max_length=20,
-                                 blank=True)
+                                 blank=True,
+                                 verbose_name=_('person ID'))
     norlonn_number = models.IntegerField(blank=True,
                                          null=True,
                                          unique=True,
@@ -80,19 +88,23 @@ class Invoice(models.Model):
             ('mark_paid', "Can mark invoices as paid")
         )
 
-    society = models.ForeignKey(Society, related_name="invoices")
-    invoice_number = models.IntegerField(unique=True)
-    period = models.DateField()
-    paid = models.BooleanField(default=False)
+    society = models.ForeignKey(Society, verbose_name=_('society'), related_name="invoices", on_delete=models.PROTECT)
+    invoice_number = models.IntegerField(verbose_name=_('invoice number'), unique=True)
+    period = models.DateField(verbose_name=_('period'))
+    paid = models.BooleanField(verbose_name=_('invoice paid'), default=False)
 
     def get_total_cost(self):
+        """
+        Calculates the cost for an event, including the percentage fee.
+        :return: Decimal of total event cost, including the fee.
+        """
         cost = 0
         events = Event.objects.filter(invoice=self)
 
         for event in events:
             cost += event.get_cost()
 
-        return (cost * Decimal('1.3')).quantize(Decimal('.01'))
+        return (Decimal(cost) * Decimal('1.3')).quantize(Decimal('.01'))
 
     def __str__(self):
         return "Number: " + str(self.invoice_number) + ": " + str(self.period)
@@ -107,7 +119,8 @@ class Event(models.Model):
         verbose_name = _('event')
         verbose_name_plural = _('events')
 
-    society = models.ForeignKey(Society, null=False, related_name="society", on_delete=models.PROTECT)
+    society = models.ForeignKey(Society, null=False, verbose_name=_('society'), related_name="society",
+                                on_delete=models.PROTECT)
     name = models.CharField(max_length=100,
                             verbose_name=_('name'))
     date = models.DateField(verbose_name=_('event date'))
@@ -117,9 +130,13 @@ class Event(models.Model):
     processed = models.DateField(null=True,
                                  blank=True,
                                  verbose_name=_('processed'))
+    # If you've got an invoice, maybe it shouldn't be allowed to be deleted.
+    # However, do we have some other good ways of doing it? :/ I mean, *easy* ways of doing it?
+    # Let's be difficult with ourselves. Don't delete the invoices, just remove the invoice from the event!
     invoice = models.ForeignKey(Invoice,
                                 null=True,
                                 blank=True,
+                                on_delete=models.PROTECT,
                                 related_name="events",
                                 verbose_name=_('invoice'))
 
@@ -151,7 +168,7 @@ class Shift(models.Model):
         verbose_name_plural = _('shifts')
         unique_together = ("event", "worker")
 
-    event = models.ForeignKey(Event, related_name="shifts")
+    event = models.ForeignKey(Event, related_name="shifts", on_delete=models.CASCADE)
     worker = models.ForeignKey(Worker,
                                on_delete=models.PROTECT,
                                related_name="shifts",
