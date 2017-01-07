@@ -1,12 +1,18 @@
 from django.contrib import admin
 
+from .events import ShiftInline
 from ..models import Society, Worker
+from ..forms.worker import WorkerForm
 
 
 class WorkersModelAdmin(admin.ModelAdmin):
+    # We have a customized widget form that we should use here, see ../forms/worker.py
+    form = WorkerForm
+    inlines = [ShiftInline]
     list_filter = ('society',)
+    list_display = ('__str__', 'address', 'person_id', 'account_no', 'norlonn_number')
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
         if db_field.name == "society":
             if not request.user.is_superuser:
                 kwargs['queryset'] = Society.objects.filter(
