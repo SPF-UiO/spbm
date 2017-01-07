@@ -1,10 +1,11 @@
 from django.contrib import admin
 
 from .events import ShiftInline
-from ..models import Society, Worker
 from ..forms.worker import WorkerForm
+from ..models import Society, Worker
 
 
+@admin.register(Worker)
 class WorkersModelAdmin(admin.ModelAdmin):
     # We have a customized widget form that we should use here, see ../forms/worker.py
     form = WorkerForm
@@ -51,6 +52,3 @@ class WorkersModelAdmin(admin.ModelAdmin):
             return qs.filter(society=request.user.spfuser.society)
         else:
             return qs.none()
-
-
-admin.site.register(Worker, WorkersModelAdmin)

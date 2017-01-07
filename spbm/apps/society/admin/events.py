@@ -72,7 +72,7 @@ class EventInline(ReadOnlyProtection, admin.TabularInline):
         else:
             super().get_readonly_fields(request, obj)
 
-
+@admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
     inlines = [ShiftInline]
@@ -127,4 +127,3 @@ class EventAdmin(admin.ModelAdmin):
             return qs.none()
 
 
-admin.site.register(Event, EventAdmin)

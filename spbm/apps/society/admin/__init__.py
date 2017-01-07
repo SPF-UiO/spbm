@@ -9,16 +9,12 @@ I mean, really, it's just more mess than it's worth. // Thor
 """
 
 
+@admin.register(Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
     list_display = ('period', 'paid')
     inlines = [events.EventInline]
 
 
-admin.site.register(Invoice, InvoiceAdmin)
-
-
+@admin.register(Society)
 class SocietyAdmin(admin.ModelAdmin):
     list_display = ('name', 'shortname', 'invoice_email',)
-
-
-admin.site.register(Society, SocietyAdmin)
