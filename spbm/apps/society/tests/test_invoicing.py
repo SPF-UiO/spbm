@@ -38,9 +38,10 @@ class InvoicingTests(TestCase):
         """
         response = self.client.get(reverse('invoices-all'))
         body = response.content.decode()
-        unpaid_invoices = Invoice.objects.filter(paid='')
+        unpaid_invoices = Invoice.objects.filter(paid=False)
         self.assertInHTML("<input type='hidden' name='action' value='mark_paid'>", body,
                           count=len(unpaid_invoices))
+        # Enumerate through each of the invoices and make sure that they're there!
         for unpaid in unpaid_invoices:
             self.assertInHTML("<input type='hidden' name='inv_id' value='{pk}'>".format(pk=unpaid.pk), body)
 
