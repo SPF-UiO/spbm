@@ -1,0 +1,26 @@
+[
+  {
+    "model": "accounts.spfuser",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "society": 1
+    }
+  },
+  {
+    "model": "accounts.spfuser",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "society": 1
+    }
+  },
+  {
+    "model": "accounts.spfuser",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "society": 2
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "model": "society.society",
+    "pk": 1,
+    "fields": {
+      "name": "Cybernetisk Selskab",
+      "shortname": "CYB",
+      "invoice_email": "utlan+test-cyb@cyb.no",
+      "default_wage": "128.00",
+      "logo": "./logo-150.png"
+    }
+  },
+  {
+    "model": "society.society",
+    "pk": 2,
+    "fields": {
+      "name": "Realistforeningen",
+      "shortname": "RF",
+      "invoice_email": "utlan+test-rf@cyb.no",
+      "default_wage": "140.00",
+      "logo": ""
+    }
+  },
+  {
+    "model": "society.society",
+    "pk": 3,
+    "fields": {
+      "name": "Samfunnsvitenskapelig fakultetsforening",
+      "shortname": "SvFF",
+      "invoice_email": "utlan+test-svff@cyb.no",
+      "default_wage": "130.00",
+      "logo": ""
+    }
+  }
+]
