@@ -32,8 +32,8 @@
                         <tr>
                             <td>{% if loop.first %}{{ event.date }}: {{ event.name }}{% endif %}</td>
                             <td>{{ shift.worker.name }}</td>
-                            <td>{{ shift.wage }}</td>
-                            <td>{{ shift.hours }}</td>
+                            <td>{{ shift.wage | intcomma }}</td>
+                            <td>{{ shift.hours | intcomma }}</td>
                             <td>{{ _('NOK %(cost)s', cost=shift.get_total() | intcomma) }}</td>
                         </tr>
                     {% endfor %}

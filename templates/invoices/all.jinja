@@ -45,7 +45,7 @@
                         <strong>{{ invoice.society.name }}</strong> <br/>
                         <span class="glyphicon glyphicon-calendar"></span>
                             <span class="sr-only">{{ _("Date") }}:</span>
-                            {{ invoice.period }}
+                            {{ invoice.period | localize }}
                         <span class="glyphicon glyphicon-transfer" style="margin-left: 10px;"></span>
                             <span class="sr-only">{{ _("Amount") }}:</span>
                             {{ _("NOK %(cost)s", cost=invoice.get_total_cost()|intcomma) }}

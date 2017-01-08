@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SPF SPBM v0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-12-24 13:29+0000\n"
+"POT-Creation-Date: 2017-01-08 16:19+0000\n"
 "PO-Revision-Date: 2016-12-23 03:34+GMT1\n"
 "Last-Translator: Thor K. Høgås <thor@roht.no>\n"
 "Language: Norwegian bokmål\n"
@@ -28,7 +28,7 @@ msgstr "norlønn-rapporter"
 msgid "SPBM"
 msgstr "SPBM"
 
-#: spbm/apps/society/models.py:19
+#: spbm/apps/society/models.py:19 spbm/apps/society/models.py:46 spbm/apps/society/models.py:91 spbm/apps/society/models.py:122
 msgid "society"
 msgstr "forening"
 
@@ -36,103 +36,135 @@ msgstr "forening"
 msgid "societies"
 msgstr "foreninger"
 
-#: spbm/apps/society/models.py:38 spbm/apps/society/models.py:158
-msgid "worker"
-msgstr "arbeider"
-
-#: spbm/apps/society/models.py:39
-msgid "workers"
-msgstr "arbeidere"
-
-#: spbm/apps/society/models.py:43
-msgid "active"
-msgstr "aktiv"
-
-#: spbm/apps/society/models.py:44
-msgid "Check off if the worker is still actively working."
-msgstr "Kun kryss av om arbeideren fortsatt jobber aktivt."
-
-#: spbm/apps/society/models.py:46 spbm/apps/society/models.py:112
+#: spbm/apps/society/models.py:23 spbm/apps/society/models.py:53 spbm/apps/society/models.py:125
 msgid "name"
 msgstr "navn"
 
-#: spbm/apps/society/models.py:47
+#: spbm/apps/society/models.py:25
+msgid "abbreviated name"
+msgstr "forkortet navn"
+
+#: spbm/apps/society/models.py:27
+msgid "invoice e-mail"
+msgstr "fakturaepost"
+
+#: spbm/apps/society/models.py:29
+msgid "default wage per hour"
+msgstr "standardlønn per time"
+
+#: spbm/apps/society/models.py:30
+msgid "logo"
+msgstr "logo"
+
+#: spbm/apps/society/models.py:42 spbm/apps/society/models.py:175
+msgid "worker"
+msgstr "arbeider"
+
+#: spbm/apps/society/models.py:43
+msgid "workers"
+msgstr "arbeidere"
+
+#: spbm/apps/society/models.py:50
+msgid "active"
+msgstr "aktiv"
+
+#: spbm/apps/society/models.py:51
+msgid "Check off if the worker is still actively working."
+msgstr "Kun kryss av om arbeideren fortsatt jobber aktivt."
+
+#: spbm/apps/society/models.py:54
 msgid "Full name, with first name first."
 msgstr "Fullt navn, med fornavnet først."
 
-#: spbm/apps/society/models.py:49
+#: spbm/apps/society/models.py:56
 msgid "address"
 msgstr "addresse"
 
-#: spbm/apps/society/models.py:50
+#: spbm/apps/society/models.py:57
 msgid "Full address including postal code and area."
 msgstr "Full bostedsadresse, inkl. postkode og område."
 
-#: spbm/apps/society/models.py:53
+#: spbm/apps/society/models.py:60
 msgid "account no."
 msgstr "kontonr."
 
-#: spbm/apps/society/models.py:54
+#: spbm/apps/society/models.py:61
 msgid "Norwegian bank account number, no periods, 11 digits."
 msgstr "Norsk bankkontonummer, uten punktum, 11 siffer."
 
-#: spbm/apps/society/models.py:60
+#: spbm/apps/society/models.py:64
+msgid "person ID"
+msgstr "fødselsnummer"
+
+#: spbm/apps/society/models.py:68
 msgid "norl&oslash;nn number"
 msgstr "norlønn-nummer"
 
-#: spbm/apps/society/models.py:61
+#: spbm/apps/society/models.py:69
 msgid "Employee number in the wage system, Norl&oslash;nn. <strong>Must</strong> exist and be correct!"
 msgstr "Asattnummeret i lønnssystemet Norlønn. <strong>Må</strong> eksistere og være korrekt satt opp!"
 
-#: spbm/apps/society/models.py:75 spbm/apps/society/models.py:124
+#: spbm/apps/society/models.py:83 spbm/apps/society/models.py:141
 msgid "invoice"
 msgstr "faktura"
 
-#: spbm/apps/society/models.py:76
+#: spbm/apps/society/models.py:84
 msgid "invoices"
 msgstr "fakturaer"
 
-#: spbm/apps/society/models.py:107
+#: spbm/apps/society/models.py:92
+msgid "invoice number"
+msgstr "fakturanummer"
+
+#: spbm/apps/society/models.py:93
+msgid "period"
+msgstr "periode"
+
+#: spbm/apps/society/models.py:94
+msgid "invoice paid"
+msgstr "faktura er betalt"
+
+#: spbm/apps/society/models.py:119
 msgid "event"
 msgstr "arrangement"
 
-#: spbm/apps/society/models.py:108
+#: spbm/apps/society/models.py:120
 msgid "events"
 msgstr "arrangementer"
 
-#: spbm/apps/society/models.py:113
+#: spbm/apps/society/models.py:126
 msgid "event date"
 msgstr "arrangementdato"
 
-#: spbm/apps/society/models.py:116
+#: spbm/apps/society/models.py:129
 msgid "registered"
 msgstr "registrert"
 
-#: spbm/apps/society/models.py:119
+#: spbm/apps/society/models.py:132
 msgid "processed"
 msgstr "behandlet"
 
-#: spbm/apps/society/models.py:136
+#: spbm/apps/society/models.py:153
 msgid "Total cost"
 msgstr "Total kostnad"
 
-#: spbm/apps/society/models.py:150
+#: spbm/apps/society/models.py:167
 msgid "shift"
 msgstr "skift"
 
-#: spbm/apps/society/models.py:151
+#: spbm/apps/society/models.py:168
 msgid "shifts"
 msgstr "skift"
 
-#: spbm/apps/society/models.py:161
+#: spbm/apps/society/models.py:178
 msgid "wage"
 msgstr "timelønn"
 
-#: spbm/apps/society/models.py:164
+#: spbm/apps/society/models.py:181
 msgid "hours"
 msgstr "timer"
 
-#: spbm/apps/society/models.py:170
+#: spbm/apps/society/models.py:187
 msgid "norl&oslash;nn report"
 msgstr "norlønn-rapport"
 
@@ -459,3 +491,9 @@ msgstr "Kontonr."
 #: templates/workers/index.jinja:46
 msgid "List of inactive workers"
 msgstr "Oversikt over inaktive arbeidere"
+
+#~ msgid "{cost}"
+#~ msgstr "kr. {cost:f}"
+
+#~ msgid "{0}"
+#~ msgstr "kr. {0}"

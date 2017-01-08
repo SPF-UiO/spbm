@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-12-24 13:29+0000\n"
+"POT-Creation-Date: 2017-01-08 16:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "SPBM"
 msgstr ""
 
-#: spbm/apps/society/models.py:19
+#: spbm/apps/society/models.py:19 spbm/apps/society/models.py:46 spbm/apps/society/models.py:91 spbm/apps/society/models.py:122
 msgid "society"
 msgstr ""
 
@@ -37,103 +37,135 @@ msgstr ""
 msgid "societies"
 msgstr ""
 
-#: spbm/apps/society/models.py:38 spbm/apps/society/models.py:158
-msgid "worker"
-msgstr ""
-
-#: spbm/apps/society/models.py:39
-msgid "workers"
-msgstr ""
-
-#: spbm/apps/society/models.py:43
-msgid "active"
-msgstr ""
-
-#: spbm/apps/society/models.py:44
-msgid "Check off if the worker is still actively working."
-msgstr ""
-
-#: spbm/apps/society/models.py:46 spbm/apps/society/models.py:112
+#: spbm/apps/society/models.py:23 spbm/apps/society/models.py:53 spbm/apps/society/models.py:125
 msgid "name"
 msgstr ""
 
-#: spbm/apps/society/models.py:47
-msgid "Full name, with first name first."
+#: spbm/apps/society/models.py:25
+msgid "abbreviated name"
 msgstr ""
 
-#: spbm/apps/society/models.py:49
-msgid "address"
+#: spbm/apps/society/models.py:27
+msgid "invoice e-mail"
+msgstr ""
+
+#: spbm/apps/society/models.py:29
+msgid "default wage per hour"
+msgstr ""
+
+#: spbm/apps/society/models.py:30
+msgid "logo"
+msgstr ""
+
+#: spbm/apps/society/models.py:42 spbm/apps/society/models.py:175
+msgid "worker"
+msgstr ""
+
+#: spbm/apps/society/models.py:43
+msgid "workers"
 msgstr ""
 
 #: spbm/apps/society/models.py:50
-msgid "Full address including postal code and area."
+msgid "active"
 msgstr ""
 
-#: spbm/apps/society/models.py:53
-msgid "account no."
+#: spbm/apps/society/models.py:51
+msgid "Check off if the worker is still actively working."
 msgstr ""
 
 #: spbm/apps/society/models.py:54
-msgid "Norwegian bank account number, no periods, 11 digits."
+msgid "Full name, with first name first."
+msgstr ""
+
+#: spbm/apps/society/models.py:56
+msgid "address"
+msgstr ""
+
+#: spbm/apps/society/models.py:57
+msgid "Full address including postal code and area."
 msgstr ""
 
 #: spbm/apps/society/models.py:60
-msgid "norl&oslash;nn number"
+msgid "account no."
 msgstr ""
 
 #: spbm/apps/society/models.py:61
+msgid "Norwegian bank account number, no periods, 11 digits."
+msgstr ""
+
+#: spbm/apps/society/models.py:64
+msgid "person ID"
+msgstr ""
+
+#: spbm/apps/society/models.py:68
+msgid "norl&oslash;nn number"
+msgstr ""
+
+#: spbm/apps/society/models.py:69
 msgid "Employee number in the wage system, Norl&oslash;nn. <strong>Must</strong> exist and be correct!"
 msgstr ""
 
-#: spbm/apps/society/models.py:75 spbm/apps/society/models.py:124
+#: spbm/apps/society/models.py:83 spbm/apps/society/models.py:141
 msgid "invoice"
 msgstr ""
 
-#: spbm/apps/society/models.py:76
+#: spbm/apps/society/models.py:84
 msgid "invoices"
 msgstr ""
 
-#: spbm/apps/society/models.py:107
-msgid "event"
+#: spbm/apps/society/models.py:92
+msgid "invoice number"
 msgstr ""
 
-#: spbm/apps/society/models.py:108
-msgid "events"
+#: spbm/apps/society/models.py:93
+msgid "period"
 msgstr ""
 
-#: spbm/apps/society/models.py:113
-msgid "event date"
-msgstr ""
-
-#: spbm/apps/society/models.py:116
-msgid "registered"
+#: spbm/apps/society/models.py:94
+msgid "invoice paid"
 msgstr ""
 
 #: spbm/apps/society/models.py:119
+msgid "event"
+msgstr ""
+
+#: spbm/apps/society/models.py:120
+msgid "events"
+msgstr ""
+
+#: spbm/apps/society/models.py:126
+msgid "event date"
+msgstr ""
+
+#: spbm/apps/society/models.py:129
+msgid "registered"
+msgstr ""
+
+#: spbm/apps/society/models.py:132
 msgid "processed"
 msgstr ""
 
-#: spbm/apps/society/models.py:136
+#: spbm/apps/society/models.py:153
 msgid "Total cost"
 msgstr ""
 
-#: spbm/apps/society/models.py:150
+#: spbm/apps/society/models.py:167
 msgid "shift"
 msgstr ""
 
-#: spbm/apps/society/models.py:151
+#: spbm/apps/society/models.py:168
 msgid "shifts"
 msgstr ""
 
-#: spbm/apps/society/models.py:161
+#: spbm/apps/society/models.py:178
 msgid "wage"
 msgstr ""
 
-#: spbm/apps/society/models.py:164
+#: spbm/apps/society/models.py:181
 msgid "hours"
 msgstr ""
 
-#: spbm/apps/society/models.py:170
+#: spbm/apps/society/models.py:187
 msgid "norl&oslash;nn report"
 msgstr ""
 
