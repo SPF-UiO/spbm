@@ -51,7 +51,6 @@ class InvoicingTests(TestCase):
         # We can mark it, right?
         permission = Permission.objects.get(codename='mark_paid')
         self.user.user_permissions.add(permission)
-        self.assertEquals(permission, self.user.user_permissions.get(codename='mark_paid'))
 
         # Get an unpaid invoice
         unpaid_invoice = self.client.get(reverse('invoices-all')).context['invoices'].first()
@@ -60,6 +59,8 @@ class InvoicingTests(TestCase):
         marking_paid_response = self.client.post(reverse('invoices-all'),
                                                  {'action': 'mark_paid',
                                                   'inv_id': unpaid_invoice.pk})
+        # Need to refresh from the database!
+        unpaid_invoice.refresh_from_db()
 
         # Is the invoice paid?
         self.assertEquals(unpaid_invoice.paid, True)
@@ -76,11 +77,23 @@ class InvoicingTests(TestCase):
         self.assertEquals(Invoice.objects.get(pk=2).paid, False)
         self.assertEquals(marking_paid_response.status_code, 403)
 
+    def test_unprocessed_events_count(self):
+        """
+        Validate that the count for unprocessed events is correct.
+        Depends on fixtures or setup data being correct.
+        """
+        response_number = self.client.get(reverse('invoices-all')).context['unprocessed_events']
+        self.assertNotEqual(response_number, 0)
+
     def test_close_period_permitted(self):
         """
         Validate being able to close a period with the given permission.
         """
         self.user.user_permissions.add(Permission.objects.get(codename='close_period'))
+
+        # Make sure that we've actually
+        self.assertNotEqual(self.client.get(reverse('invoices-all')).context['unprocessed_events'],
+                            0)
 
         closed_period = self.client.post(reverse('invoices-all'),
                                          {'action': 'close_period'})
@@ -90,7 +103,7 @@ class InvoicingTests(TestCase):
         self.assertEquals(listing.context['unprocessed_events'], 0)
         self.assertEquals(closed_period.status_code, 302)
 
-    def test_close_peried_denied(self):
+    def test_close_period_denied(self):
         """
         Validate being unable to close a period without the permission.
         """

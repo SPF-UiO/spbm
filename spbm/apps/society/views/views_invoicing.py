@@ -8,7 +8,7 @@ from django.db import transaction
 from django.db.models import Max
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.utils import timezone
+from django.utils import timezone, log
 
 from helpers.auth import user_allowed_society
 from helpers.f60 import f60
@@ -101,7 +101,7 @@ def invoices_list(request):
 def invoices_all(request):
     if request.method == "POST":
         if request.POST.get('action') == "close_period":
-            if not request.user.has_perm("invoice.close_period"):
+            if not request.user.has_perm("society.close_period"):
                 raise PermissionDenied()
 
             events = Event.objects.filter(processed__isnull=True)
@@ -130,12 +130,11 @@ def invoices_all(request):
                     event.save()
             return redirect(invoices_all)
         elif request.POST.get('action') == 'mark_paid':
-            if not request.user.has_perm('invoice.mark_paid'):
+            if not request.user.has_perm('society.mark_paid'):
                 raise PermissionDenied()
             invoice = Invoice.objects.get(id=request.POST.get('inv_id'))
             invoice.paid = True
             invoice.save()
-            print("Marking as paid: " + str(invoice))
             return redirect(invoices_all)
 
     return render(request, "invoices/all.jinja",
