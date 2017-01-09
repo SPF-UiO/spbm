@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import User, Permission
-from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.urls import reverse
 
 from . import test_fixtures
 from ..models import Invoice, Society
@@ -29,7 +29,7 @@ class InvoicingTests(TestCase):
         Return list of invoices to viewer.
         """
         response = self.client.get(reverse('invoices-list'))
-        self.assertEquals(len(response.context['invoices']), len(Invoice.objects.all()))
+        self.assertEqual(len(response.context['invoices']), len(Invoice.objects.all()))
 
     def test_get_unpaid_invoices(self):
         """
@@ -55,7 +55,7 @@ class InvoicingTests(TestCase):
 
         # Get an unpaid invoice
         unpaid_invoice = self.client.get(reverse('invoices-all')).context['invoices'].first()
-        self.assertEquals(unpaid_invoice.paid, False)
+        self.assertEqual(unpaid_invoice.paid, False)
 
         marking_paid_response = self.client.post(reverse('invoices-all'),
                                                  {'action': 'mark_paid',
@@ -64,9 +64,9 @@ class InvoicingTests(TestCase):
         unpaid_invoice.refresh_from_db()
 
         # Is the invoice paid?
-        self.assertEquals(unpaid_invoice.paid, True)
+        self.assertEqual(unpaid_invoice.paid, True)
         # Do we get redirected?
-        self.assertEquals(marking_paid_response.status_code, 302)
+        self.assertEqual(marking_paid_response.status_code, 302)
 
     def test_mark_invoice_as_paid_denied(self):
         """
@@ -75,8 +75,8 @@ class InvoicingTests(TestCase):
         marking_paid_response = self.client.post(reverse('invoices-all'),
                                                  {'action': 'mark_paid',
                                                   'inv_id': 2})
-        self.assertEquals(Invoice.objects.get(pk=2).paid, False)
-        self.assertEquals(marking_paid_response.status_code, 403)
+        self.assertEqual(Invoice.objects.get(pk=2).paid, False)
+        self.assertEqual(marking_paid_response.status_code, 403)
 
     def test_unprocessed_events_count(self):
         """
@@ -101,8 +101,8 @@ class InvoicingTests(TestCase):
 
         listing = self.client.get(reverse('invoices-all'))
 
-        self.assertEquals(listing.context['unprocessed_events'], 0)
-        self.assertEquals(closed_period.status_code, 302)
+        self.assertEqual(listing.context['unprocessed_events'], 0)
+        self.assertEqual(closed_period.status_code, 302)
 
     def test_close_period_denied(self):
         """
@@ -111,4 +111,4 @@ class InvoicingTests(TestCase):
         closed_period = self.client.post(reverse('invoices-all'),
                                          {'action': 'close_period'})
 
-        self.assertEquals(closed_period.status_code, 403)
+        self.assertEqual(closed_period.status_code, 403)

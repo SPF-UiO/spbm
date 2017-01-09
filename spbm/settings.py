@@ -49,7 +49,9 @@ INSTALLED_APPS = (
     'spbm.apps.norlonn',
 )
 
-MIDDLEWARE_CLASSES = (
+# Middleware onion layers
+# https://docs.djangoproject.com/en/1.10/topics/http/middleware/
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
