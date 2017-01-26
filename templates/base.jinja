@@ -103,9 +103,17 @@
     {% if self.title() -%}
         <h1 class="page-header">{{ self.title() }}</h1>
     {%- endif %}
-    {% block content %}
+    {% if messages -%}
+    <ul class="messages list-unstyled" role="alert">
+        {% for message in messages %}
+        <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {%- endif %}
+
+    {%- block content %}
         Content here!
-    {% endblock %}
+    {% endblock -%}
 
 </div>
 {# Load various libraries and similarly. #}
