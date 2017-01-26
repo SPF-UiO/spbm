@@ -3,7 +3,9 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 
-from spbm.apps.society.views.views_overview import redirect_society as standard_index
+from spbm.apps.society.views import PermissionDeniedView
+
+handler403 = PermissionDeniedView.as_view()
 
 urlpatterns = [
                   url(r'^admin/', admin.site.urls),
