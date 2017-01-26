@@ -9,9 +9,5 @@ urlpatterns = [
                   url(r'^admin/', admin.site.urls),
                   url(r'^accounts/', include('spbm.apps.accounts.urls')),
                   url(r'^norlonn/', include('spbm.apps.norlonn.urls')),
-                  url(r'^society/', include('spbm.apps.society.urls')),
-                  url(r'^workers/', include('spbm.apps.society.urls_workers')),
-                  url(r'^events/', include('spbm.apps.society.urls_events')),
-                  url(r'^invoices/', include('spbm.apps.society.urls_invoices')),
-                  url(r'^$', standard_index),
+                  url(r'^', include('spbm.apps.society.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
