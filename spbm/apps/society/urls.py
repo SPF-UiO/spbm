@@ -19,7 +19,7 @@ workers_urls = [
     url(society_match, include([
         url(r'^$', workers.index, name='workers-overview'),
         url(r'^add/$', workers.add, name='workers-add'),
-        url(r'^edit/(?P<worker_id>\d+)$', workers.edit, name='workers-edit'),
+        url(r'^edit/(?P<worker_id>\d+)$', workers.EditWorker.as_view(), name='workers-edit'),
     ])),
 ]
 
@@ -34,7 +34,8 @@ invoicing_urls = [
     url(r'^all/$', invoicing.invoices_all, name="invoices-all"),
     url(r'^list/$', invoicing.invoices_list, name="invoices-list"),
     url(society_match + r'$', invoicing.index),
-    url(society_match + r'(?P<date>\d{4}-\d{2}-\d{2}).pdf$', invoicing.generate),
+    url(society_match + r'(?P<date>\d{4}-\d{2}-\d{2})/$', invoicing.view_invoice),
+    url(society_match + r'(?P<date>\d{4}-\d{2}-\d{2}).pdf$', invoicing.generate_pdf),
 ]
 
 urlpatterns = [

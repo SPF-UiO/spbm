@@ -14,7 +14,7 @@
         {% for proc in invoices %}
             <tr>
                 <td><a href="{{ proc.period }}.pdf">{{ proc.period }}</a></td>
-                <td>{{ _('NOK %(cost)s', cost=proc.get_total_cost()|intcomma) }}</td>
+                <td>{{ _('NOK %(cost)s', cost=proc.get_total_cost() | localize) }}</td>
                 <td>
                     {%- if proc.paid -%}
                         <span class="glyphicon glyphicon-ok"></span> {{ _("Yes") }}

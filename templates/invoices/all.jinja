@@ -30,8 +30,13 @@
     <div>
         <h2>{{ _("Unpaid invoices") }}</h2>
         {% if invoices -%}
+            <p>
+                {% trans %}
+                    The following invoices have yet to be paid, and will affect the next payroll thusly.
+                {% endtrans %}
+            </p>
             <div class="list-group">
-                {% for invoice in invoices %}
+                {% for invoice in unpaid_invoices %}
                     <div class="list-group-item clearfix">
                         <form method="POST" action="">
                             {% csrf_token %}
@@ -44,11 +49,11 @@
                         </form>
                         <strong>{{ invoice.society.name }}</strong> <br/>
                         <span class="glyphicon glyphicon-calendar"></span>
-                            <span class="sr-only">{{ _("Date") }}:</span>
-                            {{ invoice.period | localize }}
+                        <span class="sr-only">{{ _("Date") }}:</span>
+                        {{ invoice.period | localize }}
                         <span class="glyphicon glyphicon-transfer" style="margin-left: 10px;"></span>
-                            <span class="sr-only">{{ _("Amount") }}:</span>
-                            {{ _("NOK %(cost)s", cost=invoice.get_total_cost()|intcomma) }}
+                        <span class="sr-only">{{ _("Amount") }}:</span>
+                        {{ _("NOK %(cost)s", cost=invoice.get_total_cost()|intcomma) }}
                     </div>
                 {% endfor %}
             </div>
@@ -58,4 +63,37 @@
             </div>
         {%- endif -%}
     </div>
+    <section>
+        <h2>{{ _("Complete Invoice Overview") }}</h2>
+        <p>
+            {% trans %}
+            The table underneath gives you a complete image of the various invoices that <em>should have</em>
+            been sent to the respective societies.
+            {% endtrans %}
+        </p>
+        <table class="table table-striped">
+            <tr>
+                <th>{{ _("Invoice no.") }}</th>
+                <th>{{ _("Society - period") }}</th>
+                <th>{{ _("Amount") }}</th>
+                <th>{{ _("Paid?") }}</th>
+            </tr>
+            {% for invoice in all_invoices %}
+                <tr>
+                    <td>{{ invoice.invoice_number }}</td>
+                    <td>
+                        <a href="/invoices/{{ invoice.society.shortname }}/{{ invoice.period }}.pdf">{{ invoice.society.shortname }}
+                            - {{ invoice.period }}</a></td>
+                    <td>{{ _('NOK %(cost)s', cost=proc.get_total_cost() | localize) }}</td>
+                    <td>
+                        {%- if invoice.paid -%}
+                            <span class="glyphicon glyphicon-ok"></span> {{ _("Yes") }}
+                        {%- else -%}
+                            <span class="glyphicon glyphicon-warning-sign"></span> {{ _("No") }}
+                        {%- endif -%}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </section>
 {% endblock %}

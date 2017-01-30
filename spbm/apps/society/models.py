@@ -106,6 +106,18 @@ class Invoice(models.Model):
 
         return (Decimal(cost) * Decimal('1.3')).quantize(Decimal('.01'))
 
+    def get_total_event_cost(self):
+        """
+        Calculates the cost for the invoice in regards to the events alone.
+        :return: Decimal of total event cost, not including the fee.
+        """
+        cost = 0
+        events = Event.objects.filter(invoice=self)
+        for event in events:
+            cost += event.get_cost()
+
+        return Decimal(cost).quantize(Decimal('.01'))
+
     def __str__(self):
         return "Number: " + str(self.invoice_number) + ": " + str(self.period)
 
@@ -142,6 +154,13 @@ class Event(models.Model):
 
     def __str__(self):
         return self.society.shortname + " - " + str(self.date) + ": " + self.name
+
+    def get_hours(self):
+        hours = Decimal(0)
+        for shift in self.shifts.all():
+            hours += shift.hours
+
+        return hours
 
     def get_cost(self):
         total = Decimal(0)
