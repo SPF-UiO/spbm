@@ -10,9 +10,9 @@ class SpfUserInline(admin.StackedInline):
     can_delete = False
 
 
-class UserAdmin(UserAdmin):
+class SPFUserAdmin(UserAdmin):
     inlines = (SpfUserInline,)
 
 
 admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
+admin.site.register(User, SPFUserAdmin)
