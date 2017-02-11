@@ -6,8 +6,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Creation of the Worker model by state, as we've transferred the Worker model here in the dependency.
+    2/3
+    """
+
     dependencies = [
         ('society', '0003_auto_20160715_1423'),
+        ('workers', '0002_auto_20161218_1136'),
     ]
 
     state_operations = [

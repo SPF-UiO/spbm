@@ -5,21 +5,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Migration of workers_worker to society_worker in the database.
+    1/3
+    """
 
     dependencies = [
         ('workers', '0001_initial'),
-        ('society', '0004_worker')
     ]
 
     database_operations = [
         migrations.AlterModelTable('Worker', 'society_worker')
     ]
 
-    state_operations = [
-        # migrations.DeleteModel('Worker')
-    ]
-
     operations = [
-        migrations.SeparateDatabaseAndState(database_operations=database_operations,
-                                            state_operations=state_operations)
+        migrations.SeparateDatabaseAndState(database_operations=database_operations)
     ]
