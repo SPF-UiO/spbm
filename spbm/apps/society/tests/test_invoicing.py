@@ -1,10 +1,12 @@
 from django.conf import settings
+from django.conf.locale import id
 from django.contrib.auth.models import User, Permission
+from django.db import IntegrityError
 from django.test import TestCase
 from django.urls import reverse
 
 from . import test_fixtures
-from ..models import Invoice, Society
+from ..models import Invoice, Society, Event
 from ...accounts.models import SpfUser
 
 
@@ -24,12 +26,17 @@ class InvoicingTests(TestCase):
         self.spf_user.save()
         self.client.force_login(self.user)
 
+    def assertMessagesContains(self, response, needle: str, msg=None):
+        if not any(needle in str(x) for x in list(response.context['messages'])):
+            msg = self._formatMessage(msg, "'%s' not contained in messages" % needle)
+            raise self.failureException(msg)
+
     def test_get_all_invoices(self):
         """
         Return list of invoices to viewer.
         """
-        response = self.client.get(reverse('invoices-list'))
-        self.assertEqual(len(response.context['invoices']), len(Invoice.objects.all()))
+        response = self.client.get(reverse('invoices'))
+        self.assertEqual(len(response.context['all_invoices']), len(Invoice.objects.all()))
 
     def test_get_unpaid_invoices(self):
         """
@@ -112,3 +119,21 @@ class InvoicingTests(TestCase):
                                          {'action': 'close_period'})
 
         self.assertEqual(closed_period.status_code, 403)
+
+    def test_close_period_twice_in_a_day_fail(self):
+        """
+        Periods shouldn't be possible to close twice in a day for an invoiced society.
+        Test for messages.
+        """
+        self.user.user_permissions.add(Permission.objects.get(codename='close_period'))
+        # Create an event, contents unimportant, then close period
+        Event.objects.create(date="2000-01-01", society=self.spf_user.society)
+        self.client.post(reverse('invoicing'), {'action': 'close_period'}, follow=True)
+
+        # Create an event, contents unimportant, then close period again
+        Event.objects.create(date="2000-01-01", society=self.spf_user.society)
+        second_period = self.client.post(reverse('invoicing'), {'action': 'close_period'}, follow=True)
+
+        self.assertEqual(len(second_period.context['messages']), 1)
+        self.assertMessagesContains(second_period, "cannot close a period twice")
+        self.assertContains(second_period, "cannot close")

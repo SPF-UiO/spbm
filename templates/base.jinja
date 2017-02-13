@@ -52,26 +52,10 @@
                         <li><a href="{{ url("events") }}">{{ _("Events") }}</a></li>
                     </ul>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">{{ _("Invoicing") }}<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-header">{{ _("Overview") }}</li>
-                        <li role="presentation">
-                            <a href="{{ url("invoices-list") }}">
-                                {{ _("Invoice list") }}
-                            </a>
-                        </li>
-                        <li class="dropdown-header">{{ _("Registrating") }}</li>
-                        {% set closer = user.has_perm('invoices.close_period') -%}
-                        <li role="presentation" {% if not closer -%}
-                            class="disabled"
-                        {%- endif -%}>
-                            <a href="{% if closer %}{{ url("invoices-all") }}{% else %}#{% endif %}">
-                                {{ _("Periodes and status") }}
-                            </a>
-                        </li>
-                    </ul>
+                <li>
+                    <a href="{{ url("invoices") }}" class="navbar-link" role="button">
+                        {{ _("Invoicing") }}
+                    </a>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -92,7 +76,7 @@
             {% if user.is_staff -%}
                 <ul class="nav navbar-nav navbar-right" role="navigation">
                     <li role="presentation">
-                        <a href="/admin">{{ _("Administration") }}</a>
+                        <a href="{{ url('admin:index') }}">{{ _("Administration") }}</a>
                     </li>
                 </ul>
             {%- endif %}
@@ -104,11 +88,11 @@
         <h1 class="page-header">{{ self.title() }}</h1>
     {%- endif %}
     {% if messages -%}
-    <ul class="messages list-unstyled" role="alert">
-        {% for message in messages %}
-        <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
+        <ul class="messages list-unstyled" role="alert">
+            {% for message in messages %}
+                <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message | safe }}</li>
+            {% endfor %}
+        </ul>
     {%- endif %}
 
     {%- block content %}
@@ -117,14 +101,15 @@
 
 </div>
 {# Load various libraries and similarly. #}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="{{ static("js/jquery-3.1.1.min.js") }}"></script>
 <script src="{{ static("js/bootstrap.min.js") }}"></script>
+<script src="{{ static("js/modern.js") }}"></script>
 <script>
     Modernizr.load({
         test: Modernizr.inputtypes.date,
         nope: "/static/js/jquery-ui.min.js",
         callback: function () {
-            $("input[type=date]").datepicker();
+            $("input[type=date]").datepicker({dateFormat: 'yy-mm-dd'});
         }
     });
 </script>

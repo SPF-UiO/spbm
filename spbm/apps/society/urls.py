@@ -32,7 +32,6 @@ event_urls = [
 invoicing_urls = [
     url(r'^$', invoicing.InvoicingView.as_view(), name="invoices"),
     url(r'^$', invoicing.InvoicingView.as_view(), name="invoicing"),
-    url(r'^list/$', invoicing.invoices_list, name="invoices-list"),
     url(r'^view/' + society_match + r'(?P<date>\d{4}-\d{2}-\d{2})/$', invoicing.view_invoice, name='invoice-view'),
     url(r'^view/' + society_match + r'(?P<date>\d{4}-\d{2}-\d{2}).pdf$', invoicing.generate_pdf, name='invoice-view-pdf'),
 ]

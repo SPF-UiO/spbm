@@ -1,31 +1,64 @@
 {% extends "base.jinja" %}
 
 {% block title -%}
-    {{ _("Invoice for %(society)s in period %(date)s", date=date | localize, society=society) }}
+    {{ _("Invoice #%(id)s: %(date)s %(society)s", id=invoice.invoice_number,
+    date=invoice.period, society=invoice.society) }}
 {%- endblock %}
 
 {% block content %}
-    <a href="{{ url('invoices-all') }}">{{ _("Return to the invoices index") }}</a>
-    <div>
+    <article>
+        <ul class="list-inline invoice-details">
+            <li>
+                <i class="glyphicon glyphicon-calendar"></i>
+                {{ _("Invoiced at %(period)s", period=invoice.period | localize) }}
+            </li>
+            <li>
+                <i class="glyphicon glyphicon-glass"></i>
+                {{ _("%(society)s", society=invoice.society.name) }}
+            </li>
+            <li>
+                <i class="glyphicon glyphicon-user"></i>
+                {% if invoice.created_by -%}
+                    {% set created_by = "%s (%s)" | format(invoice.created_by, invoice.created_by.spfuser.society) %}
+                {% else -%}
+                    {% set created_by = "unknown user" %}
+                {%- endif %}
+                {{ _("Period closed by %(user)s", user=created_by) }}
+            </li>
+        </ul>
         <table class="table table-striped table-hover">
+            <caption>
+                {{ _("Overview over events and costs associated with invoice number %(id)d.",
+                    id = invoice.invoice_number) }}
+            </caption>
             <tr>
                 <th>{{ _("Description") }}</th>
-                <th>{{ _("Count") }}</th>
-                <th>{{ _("Item cost") }}</th>
-                <th>{{ _("Total cost") }}</th>
+                <th class="text-right">{{ _("Count") }}</th>
+                <th class="text-right">{{ _("Unit cost") }}</th>
+                <th class="text-right">{{ _("Total cost") }}</th>
             </tr>
             {% for item in items -%}
                 <tr>
                     <td>{{ item.description }}</td>
-                    <td>{{ item.count | localize | default(1) }}</td>
-                    <td>{{ item.item_cost | localize }}</td>
-                    <td>
-                        {% if item.line_cost -%}
-                            {{ _("NOK %(cost)s", cost=item.line_cost | localize) | default('') }}
-                        {% endif %}
+                    <td class="text-right">{{ item.count | localize | default(1) }}</td>
+                    <td class="text-right">
+                        {{ "%s" | format(item.item_cost | intcomma | localize) }}
+                    </td>
+                    <td class="text-right">
+                        {{ _("NOK %(cost)s", cost=item.line_cost | intcomma | localize) | default('') }}
                     </td>
                 </tr>
             {% endfor -%}
+            <tr class="table-sum">
+                <td colspan="3"><strong>{{ _("Sum") }}</strong></td>
+                <td class="text-right"><strong>{{ _("NOK %(cost)s", cost=cost.total | localize) }}</strong></td>
+            </tr>
         </table>
-    </div>
+        <nav aria-label="...">
+            <ul class="pager">
+                <li class="back"><a href="{{ url('invoices') }}"><span
+                        aria-hidden="true">&larr;</span> {{ _("Return to invoice overview") }}</a></li>
+            </ul>
+        </nav>
+    </article>
 {% endblock %}
