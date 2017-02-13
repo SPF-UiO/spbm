@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from django.contrib.auth.models import User, AbstractUser
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import six
@@ -87,11 +88,17 @@ class Invoice(models.Model):
             ('close_period', "Can close periods to generate invoices"),
             ('mark_paid', "Can mark invoices as paid")
         )
-
+    """ The society the invoice belongs to. """
     society = models.ForeignKey(Society, verbose_name=_('society'), related_name="invoices", on_delete=models.PROTECT)
+    """ A unique invoice number, which SHOULD be reflected in the external invoice system. """
     invoice_number = models.IntegerField(verbose_name=_('invoice number'), unique=True)
+    """ The date for which the period is valid. """
     period = models.DateField(verbose_name=_('period'))
+    """ Status of received payment. """
     paid = models.BooleanField(verbose_name=_('invoice paid'), default=False)
+    """ User who created the invoice, i.e. closed the invoice period. """
+    created_by = models.ForeignKey(User, help_text=_('User which closed the period the invoice belongs to.'),
+                                   on_delete=models.PROTECT, null=True, default=None)
 
     def get_total_cost(self):
         """
@@ -106,8 +113,21 @@ class Invoice(models.Model):
 
         return (Decimal(cost) * Decimal('1.3')).quantize(Decimal('.01'))
 
+    def get_total_event_cost(self):
+        """
+        Calculates the cost for the invoice in regards to the events alone.
+        :return: Decimal of total event cost, not including the fee.
+        """
+        cost = 0
+        events = Event.objects.filter(invoice=self)
+        for event in events:
+            cost += event.get_cost()
+
+        return Decimal(cost).quantize(Decimal('.01'))
+
     def __str__(self):
-        return "Number: " + str(self.invoice_number) + ": " + str(self.period)
+        return "Invoice #{id}: {period} {society} ".format(id=str(self.invoice_number),
+                                                           society=str(self.invoice_number), period=str(self.period))
 
 
 class Event(models.Model):
@@ -142,6 +162,13 @@ class Event(models.Model):
 
     def __str__(self):
         return self.society.shortname + " - " + str(self.date) + ": " + self.name
+
+    def get_hours(self):
+        hours = Decimal(0)
+        for shift in self.shifts.all():
+            hours += shift.hours
+
+        return hours
 
     def get_cost(self):
         total = Decimal(0)

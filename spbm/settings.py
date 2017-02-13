@@ -8,6 +8,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
+"""
+SPBM-related settings
+"""
+SPBM = {
+    'dates': {
+        'invoicing': 15,
+        'deadline': 10,
+        'wages': 25,
+    }
+}
+
 import os
 
 # We need the default extensions

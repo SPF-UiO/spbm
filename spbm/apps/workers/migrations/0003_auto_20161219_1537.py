@@ -5,6 +5,10 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    """
+    Delete the model from Django's state.
+    3/3
+    """
 
     dependencies = [
         ('workers', '0002_auto_20161218_1136'),

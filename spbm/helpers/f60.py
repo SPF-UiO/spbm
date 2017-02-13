@@ -118,9 +118,9 @@ except (AttributeError, IndexError):
 #        logging.debug('locale passet ikke på denne plattformen: %s', x)
 #        continue
 #
-logging.debug('setter locale : %s', locale.getdefaultlocale())
-locale.setlocale(locale.LC_ALL, locale.getdefaultlocale())
-logging.debug('satte locale : %s', locale.getlocale())
+#logging.debug('setter locale : %s', locale.getdefaultlocale())
+#locale.setlocale(locale.LC_ALL, locale.getdefaultlocale())
+#logging.debug('satte locale : %s', locale.getlocale())
 
 
 class f60:
@@ -346,20 +346,7 @@ class f60:
 
     def _s(self, t):
         """Sørger for at tekst er i riktig kodesett (encoding)"""
-        if not isinstance(t, str): return t
-
         return t
-        # Reportlab 2.x vil ha unicode
-        if REPORTLAB2:
-            try:
-                return unicode(t)
-            except UnicodeDecodeError:
-                return unicode(t, 'latin1')
-        else:  # Reportlab 1.x vil ha latin1/iso-8859-1
-            try:
-                return unicode(t).encode('latin1')
-            except UnicodeDecodeError:
-                return unicode(t, 'latin1').encode('latin1')
 
     def _kr(self, i):
         "Sørger for at et beløp skrives med riktig skilletegn og valuta. Returnerer tekst"
