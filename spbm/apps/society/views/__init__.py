@@ -12,8 +12,5 @@ class PermissionDeniedView(View):
     """
     template_name = 'errors/unauthorized.jinja'
 
-    def get(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
         return HttpResponseForbidden(render(request, self.template_name, *args, kwargs))
-
-
-
