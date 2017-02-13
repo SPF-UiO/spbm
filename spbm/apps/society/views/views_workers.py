@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 
-from helpers.auth import user_allowed_society
+from spbm.helpers.auth import user_allowed_society
 from spbm.apps.society.forms.worker import WorkerForm, WorkerEditForm
 from spbm.apps.society.models import Society, Worker
 from spbm.helpers.mixins import LoggedInPermissionsMixin

@@ -3,7 +3,7 @@ from django.db import transaction
 from django.forms.formsets import formset_factory
 from django.shortcuts import render, redirect
 
-from helpers.auth import user_allowed_society
+from spbm.helpers.auth import user_allowed_society
 from ..forms.events import EventForm, MakeShiftBase
 from ..models import Society, Event, Shift
 
@@ -36,12 +36,12 @@ def add(request, society_name):
     if not user_allowed_society(request.user, society):
         return render(request, "errors/unauthorized.jinja")
 
-    eventform = formset_factory(EventForm, min_num=1, max_num=1)
-    shiftform = formset_factory(MakeShiftBase(society), min_num=6)
+    event_form = formset_factory(EventForm, min_num=1, max_num=1)
+    shift_form = formset_factory(MakeShiftBase(society), min_num=6, max_num=12)
 
     if request.method == "POST":
-        event_formset = eventform(request.POST, prefix="event")
-        shift_formset = shiftform(request.POST, prefix="shift")
+        event_formset = event_form(request.POST, prefix="event")
+        shift_formset = shift_form(request.POST, prefix="shift")
 
         if event_formset.is_valid():
             with transaction.atomic():
@@ -65,7 +65,7 @@ def add(request, society_name):
                     db_shift.save()
                 return redirect(index, society_name=society_name)
     else:
-        event_formset = eventform(prefix="event")
-        shift_formset = shiftform(prefix="shift")
+        event_formset = event_form(prefix="event")
+        shift_formset = shift_form(prefix="shift")
 
     return render(request, "events/add.jinja", {'event_formset': event_formset, 'shift_formset': shift_formset})
