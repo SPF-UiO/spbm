@@ -1,8 +1,16 @@
 {% extends "base.jinja" %}
 
-{% block content %}
+{% block title %}
     {# Translators: Title for reports page. #}
-    <h1 class="page-header">{{ _("Norlønn Reports") }}</h1>
+    {{ _("Wage Reports") }}
+{% endblock %}
+
+{% block content %}
+    <p>
+        {% trans %}
+            Access to wage reports for importing into the <em>Norlønn</em> payroll system.
+        {% endtrans %}
+    </p>
 
     {% if errors %}
         <div class="panel panel-warning">
@@ -24,7 +32,7 @@
 
     {% if user.has_perm('norlonn.generate_report') %}
         <p>
-        <form action="{{ url('generate_report') }}" method="post">
+        <form action="{{ url('wages-generate_report') }}" method="post">
             {% csrf_token %}
             <button class="btn
                 {%- if errors %} btn-warning
@@ -37,7 +45,7 @@
         </p>
     {% endif %}
 
-    <h2>Existing reports</h2>
+    <h2>{{ _("Existing reports") }}</h2>
     <div class="alert alert-info">
         <p>
             {% trans %}
@@ -48,16 +56,16 @@
         </p>
     </div>
 
-    <ul>
+    <ol>
         {% for report in reports %}
             <li>
                 {% if user.has_perm('norlonn.view_report') %}
-                    <a href="/norlonn/get_report/{{ report.date }}">{{ report.date }}</a>
+                    <a href="{{ url('wages-report', date=report.date) }}">{{ report.date }}</a>
                 {% else %}
                     {{ report.date }}
                 {% endif %}
             </li>
         {% endfor %}
-    </ul>
+    </ol>
     </p>
 {% endblock %}

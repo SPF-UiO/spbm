@@ -40,8 +40,8 @@ invoicing_urls = [
 
 wages_urls = [
     url(r'^$', wages.index, name="wages"),
-    url(r'^generate_report/$', wages.generate_report, name="generate_report"),
-    url(r'^get_report/(?P<date>.*)/$', wages.get_report),
+    url(r'^generate_report/$', wages.generate_report, name="wages-generate_report"),
+    url(r'^get_report/(?P<date>.*)/$', wages.get_report, name="wages-report"),
 ]
 
 urlpatterns = [

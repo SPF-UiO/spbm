@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
+from django.utils.translation import ugettext as _
 
 from .models import NorlonnReport
 from ..society.models import Shift
@@ -22,10 +23,10 @@ def index(request):
 
     for s in shifts:
         if s.worker.norlonn_number is None:
-            errors.append("Worker %s lacks norlonn number!" % s.worker)
+            errors.append(_("Worker %s (for %s) lacks norlonn number!" % (s.worker, s.event)))
 
         if not s.event.invoice.paid:
-            errors.append("Invoice not paid for worker %s" % s.worker)
+            errors.append(_("%s (for %s) --- Invoice not paid" % (s.worker, s.event)))
 
     return render(request, 'norlonn/index.jinja', {'reports': reports, 'errors': errors})
 
@@ -51,20 +52,20 @@ def generate_report(request):
 
     for s in shifts:
         if s.worker.norlonn_number is None:
-            errors.append("ERR: %s - %s --- Lacks norlonn number" % (s.worker, s.event))
+            errors.append(_("ERR: %s - %s --- Lacks norlonn number" % (s.worker, s.event)))
             continue
 
-        if s.event.invoice.paid == False:
-            errors.append("ERR: %s - %s --- Invoice not paid" % (s.worker, s.event))
+        if not s.event.invoice.paid:
+            errors.append(_("ERR: %s - %s --- Invoice not paid" % (s.worker, s.event)))
             continue
 
-        succ.append("OK: %s - %s" % (s.worker, s.event))
+        succ.append(_("OK: %s - %s" % (s.worker, s.event)))
         s.norlonn_report = report
         s.save()
 
     if len(succ) == 0:
         report.delete()
-        return HttpResponse("Nothing to generate!");
+        return HttpResponse(_("Nothing to generate!"))
 
     return render(request, 'norlonn/report.jinja', {'errors': errors, 'success': succ})
 
@@ -94,5 +95,3 @@ def get_report(request, date):
         linjer.append(";" + str(s.worker.norlonn_number) + ";H1;100;" + str(total) + ";")
 
     return HttpResponse("\n".join(linjer), content_type="text/plain; charset=utf-8")
-
-# Create your views here.
