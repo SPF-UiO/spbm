@@ -10,6 +10,5 @@ handler403 = PermissionDeniedView.as_view()
 urlpatterns = [
                   url(r'^admin/', admin.site.urls),
                   url(r'^accounts/', include('spbm.apps.accounts.urls')),
-                  url(r'^norlonn/', include('spbm.apps.norlonn.urls')),
                   url(r'^', include('spbm.apps.society.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

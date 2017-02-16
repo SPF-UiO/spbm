@@ -34,11 +34,11 @@
                     <ul class="dropdown-menu">
                         <li class="dropdown-header">{{ _("Financials") }}</li>
                         <li role="presentation">
-                            <a href="{{ url("invoices") }}">{{ _("Invoices and status") }}</a>
+                            <a href="{{ url('invoices') }}">{{ _("Invoices and status") }}</a>
                         </li>
                         <li role="separator" class="divider"></li>
                         <li class="dropdown-header">{{ _("Settings") }}</li>
-                        <li class="disabled"><a href="#">{{ _("The society") }}</a></li>
+                        <li class="disabled"><a href="#" title="Not yet implemented">{{ _("The society") }}</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -46,30 +46,24 @@
                        aria-expanded="false">{{ _("Bookings") }}<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li class="dropdown-header">{{ _("Workers and registrations") }}</li>
-                        <li><a href="{{ url("workers") }}">{{ _("Workers") }}</a></li>
+                        <li><a href="{{ url('workers') }}">{{ _("Workers") }}</a></li>
                         <li role="separator" class="divider"></li>
                         <li class="dropdown-header">{{ _("Events and registrations") }}</li>
-                        <li><a href="{{ url("events") }}">{{ _("Events") }}</a></li>
+                        <li><a href="{{ url('events') }}">{{ _("Events") }}</a></li>
                     </ul>
                 </li>
                 <li>
-                    <a href="{{ url("invoices") }}" class="navbar-link" role="button">
+                    <a href="{{ url('invoices') }}" class="navbar-link" role="button">
                         {{ _("Invoicing") }}
                     </a>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                <li>
+                    <a href="{{ url('wages') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">{{ _("Wages") }} <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-header">{{ _("Reporting") }}</li>
-                        <li role="presentation">
-                            <a href="{{ url("norlonn") }}">Norlønn</a>
-                        </li>
-                    </ul>
                 </li>
             </ul>
             <p class="navbar-text navbar-right login-details">
-                <a href="{{ url("logout") }}" class="navbar-link" title="{{ _("Log out of SPFs SPBM") }}">
+                <a href="{{ url('logout') }}" class="navbar-link" title="{{ _("Log out of SPFs SPBM") }}">
                     {{ user }} ({{ user.spfuser.society.name }})
                 </a>
             </p>

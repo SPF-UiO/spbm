@@ -1,7 +1,4 @@
-from django.conf import settings
-from django.conf.locale import id
 from django.contrib.auth.models import User, Permission
-from django.db import IntegrityError
 from django.test import TestCase
 from django.urls import reverse
 
@@ -14,11 +11,6 @@ class InvoicingTests(TestCase):
     fixtures = test_fixtures
 
     def setUp(self):
-        # Turn on the django-jinja template debug to provide response.context in the client.
-        # NOTE: Do *not* change any other settings on-the-fly. This one only affects this exact issue,
-        #       and as such it's safe to edit. Otherwise Django settings are _immutable_.
-        settings.TEMPLATES[0]['OPTIONS']['debug'] = True
-
         # Logging into the site as a test in itself can be somewhere else. This doesn't need it.
         self.user = User(username='kungfury')
         self.user.save()

@@ -1,8 +1,11 @@
 from django.conf.urls import url, include
 
+# TODO: Create intermediate class to decouple Norlønn from wage reporting
+from spbm.apps.norlonn import views as wages
+
 from .views import views_overview as overview, views_workers as workers, \
     views_events as events, invoicing as invoicing
-from .views.views_overview import redirect_society as standard_index
+from .views.views_overview import index as standard_index
 
 # Our *pre-made* (*cough*) bit of URL that specifies which society we're in.
 # Admittedly I feel like this ought to be scrapped, seeing as we could simply keep track of permitted societies
@@ -10,8 +13,7 @@ from .views.views_overview import redirect_society as standard_index
 society_match = r'(?P<society_name>[A-Za-z]+)/'
 
 society_urls = [
-    url(r'^$', overview.redirect_society, name='society'),
-    url(r'^' + society_match + r'$', overview.index, name="index")
+    url(r'^$', overview.index, name='index'),
 ]
 
 workers_urls = [
@@ -36,10 +38,17 @@ invoicing_urls = [
     url(r'^view/' + society_match + r'(?P<date>\d{4}-\d{2}-\d{2}).pdf$', invoicing.generate_pdf, name='invoice-view-pdf'),
 ]
 
+wages_urls = [
+    url(r'^$', wages.index, name="wages"),
+    url(r'^generate_report/$', wages.generate_report, name="generate_report"),
+    url(r'^get_report/(?P<date>.*)/$', wages.get_report),
+]
+
 urlpatterns = [
     url(r'^$', standard_index),
     url(r'^society/', include(society_urls)),
     url(r'^workers/', include(workers_urls)),
     url(r'^events/', include(event_urls)),
     url(r'^invoices/', include(invoicing_urls)),
+    url(r'^wages/', include(wages_urls)),
 ]
