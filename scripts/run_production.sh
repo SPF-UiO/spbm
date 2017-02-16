@@ -1,14 +1,10 @@
-#!/bin/sh
+#!/bin/bash -ex
 
-# Compile static files
-./manage.py collectstatic --no-input
-
-# Compile translation messages
-./manage.py compilemessages
-
+# Correct virtualenv for execution
+source .virtualenv/bin/activate
 
 # Execute uwsgi for hosting/running the server
-uwsgi --chdir=/home/spf/spbm/ \
+uwsgi --chdir=/home/spf/src/spbm/ \
 --module spbm.wsgi:application \
 --master --pidfile=/tmp/spf-uwsgi.pid \
 --socket=127.0.0.1:8435 \
@@ -16,7 +12,14 @@ uwsgi --chdir=/home/spf/spbm/ \
 --harakiri=20 \
 --max-requests=5000 \
 --vacuum \
---home=/home/spf/spbm/virtualenv/ \
+--module spbm.wsgi:application \
+--master --pidfile=/tmp/spf-uwsgi.pid \
+--socket=127.0.0.1:8435 \
+--processes=1 \
+--harakiri=20 \
+--max-requests=5000 \
+--vacuum \
+--home=/home/spf/src/.virtualenv/ \
 --daemonize=/home/spf/logs/website.log \
---touch-reload=/home/spf/spbm/wsgi.py
+--touch-reload=wsgi.py
 

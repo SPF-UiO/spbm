@@ -36,24 +36,24 @@ build:
           echo "Cache at $WERCKER_CACHE_DIR/apk-cache"
           apk cache clean
           echo "Cleaned the cache"
+
+    # There are a lot of packages that we depend on
     - script:
         name: alpine pre-requisites
         code: |
           apk update
           apk add zlib-dev gettext jpeg-dev postgresql-dev gcc musl-dev linux-headers
+
+    # Once done, install virtualenv so we're ready to use it
     - script:
         name: virtualenv-install
         code: |
           pip install virtualenv
+
     # A step that sets up the python virtual environment
     - virtualenv:
         name: setup virtual environment
         install_wheel: True # Enable wheel to speed up builds (experimental)
-
-    # # Use this virtualenv step for python 3.2
-    # - virtualenv
-    #     name: setup virtual environment
-    #     python_location: /usr/bin/python3.2
 
     # A step that executes `pip install` command.
     - pip-install:
@@ -70,13 +70,45 @@ build:
         code: |
           echo "python version $(python --version) running"
           echo "pip version $(pip --version) running"
+
     # Then we run the tests of our Django instance
     - script: run tests
       code: |
         python ./manage.py test -v 3
+
     # Once that's done, let's compile the current translation
     - script: compile translation messages
       code: |
         python ./manage.py compilemessages
 
-
+################################################################################
+# Deployment pipeline
+# - Takes care of putting the bits and bytes in the right place.
+production:
+  steps:
+    - script: install prerequisites
+      code: |
+        apk update
+        apk add bash openssh
+    - wercker/add-ssh-key@1.0.3:
+        keyname: SPF
+        user: $SPF_USERNAME
+    - wercker/add-to-known_hosts@2.0.1:
+        hostname: spf.cyb.no
+        fingerprint: SHA256:KiAgxHLl7nmtUXSt9upc5kITU4ptvJAaTYkusTMequA
+    - script: execute deployment script
+      code: |
+        ssh spf@spf.cyb.no /bin/bash << EOF
+          set -ex
+          if ! [ -d ~/src ]; then
+              git clone git@bitbucket.org:Aleksi/spf.git src
+              cd ~/src
+              git checkout master
+              virtualenv -p python3 --prompt "(spbm)" .virtualenv
+              ./scripts/update.sh && ./scripts/run_production.sh
+          else
+              cd ~/src
+              (./scripts/backup.sh && git fetch && git reset --hard origin/master)
+              ./scripts/update.sh
+          fi
+        EOF
