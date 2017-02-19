@@ -1,0 +1,68 @@
+[
+  {
+    "model": "society.shift",
+    "pk": 1,
+    "fields": {
+      "event": 1,
+      "worker": 1,
+      "wage": "260.00",
+      "hours": "15.00",
+      "norlonn_report": 6
+    }
+  },
+  {
+    "model": "society.shift",
+    "pk": 2,
+    "fields": {
+      "event": 2,
+      "worker": 1,
+      "wage": "260.00",
+      "hours": "8.00",
+      "norlonn_report": null
+    }
+  },
+  {
+    "model": "society.shift",
+    "pk": 3,
+    "fields": {
+      "event": 2,
+      "worker": 2,
+      "wage": "260.00",
+      "hours": "4.00",
+      "norlonn_report": null
+    }
+  },
+  {
+    "model": "society.shift",
+    "pk": 4,
+    "fields": {
+      "event": 3,
+      "worker": 1,
+      "wage": "260.00",
+      "hours": "9.00",
+      "norlonn_report": null
+    }
+  },
+  {
+    "model": "society.shift",
+    "pk": 5,
+    "fields": {
+      "event": 3,
+      "worker": 2,
+      "wage": "260.00",
+      "hours": "9.00",
+      "norlonn_report": null
+    }
+  },
+  {
+    "model": "society.shift",
+    "pk": 6,
+    "fields": {
+      "event": 4,
+      "worker": 2,
+      "wage": "300.00",
+      "hours": "7.00",
+      "norlonn_report": null
+    }
+  }
+]

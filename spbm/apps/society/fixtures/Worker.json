@@ -1,0 +1,41 @@
+[
+  {
+    "model": "society.worker",
+    "pk": 1,
+    "fields": {
+      "society": 1,
+      "active": true,
+      "name": "Ola S. Normann",
+      "address": "Olegata 43b, 0123 Oslo",
+      "account_no": "99002279610",
+      "person_id": "01020312345",
+      "norlonn_number": 1337
+    }
+  },
+  {
+    "model": "society.worker",
+    "pk": 2,
+    "fields": {
+      "society": 1,
+      "active": true,
+      "name": "James McMay",
+      "address": "Jameston Street",
+      "account_no": "12345678903",
+      "person_id": "01010112345",
+      "norlonn_number": 1338
+    }
+  },
+  {
+    "model": "society.worker",
+    "pk": 3,
+    "fields": {
+      "society": 2,
+      "active": true,
+      "name": "Kari Normann",
+      "address": "Trondheimsveien 235, 0586 Oslo",
+      "account_no": "",
+      "person_id": "01020334589",
+      "norlonn_number": null
+    }
+  }
+]

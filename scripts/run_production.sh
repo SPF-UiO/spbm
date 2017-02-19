@@ -4,7 +4,7 @@
 source .virtualenv/bin/activate
 
 # Execute uwsgi for hosting/running the server
-uwsgi --chdir=/home/spf/src/spbm/ \
+uwsgi --chdir=~/src/spbm/ \
 --module spbm.wsgi:application \
 --master --pidfile=/tmp/spf-uwsgi.pid \
 --socket=127.0.0.1:8435 \
@@ -12,7 +12,7 @@ uwsgi --chdir=/home/spf/src/spbm/ \
 --harakiri=20 \
 --max-requests=5000 \
 --vacuum \
---home=/home/spf/src/.virtualenv/ \
---daemonize=/home/spf/logs/website.log \
---touch-reload=wsgi.py
+--home=~/src/.virtualenv/ \
+--daemonize=~/logs/website.log \
+--touch-reload=~/src/spbm/wsgi.py
 

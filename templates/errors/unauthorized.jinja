@@ -1,4 +1,17 @@
-<div class="alert alert-danger">
-    <p>Your <strong>user is not authorized</strong> to view this object.</p>
-</div>
+{% extends 'base.jinja' %}
+{% block title -%}
+    {{ _('403 Permission Denied') }}
+{%- endblock %}
 
+{% block content -%}
+<div class="alert alert-danger">
+    <p>
+        <strong>Permission denied!</strong>
+        {% if exception -%}
+            {{ exception }}
+        {%- else -%}
+            Your user does not have the authorization to perform the requested operation.
+        {%- endif %}
+    </p>
+</div>
+{%- endblock %}

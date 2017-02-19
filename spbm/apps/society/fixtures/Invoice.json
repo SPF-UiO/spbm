@@ -1,0 +1,22 @@
+[
+  {
+    "model": "society.invoice",
+    "pk": 1,
+    "fields": {
+      "society": 1,
+      "invoice_number": 1,
+      "period": "2016-07-15",
+      "paid": true
+    }
+  },
+  {
+    "model": "society.invoice",
+    "pk": 2,
+    "fields": {
+      "society": 1,
+      "invoice_number": 2,
+      "period": "2016-07-17",
+      "paid": false
+    }
+  }
+]

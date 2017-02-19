@@ -6,3 +6,42 @@ body {
    /* due to fixed navbar */
    padding-top: 70px;
 }
+
+/*
+Lazily for use with glyphicons, or equivalent, to have in a cute little panel.
+ */
+.status {
+    font-size: 5em;
+}
+
+.status.pull-right, .pull-right .status {
+    margin-left: 10px;
+}
+
+.status.pull-left, .pull-left .status {
+    margin-right: 10px;
+}
+
+/*
+Table paddings for wide-spanning row headers
+ */
+.table-group {
+    background-color: #f9f9f9;
+}
+
+.invoice-details {
+    text-align: center;
+}
+
+.invoice-details > li {
+    margin: 0 10px;
+}
+
+.table-sum {
+    border-top: 1px solid #333;
+    border-bottom: 2px solid #333;
+}
+
+.table .table-sum > td {
+    padding-top: 1em;
+}

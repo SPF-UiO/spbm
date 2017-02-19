@@ -28,74 +28,52 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav" role="navigation">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">{{ _("Your Society") }} <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-header">{{ _("Financials") }}</li>
-                        <li role="presentation">
-                            <a href="{{ url("invoices") }}">{{ _("Invoices and status") }}</a>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <li class="dropdown-header">{{ _("Settings") }}</li>
-                        <li class="disabled"><a href="#">{{ _("The society") }}</a></li>
-                    </ul>
+                <li>
+                    <a href="#" class="navbar-link" role="button">
+                        {{ _("Your Society") }}
+                    </a>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">{{ _("Bookings") }}<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li class="dropdown-header">{{ _("Workers and registrations") }}</li>
-                        <li><a href="{{ url("workers") }}">{{ _("Workers") }}</a></li>
+                        <li><a href="{{ url('workers') }}">{{ _("Workers") }}</a></li>
                         <li role="separator" class="divider"></li>
                         <li class="dropdown-header">{{ _("Events and registrations") }}</li>
-                        <li><a href="{{ url("events") }}">{{ _("Events") }}</a></li>
+                        <li><a href="{{ url('events') }}">{{ _("Events") }}</a></li>
                     </ul>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">{{ _("Invoicing") }}<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-header">{{ _("Overview") }}</li>
-                        <li role="presentation">
-                            <a href="{{ url("invoices-list") }}">
-                                {{ _("Invoice list") }}
-                            </a>
-                        </li>
-                        <li class="dropdown-header">{{ _("Registrating") }}</li>
-                        {% set closer = user.has_perm('invoices.close_period') -%}
-                        <li role="presentation" {% if not closer -%}
-                            class="disabled"
-                        {%- endif -%}>
-                            <a href="{% if closer %}{{ url("invoices-all") }}{% else %}#{% endif %}">
-                                {{ _("Periodes and status") }}
-                            </a>
-                        </li>
-                    </ul>
+                <li>
+                    <a href="{{ url('invoices') }}" class="navbar-link" role="button">
+                        {{ _("Invoicing") }}
+                    </a>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">{{ _("Wages") }} <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-header">{{ _("Reporting") }}</li>
-                        <li role="presentation">
-                            <a href="/norlonn">Norlønn</a>
-                        </li>
-                    </ul>
+                <li>
+                    <a href="{{ url('wages') }}" class="navbar-link" role="button">
+                        {{ _("Wages") }}
+                    </a>
                 </li>
             </ul>
-            <p class="navbar-text navbar-right login-details">
-                <a href="{{ url("logout") }}" class="navbar-link" title="{{ _("Log out of SPFs SPBM") }}">
-                    {{ user }} ({{ user.spfuser.society.name }})
-                </a>
-            </p>
             {% if user.is_staff -%}
                 <ul class="nav navbar-nav navbar-right" role="navigation">
-                    <li role="presentation">
-                        <a href="/admin">{{ _("Administration") }}</a>
+                    <li>
+                        <a href="{{ url('admin:index') }}">
+                            <span class="hidden-sm">{{ _("Administration") }} </span><i
+                                class="glyphicon glyphicon-cog"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url('logout') }}" class="navbar-link" title="{{ _("Log out of SPFs SPBM") }}">
+                            <span class="hidden-sm">{{ _("Logout") }} </span><i class="glyphicon glyphicon-log-out"></i>
+                        </a>
                     </li>
                 </ul>
             {%- endif %}
+            <p class="navbar-text navbar-right">
+                <small>{{ user.spfuser.society.shortname }}</small>
+                {{ user }}
+            </p>
         </div>
     </div>
 </nav>
@@ -103,20 +81,29 @@
     {% if self.title() -%}
         <h1 class="page-header">{{ self.title() }}</h1>
     {%- endif %}
-    {% block content %}
+    {% if messages -%}
+        <ul class="messages list-unstyled" role="alert">
+            {% for message in messages %}
+                <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message | safe }}</li>
+            {% endfor %}
+        </ul>
+    {%- endif %}
+
+    {%- block content %}
         Content here!
-    {% endblock %}
+    {% endblock -%}
 
 </div>
 {# Load various libraries and similarly. #}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="{{ static("js/jquery-3.1.1.min.js") }}"></script>
 <script src="{{ static("js/bootstrap.min.js") }}"></script>
+<script src="{{ static("js/modern.js") }}"></script>
 <script>
     Modernizr.load({
         test: Modernizr.inputtypes.date,
         nope: "/static/js/jquery-ui.min.js",
         callback: function () {
-            $("input[type=date]").datepicker();
+            $("input[type=date]").datepicker({dateFormat: 'yy-mm-dd'});
         }
     });
 </script>

@@ -1,28 +1,197 @@
 {% extends "base.jinja" %}
-
 {% block title -%}
-    {{ _("Society invoices") }}
+    {{ _("Invoice Management") }}
 {%- endblock %}
 
 {% block content %}
-    <table class="table table-striped">
+<section class="row">
+    {# Progress of period #}
+    {% set progress = progress * 100 | round | int %}
+    {% set progress_width = progress %}
+    {% if progress == 100 %}
+        {% set state = "success" %}
+    {% elif progress > 100 %}
+        {% set progress_width = 100 %}
+        {% set state = "danger" %}
+    {% endif %}
+    <div class="col-lg-12 col-md-12">
+        <div class="progress progress-striped">
+            <div class="progress-bar {% if state -%} progress-bar-{{ state }} {% endif -%}" role="progressbar"
+                 aria-valuenow="{{ progress }}"
+                 aria-valuemin="0"
+                 aria-valuemax="100" style="min-width: 5em; width: {{ progress_width }}%;">
+                {{ _("%(days)s days", days=days_left.days) }}
+            </div>
+        </div>
+    </div>
+
+    {# Period invoicing #}
+    {% set header_invoice_period -%}
+    <h2 class="panel-heading panel-title">
+        {{ _("Period status") }}
+        {%- if unprocessed_events -%}
+            : {{ ngettext('%(num)d unprocessed event', '%(num)d unprocessed events', unprocessed_events) }}
+        {%- endif %}
+    </h2>
+    {%- endset %}
+
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        {% if unprocessed_events %}
+            <aside class="panel panel-primary">
+                {{ header_invoice_period }}
+                <form class="panel-body" method="POST" action="{{ url('invoices') }}">
+                    <p>
+                        {% trans -%}
+                            There are unprocessed events, which means you can close the period, if it is the right
+                            time of month.
+                        {%- endtrans %}</p>
+                    {% csrf_token %}
+                    <input type='hidden' name='action' value='close_period'/>
+                    <button class="btn btn-danger" type='submit'>
+                        {{ _("Close period") }}
+                        <small class="clearfix">{{ _("Not easily reversible!") }}</small>
+                    </button>
+                </form>
+                <div class="panel-footer small">
+                    {{ _("Remember to only close the invoice period <strong>max once a month, on the 15th</strong>.") }}
+                </div>
+            </aside>
+        {%- else -%}
+            <aside class="panel panel-info">
+                {{ header_invoice_period }}
+                <div class="panel-body">
+                    <div class="text-center pull-right">
+                        <i class="glyphicon glyphicon-ok status"></i>
+                        <small class="sr-only">{{ _("So far, so good!") }}</small>
+                    </div>
+                    {% trans -%}
+                        There are no unprocessed events currently registered.
+                        You can register some events if you wish, <em>or</em> wait until next month.
+                    {%- endtrans %}
+                </div>
+            </aside>
+        {% endif %}
+    </div>
+
+    {# Invoice statuses #}
+    {% set header_unpaid_invoices -%}
+    <h2 class="panel-heading panel-title">
+        {{ _("Unpaid invoices") }}
+    </h2>
+    {%- endset %}
+
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        {% if unpaid_invoices -%}
+            <aside class="panel panel-warning">
+                {{ header_unpaid_invoices }}
+                <div class="panel-body">
+                    {% trans %}
+                        The following invoices have yet to be paid, and will affect the next payroll thusly.
+                    {% endtrans %}
+                </div>
+                <div class="list-group">
+                    {% for invoice in unpaid_invoices %}
+                        <div class="list-group-item clearfix">
+                            <form method="POST" action="">
+                                {% csrf_token %}
+                                <input type='hidden' name='action' value='mark_paid'/>
+                                <input type='hidden' name='inv_id' value='{{ invoice.id }}'/>
+                                <button class="btn pull-right btn-primary" type='submit'>
+                                    <span class="glyphicon glyphicon-ok big"></span>
+                                    {{ _("Mark as paid") }}
+                                </button>
+                            </form>
+                            <strong>{{ invoice.society.name }}</strong> <br/>
+                            <span class="glyphicon glyphicon-calendar"></span>
+                            <span class="sr-only">{{ _("Date") }}:</span>
+                            {{ invoice.period | localize }}
+                            <span class="glyphicon glyphicon-transfer" style="margin-left: 10px;"></span>
+                            <span class="sr-only">{{ _("Amount") }}:</span>
+                            {{ _("NOK %(cost)s", cost=invoice.get_total_cost()|intcomma) }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </aside>
+        {%- else -%}
+            <aside class="panel panel-success">
+                {{ header_unpaid_invoices }}
+                <div class="panel-body">
+                    {{ _("There aren't any unpaid invoices! That's great!") }}
+                    <div class="text-center pull-right">
+                        <i class="glyphicon glyphicon-ok status"></i>
+                        <small class="sr-only">{{ _("So far, so good!") }}</small>
+                    </div>
+                </div>
+            </aside>
+        {%- endif -%}
+    </div>
+</section>
+<section>
+    <h2>{{ _("Complete invoice overview") }}</h2>
+    <p>
+    </p>
+    <table class="table table-hover table-responsive">
+        <caption>
+            {% trans %}
+                Overview over all the various invoices that <em>should have</em>
+                been sent to the respective societies.
+            {% endtrans %}
+        </caption>
+        <colgroup span="4"></colgroup>
+        <thead>
         <tr>
-            <th>{{ _('Period date') }}</th>
-            <th>{{ _('Amount') }}</th>
-            <th>{{ _('Paid?') }}</th>
+            <th>{{ _("Period") }}</th>
+            <th>{{ _("Society") }}</th>
+            <th class="text-right">{{ _("Invoice sum") }}</th>
+            <th>{{ _("Paid?") }}</th>
+            <th>{{ _("Actions") }}</th>
         </tr>
-        {% for proc in invoices %}
-            <tr>
-                <td><a href="{{ proc.period }}.pdf">{{ proc.period }}</a></td>
-                <td>{{ _('NOK %(cost)s', cost=proc.get_total_cost()|intcomma) }}</td>
-                <td>
-                    {%- if proc.paid -%}
-                        <span class="glyphicon glyphicon-ok"></span> {{ _("Yes") }}
-                    {%- else -%}
-                        <span class="glyphicon glyphicon-warning-sign"></span> {{ _("No") }}
-                    {%- endif -%}
-                </td>
+        </thead>
+        <tbody>
+        {% for period, invoices in all_invoices | groupby('period') | reverse -%}
+            {% set is_first = loop.first %}
+            <tr class="table-group">
+                <th colspan="999">
+                    {{ period | localize }}
+                </th>
             </tr>
-        {% endfor %}
+            {% for invoice in invoices -%}
+                {% if not invoice.paid and is_first %}
+                    {% set class_warning = ' class="warning"' %}
+                {% elif not invoice.paid %}
+                    {% set class_warning = ' class="danger"' %}
+                {% endif %}
+                <tr{{ class_warning | default('') | safe }}>
+                    <td></td>
+                    <th>
+                        {{ invoice.society.name }}
+                    </th>
+                    <td class="text-right">{{ _('NOK %(cost)s', cost=invoice.get_total_cost() | intcomma | localize) }}</td>
+                    <td>
+                        {%- if invoice.paid -%}
+                            <span class="glyphicon glyphicon-ok"></span> {{ _("Yes") }}
+                        {%- else -%}
+                            <span class="glyphicon glyphicon-warning-sign"></span> {{ _("No") }}
+                        {%- endif -%}
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-xs">
+                            <a href="{{ url('invoice-view', society_name=invoice.society.shortname, date=invoice.period) }}"
+                               title="{{ _("View the details of the invoice") }}" class="btn btn-info">
+                                <i class="glyphicon glyphicon-eye-open"></i>
+                                <span class="sr-only">{{ _("View invoice") }}</span>
+                            </a>
+                            <a href="{{ url('invoice-view-pdf', society_name=invoice.society.shortname, date=invoice.period) }}"
+                               title="{{ _("View PDF") }}" class="btn btn-warning">
+                                <i class="glyphicon glyphicon-file"></i>
+                                <span class="sr-only">{{ _("View invoice PDF") }}</span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {%- endfor %}
+        {%- endfor %}
+        </tbody>
     </table>
+</section>
 {% endblock %}
