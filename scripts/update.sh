@@ -16,4 +16,8 @@ pip install -r requirements.txt
 ./manage.py compilemessages
 
 # Reload uWSGI
-touch spbm/wsgi.py
+if pgrep -U spf uwsgi; then
+    touch spbm/wsgi.py
+else
+    ./scripts/run_production.sh
+fi
