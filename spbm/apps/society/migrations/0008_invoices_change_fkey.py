@@ -7,6 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
     dependencies = [
         ('society', '0007_invoices_create'),
+        ('invoices', '0002_alter_table'),
     ]
 
     operations = [

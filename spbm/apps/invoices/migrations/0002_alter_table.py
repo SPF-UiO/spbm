@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('invoices', '0001_initial'),
-        ('society', '0008_invoices_change_fkey'),
+        ('society', '0007_invoices_create'),
     ]
 
     database_operations = [
