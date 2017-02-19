@@ -3,7 +3,6 @@ from django.shortcuts import render
 from django.views import View
 
 from . import views_overview, views_workers
-from .views_overview import redirect_society
 
 
 class PermissionDeniedView(View):

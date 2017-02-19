@@ -12,7 +12,7 @@ from .views.views_overview import index as standard_index
 # in the session instead, allowing to change and keep the change between each.
 society_match = r'(?P<society_name>[A-Za-z]+)/'
 
-society_urls = [
+overview_urls = [
     url(r'^$', overview.index, name='index'),
 ]
 
@@ -46,7 +46,7 @@ wages_urls = [
 
 urlpatterns = [
     url(r'^$', standard_index),
-    url(r'^society/', include(society_urls)),
+    url(r'^society/', include(overview_urls)),
     url(r'^workers/', include(workers_urls)),
     url(r'^events/', include(event_urls)),
     url(r'^invoices/', include(invoicing_urls)),
