@@ -7,13 +7,11 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0006_events_change_fkey'),
-        ('society', '0005_events_create_state'),
+        ('events', '0005_auto_20161218_1500'),
     ]
 
     database_operations = [
         migrations.AlterModelTable('Event', 'society_event'),
-        migrations.AlterModelTable('Shift', 'society_shift')
     ]
 
     operations = [

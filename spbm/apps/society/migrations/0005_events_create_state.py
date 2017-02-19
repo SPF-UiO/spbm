@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
         ('norlonn', '0002_auto_20150602_1738'),
         ('invoices', '0001_initial'),
         ('society', '0004_worker'),
-        ('events', '0005_auto_20161218_1500'),
+        ('events', '0006_events_database_alter'),
     ]
 
     state_operations = [

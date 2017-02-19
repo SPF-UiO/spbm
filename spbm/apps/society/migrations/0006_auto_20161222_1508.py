@@ -7,6 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
     dependencies = [
         ('society', '0005_events_create_state'),
+        ('events', '0008_shifts_database_alter'),
     ]
 
     operations = [

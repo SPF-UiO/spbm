@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('society', '0005_events_create_state'),
-        ('events', '0005_auto_20161218_1500'),
+        ('events', '0006_events_database_alter'),
     ]
 
     operations = [

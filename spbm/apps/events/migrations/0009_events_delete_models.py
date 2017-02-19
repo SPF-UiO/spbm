@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0007_events_database_alter'),
+        ('events', '0008_shifts_database_alter'),
     ]
 
     state_operations = [
