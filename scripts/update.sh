@@ -13,7 +13,7 @@ pip install -r requirements.txt
 ./manage.py collectstatic --noinput
 
 # Compile translation messages
-./manage.py compilemessages --locale nb_NO en_UK
+./manage.py compilemessages -l nb_NO -l en_UK
 
 # Reload uWSGI
 if pgrep -U spf uwsgi; then
