@@ -549,7 +549,7 @@ msgstr "%(society)s"
 #: templates/invoices/view.jinja:26
 #, python-format
 msgid "Period closed by %(user)s"
-msgstr "Periode lukket av %(date)s"
+msgstr "Periode lukket av %(user)s"
 
 #: templates/invoices/view.jinja:31
 #, python-format
