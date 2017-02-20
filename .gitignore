@@ -2,6 +2,9 @@
 __pycache__
 *.pyc
 
+# Ignore virtualenv
+.virtualenv/*
+
 # Ignore site files created/uploaded 
 static_files/*
 media_files/*
