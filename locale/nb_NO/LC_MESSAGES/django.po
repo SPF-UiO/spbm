@@ -30,7 +30,7 @@ msgstr "Forening"
 
 #: spbm/apps/accounts/models.py:13
 msgid "The society within SPF that the user has as a primary connection."
-msgstr ""
+msgstr "Foreningen innad i SPF som denne brukeren har som primærtilknytning."
 
 #: spbm/apps/accounts/models.py:16
 msgid "SPF-member connected to {society}"
@@ -175,7 +175,7 @@ msgstr "faktura er betalt"
 
 #: spbm/apps/society/models.py:100
 msgid "User which closed the period the invoice belongs to."
-msgstr ""
+msgstr "Bruker som lukket perioden som fakturaen er en del av."
 
 #: spbm/apps/society/models.py:139
 msgid "event"
@@ -251,7 +251,7 @@ msgstr "Du har ikke de nødvendige rettighetene for å markere fakturaer som bet
 
 #: spbm/apps/society/views/invoicing.py:131
 msgid "You've successfully marked {invoice} as paid."
-msgstr ""
+msgstr "Du har vellykket markert {invoice} som betalt."
 
 #: spbm/apps/society/views/invoicing.py:167
 #, python-format
@@ -332,7 +332,7 @@ msgstr "Brukernavn eller passord samsvarte ikke. Prøv igjen."
 
 #: templates/accounts/login.jinja:23
 msgid "Your account doesn't have access to this page. To proceed, please login with an account that has access."
-msgstr ""
+msgstr "Din konto har ikke tilgang til denne siden. For å fortsette må du logge inn med en konto som har tilgang."
 
 #: templates/accounts/login.jinja:26
 msgid "You must be logged in to view this page. Please login below."
@@ -354,7 +354,7 @@ msgstr "Husk min innlogging på denne maskinen"
 
 #: templates/accounts/login.jinja:60
 msgid "Sign in to SPF"
-msgstr "Logg inn på SPF"
+msgstr "Logg inn på SPF-siden"
 
 #: templates/errors/unauthorized.jinja:3
 msgid "403 Permission Denied"
@@ -517,7 +517,7 @@ msgstr "Nei"
 
 #: templates/invoices/index.jinja:180
 msgid "View the details of the invoice"
-msgstr ""
+msgstr "Vis detaljene til fakturaen"
 
 #: templates/invoices/index.jinja:182
 msgid "View invoice"
@@ -554,7 +554,7 @@ msgstr "Periode lukket av %(user)s"
 #: templates/invoices/view.jinja:31
 #, python-format
 msgid "Overview over events and costs associated with invoice number %(id)d."
-msgstr ""
+msgstr "Oversikt over arrangement og kostnader assosiert med fakturanr. %(id)d."
 
 #: templates/invoices/view.jinja:35
 msgid "Description"
@@ -570,7 +570,7 @@ msgstr "Enhetskostnad"
 
 #: templates/invoices/view.jinja:60
 msgid "Return to invoice overview"
-msgstr ""
+msgstr "Gå tilbake til fakturaoversikten"
 
 #. Title for reports page.
 #: templates/norlonn/index.jinja:5
@@ -579,7 +579,7 @@ msgstr "Lønnsrapporter"
 
 #: templates/norlonn/index.jinja:10
 msgid "Access to wage reports for importing into the <em>Norlønn</em> payroll system."
-msgstr ""
+msgstr "Tilgang til lønnsrapporter for import inn i lønnssystemet <em>Norlønn</em>."
 
 #: templates/norlonn/index.jinja:17
 msgid "Current report errors"
@@ -599,7 +599,7 @@ msgstr "Generér ny lønnsrapport"
 
 #: templates/norlonn/index.jinja:48
 msgid "Existing reports"
-msgstr ""
+msgstr "Eksisterende rapporter"
 
 #: templates/norlonn/index.jinja:51
 msgid ""
