@@ -7,7 +7,7 @@ psycopg2==2.6.2
 
 # Jinja2 improved translation tags & i18n
 jinja2==2.9.4
-puente==0.4.1
+puente==0.5
 markupsafe==0.23
 pytz==2016.10
 # PDF-generation
