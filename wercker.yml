@@ -101,7 +101,7 @@ production:
         ssh spf@spf.cyb.no /bin/bash << EOF
           set -ex
           if ! [ -d ~/src ]; then
-              git clone git@bitbucket.org:Aleksi/spf.git src
+              git clone git@github.com:SPF-UiO/spbm.git src
               cd ~/src
               git checkout master
               virtualenv -p python3 --prompt "(spbm)" .virtualenv
