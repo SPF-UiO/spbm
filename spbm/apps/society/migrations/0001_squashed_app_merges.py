@@ -14,27 +14,6 @@ class Migration(migrations.Migration):
     merge them all into this one and single app.
     """
 
-    replaces = [
-        ('society', '0001_initial'),
-        ('society', '0002_society_logo'),
-        ('society', '0003_auto_20160715_1423'),
-        ('society', '0004_worker'),
-        ('society', '0005_events_create_state'),
-        ('society', '0006_auto_20161222_1508'),
-        ('society', '0007_invoices_create'),
-        ('society', '0008_invoices_change_fkey'), ('society', '0009_meta_and_logo_optional'),
-        ('society', '0010_auto_20170203_2319'), ('society', '0011_invoice_created_by'),
-
-        ('invoices', '0001_initial'), ('invoices', '0002_alter_table'), ('invoices', '0003_delete_models'),
-
-        ('workers', '0001_initial'), ('workers', '0002_auto_20161218_1136'), ('workers', '0003_auto_20161219_1537'),
-
-        ('events', '0001_initial'), ('events', '0002_auto_20150304_2018'), ('events', '0003_shift_norlonn_report'),
-        ('events', '0004_auto_20150602_1738'), ('events', '0005_auto_20161218_1500'),
-        ('events', '0006_events_database_alter'), ('events', '0007_events_change_fkey'),
-        ('events', '0008_shifts_database_alter'), ('events', '0009_events_delete_models')
-    ]
-
     initial = True
 
     dependencies = [

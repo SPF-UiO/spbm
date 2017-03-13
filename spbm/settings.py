@@ -53,10 +53,7 @@ INSTALLED_APPS = (
     'puente',
     'widget_tweaks',
     'spbm.apps.society',
-    'spbm.apps.workers',  # deprecated
-    'spbm.apps.events',  # deprecated
     'spbm.apps.accounts',
-    'spbm.apps.invoices',  # deprecated
     'spbm.apps.norlonn',
 )
 
