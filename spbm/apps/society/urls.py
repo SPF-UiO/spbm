@@ -4,7 +4,7 @@ from django.conf.urls import url, include
 from spbm.apps.norlonn import views as wages
 
 from .views import views_overview as overview, views_workers as workers, \
-    views_events as events, invoicing as invoicing
+    events, invoicing
 from .views.views_overview import index as standard_index
 
 # Our *pre-made* (*cough*) bit of URL that specifies which society we're in.
@@ -26,9 +26,10 @@ workers_urls = [
 ]
 
 event_urls = [
-    url(r'^$', events.redirect_society, name="events"),
-    url(r'^' + society_match + r'$', events.index, name="events-society"),
-    url(r'^' + society_match + r'add/$', events.add),
+    url(r'^$', events.index, name='events'),
+    url(r'^add/$', events.EventAddView.as_view(), name='events-add'),
+    url(r'^' + society_match + r'$', events.index, name='events'),
+    url(r'^' + society_match + r'add/$', events.add, name='events-add'),
 ]
 
 invoicing_urls = [

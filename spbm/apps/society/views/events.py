@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.forms.formsets import formset_factory
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import CreateView
 
 from spbm.helpers.auth import user_allowed_society
 from ..forms.events import EventForm, MakeShiftBase
@@ -9,30 +11,37 @@ from ..models import Society, Event, Shift
 
 
 @login_required
-def redirect_society(request):
-    return redirect(index, society_name=request.user.spfuser.society.shortname)
+def index(request, society_name=None):
+    society = request.user.spfuser.society if society_name is None \
+        else get_object_or_404(Society, shortname=society_name)
 
-
-@login_required
-def index(request, society_name):
-    society = Society.objects.get(shortname=society_name)
     if not user_allowed_society(request.user, society):
         return render(request, "errors/unauthorized.jinja")
 
     events = Event.objects.filter(society=society)
-    proc_vals = events.values('processed').distinct().extra(select={'processed_is_null': 'processed IS NULL'},
+    processed = events.values('processed').distinct().extra(select={'processed_is_null': 'processed IS NULL'},
                                                             order_by=['-processed_is_null', '-processed'])
+    events_by_date = {}
+    for event in processed:
+        events_by_date[event['processed']] = events.filter(processed=event['processed']).order_by('-date')
 
-    eset = {}
-    for p in proc_vals:
-        eset[p['processed']] = events.filter(processed=p['processed']).order_by('-date')
+    return render(request, "events/index.jinja",
+                  {'processed': processed, 'events': events_by_date, 'cur_page': 'events'})
 
-    return render(request, "events/index.jinja", {'processed': proc_vals, 'events': eset, 'cur_page': 'events'})
+
+class EventAddView(LoginRequiredMixin, CreateView):
+    template_name = "events/add.jinja"
+    form_class = EventForm
+
+        # society = request.user.spfuser.society if society_name is None \
+        #     else get_object_or_404(Society, shortname=society_name)
 
 
 @login_required
-def add(request, society_name):
-    society = Society.objects.get(shortname=society_name)
+def add(request, society_name=None):
+    society = request.user.spfuser.society if society_name is None \
+        else get_object_or_404(Society, shortname=society_name)
+
     if not user_allowed_society(request.user, society):
         return render(request, "errors/unauthorized.jinja")
 
@@ -63,7 +72,7 @@ def add(request, society_name):
                     db_shift.wage = shift.cleaned_data['wage']
                     db_shift.hours = shift.cleaned_data['hours']
                     db_shift.save()
-                return redirect(index, society_name=society_name)
+                return redirect(index)
     else:
         event_formset = event_form(prefix="event")
         shift_formset = shift_form(prefix="shift")

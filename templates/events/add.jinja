@@ -8,15 +8,15 @@
 <form class="form-horizontal" method="post" action="">
     {% csrf_token %}
     {% autoescape off %}
-    {% for form in event_formset %}
+{#    {% for form in event_formset %}#}
         {% include 'form-loop.jinja' %}
-    {% endfor %}
-    {{ event_formset.management_form }}
+{#    {% endfor %}#}
+{#    {{ event_formset.management_form }}#}
 
-    {% for form in shift_formset %}
-        {% include 'form-loop.jinja' %}
-    {% endfor %}
-    {{ shift_formset.management_form }}
+{#    {% for form in shift_formset %}#}
+{#        {% include 'form-loop.jinja' %}#}
+{#    {% endfor %}#}
+{#    {{ shift_formset.management_form }}#}
     {# <table>
         {{ event_formset }}
     </table>
