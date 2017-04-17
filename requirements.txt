@@ -1,17 +1,17 @@
 # Main framework
-Django<1.11
+Django>=1.11,<1.12
 django-jinja==2.2.2
 
 # Data
 psycopg2==2.6.2
 
 # Jinja2 improved translation tags & i18n
-jinja2==2.9.4
+jinja2==2.9.6
 puente==0.5
-markupsafe==0.23
-pytz==2016.10
+markupsafe==1.0
+pytz==2017.02
 # PDF-generation
-reportlab==3.3.0
+reportlab==3.4.0
 # Localisation and handling local input
 django-localflavor==1.4.1
 # Widget tweaks to avoid editing forms in code
