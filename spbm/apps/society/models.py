@@ -7,6 +7,7 @@ from django.utils import six
 from django.utils.functional import lazy
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+from django.core.validators import MinValueValidator
 
 mark_safe_lazy = lazy(mark_safe, six.text_type)
 
@@ -160,9 +161,6 @@ class Event(models.Model):
                                 related_name="events",
                                 verbose_name=_('invoice'))
 
-    def __str__(self):
-        return self.society.shortname + " - " + str(self.date) + ": " + self.name
-
     def get_hours(self):
         hours = Decimal(0)
         for shift in self.shifts.all():
@@ -179,10 +177,17 @@ class Event(models.Model):
 
     get_cost.short_description = _("Total cost")
 
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('events-view', args=[self.pk])
+
     def clean(self):
         if self.invoice is not None:
             if self.invoice.society != self.society:
                 raise ValidationError("Cannot add event to another society invoice!")
+
+    def __str__(self):
+        return self.society.shortname + " - " + str(self.date) + ": " + self.name
 
 
 class Shift(models.Model):
@@ -202,10 +207,12 @@ class Shift(models.Model):
                                verbose_name=_('worker'))
     wage = models.DecimalField(max_digits=10,
                                decimal_places=2,
-                               verbose_name=_('wage'))
+                               verbose_name=_('wage'),
+                               validators=[MinValueValidator(10)])
     hours = models.DecimalField(max_digits=10,
                                 decimal_places=2,
-                                verbose_name=_('hours'))
+                                verbose_name=_('hours'),
+                                validators=[MinValueValidator(0.25)])
     norlonn_report = models.ForeignKey('norlonn.NorlonnReport',
                                        blank=True,
                                        null=True,

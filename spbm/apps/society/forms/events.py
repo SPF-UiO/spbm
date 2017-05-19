@@ -1,7 +1,9 @@
 from django.forms import ModelChoiceField, DecimalField, DateInput
-from django.forms import ModelForm, Form
+from django.forms import ModelForm, Form, BaseModelFormSet
+from extra_views import InlineFormSet
 
-from spbm.apps.society.models import Worker, Event
+from helpers.auth import user_society
+from spbm.apps.society.models import Worker, Event, Shift
 
 
 class MyDateInput(DateInput):
@@ -18,14 +20,20 @@ class EventForm(ModelForm):
         fields = ['name', 'date']
 
 
-def MakeShiftBase(society):
-    class ShiftForm(Form):
+def make_shift_base(society):
+    """ Takes a society and returns a Shift form with initial data populated based of society defaults """
+
+    class ShiftForm(ModelForm):
+        class Meta:
+            model = Shift
+            exclude = ['norlonn_report']
+
         def __init__(self, *args, **kwargs):
             super(ShiftForm, self).__init__(*args, initial={'wage': society.default_wage}, **kwargs)
-            self.fields['worker'].queryset = Worker.objects.filter(society=society, active=1)
-
-        worker = ModelChoiceField(queryset=Worker.objects.filter(society=society))
-        wage = DecimalField(max_digits=10, decimal_places=2)
-        hours = DecimalField(max_digits=10, decimal_places=2)
+            self.fields['worker'].queryset = Worker.objects.filter(society=society, active=True)
 
     return ShiftForm
+
+
+
+

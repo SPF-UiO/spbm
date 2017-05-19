@@ -1,7 +1,7 @@
 {% extends "base.jinja" %}
 
 {% block title -%}
-    {{ _('Add event') }}
+    {{ _("Edit event") }}
 {%- endblock %}
 
 {% block content %}
@@ -14,18 +14,10 @@
     {# Include and enumerate through the main form #}
     {% include 'form-loop.jinja' %}
 
-    <h3>{{ _('Shift workers') }}</h3>
-
     {# Go through all of the inline forms that are #}
     {% for inline in inlines %}
-        {# If the formset has errors, show these #}
-        {% if inline.non_form_errors() %}
-            {% for error in inline.non_form_errors() %}
-            <div class="alert alert-warning">{{ error }}</div>
-            {% endfor %}
-        {% endif %}
         {% for form in inline %}
-            {% include 'form-loop-columns.jinja' %}
+            {% include 'form-loop.jinja' %}
         {% endfor %}
         {{ inline.management_form }}
     {% endfor %}
@@ -34,10 +26,10 @@
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" class="btn btn-success">
-                {{ _('Create event') }}
+                {{ _('Update event with changes') }}
             </button>
-            <a href="{{ url("events") }}" title="{{ _('Cancel creating this event') }}" class="btn btn-warning">
-                {{ _('Cancel creating this event') }}
+            <a href="{{ url("events") }}" title="{{ _('Cancel changes') }}" class="btn btn-warning">
+                {{ _('Cancel changes') }}
             </a>
         </div>
     </div>

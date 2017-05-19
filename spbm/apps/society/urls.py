@@ -27,7 +27,8 @@ workers_urls = [
 
 event_urls = [
     url(r'^$', events.index, name='events'),
-    url(r'^add/$', events.EventAddView.as_view(), name='events-add'),
+    url(r'^add/$', events.EventCreateView.as_view(), name='events-add'),
+    url(r'^view/(?P<pk>\d+)$', events.EventUpdateView.as_view(), name='events-view'),
     url(r'^' + society_match + r'$', events.index, name='events'),
     url(r'^' + society_match + r'add/$', events.add, name='events-add'),
 ]

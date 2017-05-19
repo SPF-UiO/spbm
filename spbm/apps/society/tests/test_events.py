@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-from django.db import IntegrityError
 from django.test import TestCase
 from django.urls import reverse
 
@@ -40,15 +39,14 @@ class EventLoggedInTests(TestCase):
         Test that we can add an event.
         """
         event_data = {
-            'event-0-name': "Magical Test Event",
-            'event-0-date': "2017-01-25",
-            'event-TOTAL_FORMS': 1,
-            'event-INITIAL_FORMS': 0,
-            'shift-0-worker': 3,
-            'shift-0-wage': 128.00,
-            'shift-0-hours': 8,
-            'shift-TOTAL_FORMS': 1,
-            'shift-INITIAL_FORMS': 0
+            'name': "Magical Test Event",
+            'date': "2017-01-25",
+            'shifts-0-worker': 3,
+            'shifts-0-wage': 128.00,
+            'shifts-0-hours': 8,
+            'shifts-TOTAL_FORMS': 1,
+            'shifts-MIN_NUM_FORMS': 1,
+            'shifts-INITIAL_FORMS': 0
         }
         adding_event = self.client.post(reverse('events-add'), event_data, follow=True)
         self.assertEqual(adding_event.status_code, self.HTTP_OK)
@@ -62,21 +60,22 @@ class EventLoggedInTests(TestCase):
         Test that we fail when adding a worker twice to an event.
         """
         event_data = {
-            'event-0-name': "Magical Test Event",
-            'event-0-date': "2017-01-25",
-            'event-TOTAL_FORMS': 1,
-            'event-INITIAL_FORMS': 0,
-            'shift-0-worker': 3,
-            'shift-0-wage': 128.00,
-            'shift-0-hours': 8,
-            'shift-1-worker': 3,
-            'shift-1-wage': 128.00,
-            'shift-1-hours': 8,
-            'shift-TOTAL_FORMS': 2,
-            'shift-INITIAL_FORMS': 0
+            'name': "Magical Test Event",
+            'date': "2017-01-25",
+            'shifts-0-worker': 3,
+            'shifts-0-wage': 128.00,
+            'shifts-0-hours': 8,
+            'shifts-1-worker': 3,
+            'shifts-1-wage': 128.00,
+            'shifts-1-hours': 8,
+            'shifts-TOTAL_FORMS': 2,
+            'shifts-MIN_NUM_FORMS': 1,
+            'shifts-INITIAL_FORMS': 0
         }
-        with self.assertRaises(IntegrityError):
-            added_event = self.client.post(reverse('events-add'), event_data, follow=True)
+        added_event = self.client.post(reverse('events-add'), event_data, follow=True)
+        self.assertTrue(added_event.context['inlines'][0].non_form_errors())
+        last_event = Event.objects.last()
+        self.assertEqual(last_event.name, "Lørdagsparty")
 
 
 class EventLoggedOutTests(TestCase):
@@ -87,7 +86,12 @@ class EventLoggedOutTests(TestCase):
         """
         from ..urls import event_urls
         for view in event_urls:
-            response = self.client.get(reverse(view.name))
+            from django.urls import NoReverseMatch
+            try:
+                response = self.client.get(reverse(view.name))
+            except NoReverseMatch:
+                # Better way to try views with a single parameter?
+                response = self.client.get(reverse(view.name, args=[1]))
             self.assertEqual(response.status_code,
                              302,
                              "Did not receive expected HTTP UNAUTHORIZED")

@@ -22,3 +22,6 @@ uwsgi==2.0.15
 
 # Sane relative dates
 python-dateutil==2.6.0
+
+# Extra class-based generic views
+django-extra-views

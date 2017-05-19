@@ -1,12 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
-from django.forms.formsets import formset_factory
+from django.forms.formsets import formset_factory, all_valid
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import CreateView
+from django.urls import reverse
+from extra_views import CreateWithInlinesView, InlineFormSet, UpdateWithInlinesView
 
-from spbm.helpers.auth import user_allowed_society
-from ..forms.events import EventForm, MakeShiftBase
+from spbm.helpers.auth import user_allowed_society, user_society
+from ..forms.events import EventForm, make_shift_base
 from ..models import Society, Event, Shift
 
 
@@ -29,12 +30,52 @@ def index(request, society_name=None):
                   {'processed': processed, 'events': events_by_date, 'cur_page': 'events'})
 
 
-class EventAddView(LoginRequiredMixin, CreateView):
-    template_name = "events/add.jinja"
-    form_class = EventForm
+class ShiftInlineForm(InlineFormSet):
+    model = Shift
+    exclude = ['norlonn_report']
+    can_delete = False
 
-        # society = request.user.spfuser.society if society_name is None \
-        #     else get_object_or_404(Society, shortname=society_name)
+    def get_form_class(self):
+        return make_shift_base(user_society(self.request))
+
+    def get_factory_kwargs(self):
+        kwargs = super(ShiftInlineForm, self).get_factory_kwargs()
+        kwargs.update({
+            'min_num': 1,
+        })
+        return kwargs
+
+
+class EventCreateView(LoginRequiredMixin, CreateWithInlinesView):
+    template_name = "events/add.jinja"
+    model = Event
+    fields = ['name', 'date']
+    inlines = [ShiftInlineForm, ]
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+
+        if form.is_valid():
+            self.object = form.save(commit=False)
+            self.object.society = user_society(request)
+            form_validated = True
+        else:
+            self.object = None
+            form_validated = False
+
+        inlines = self.construct_inlines()
+
+        if all_valid(inlines) and form_validated:
+            return self.forms_valid(form, inlines)
+        return self.forms_invalid(form, inlines)
+
+
+class EventUpdateView(LoginRequiredMixin, UpdateWithInlinesView):
+    template_name = "events/add.jinja"
+    model = Event
+    fields = ['name', 'date']
+    inlines = [ShiftInlineForm, ]
 
 
 @login_required
@@ -46,7 +87,7 @@ def add(request, society_name=None):
         return render(request, "errors/unauthorized.jinja")
 
     event_form = formset_factory(EventForm, min_num=1, max_num=1)
-    shift_form = formset_factory(MakeShiftBase(society), min_num=6, max_num=12)
+    shift_form = formset_factory(make_shift_base(society), min_num=6, max_num=12)
 
     if request.method == "POST":
         event_formset = event_form(request.POST, prefix="event")

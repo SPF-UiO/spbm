@@ -6,3 +6,6 @@ def user_allowed_society(usr, soc):
         return True
 
     return False
+
+def user_society(request):
+    return request.user.spfuser.society
