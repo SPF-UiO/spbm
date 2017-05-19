@@ -1,8 +1,6 @@
-from django.forms import ModelChoiceField, DecimalField, DateInput
-from django.forms import ModelForm, Form, BaseModelFormSet
-from extra_views import InlineFormSet
+from django.forms import DateInput
+from django.forms import ModelForm
 
-from helpers.auth import user_society
 from spbm.apps.society.models import Worker, Event, Shift
 
 
