@@ -42,7 +42,7 @@ build:
         name: alpine pre-requisites
         code: |
           apk update
-          apk add zlib-dev gettext jpeg-dev postgresql-dev gcc musl-dev linux-headers
+          apk add gettext gcc linux-headers jpeg-dev postgresql-dev musl-dev 
 
     # Once done, install virtualenv so we're ready to use it
     - script:
@@ -57,7 +57,8 @@ build:
 
     # A step that executes `pip install` command.
     - pip-install:
-        auto_run_wheel: False
+        name: pip install requirements with wheel
+        auto_run_wheel: True
 
     # # This pip-install clears the local wheel cache
     # - pip-install:

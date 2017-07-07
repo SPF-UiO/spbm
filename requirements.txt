@@ -18,7 +18,7 @@ django-localflavor==1.4.1
 django-widget-tweaks==1.4.1
 
 # Execution for the moment
-uwsgi==2.0.14
+uwsgi==2.0.15
 
 # Sane relative dates
 python-dateutil==2.6.0
