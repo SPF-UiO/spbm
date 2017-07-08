@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.test import TestCase
 from django.urls import reverse
 
@@ -7,13 +7,36 @@ from ..models import Event, Society
 from ...accounts.models import SpfUser
 
 
-class EventLoggedInTests(TestCase):
+class EventLoggedInWithPermissionsTests(TestCase):
     fixtures = test_fixtures
     HTTP_OK = 200
 
+    @classmethod
+    def setUpTestData(cls):
+        # Some useful helpers for validating
+        cls.last_event = Event.objects.last()
+        cls.magic_event = {
+            'name': "Magical Test Event",
+            'date': "2017-01-25",
+            'shifts-0-worker': 3,
+            'shifts-0-wage': 128.00,
+            'shifts-0-hours': 8,
+            'shifts-1-worker': 3,
+            'shifts-1-wage': 128.00,
+            'shifts-1-hours': 8,
+            'shifts-TOTAL_FORMS': 2,
+            'shifts-MIN_NUM_FORMS': 1,
+            'shifts-INITIAL_FORMS': 0
+        }
+
     def setUp(self):
+        # Create the user and add the needed permissions
         self.user = User(username='kungfury')
         self.user.save()
+        self.user.user_permissions.add(Permission.objects.get(codename='add_event'),
+                                       Permission.objects.get(codename='change_event'))
+
+        # set him as part of a society, then force login
         self.spf_user = SpfUser(user=self.user, society=Society.objects.get(pk=2))
         self.spf_user.save()
         self.client.force_login(self.user)
@@ -30,32 +53,26 @@ class EventLoggedInTests(TestCase):
         """
         Test that we can access these pages being logged in.
         """
-        [self.assertEqual(self.client.get(reverse(view), follow=True).status_code, self.HTTP_OK,
-                          "Incorrect HTTP response given!")
-         for view in ['events', 'events-add']]
+        for view in ['events', 'events-add']:
+            with self.subTest(msg=view):
+                self.assertEqual(self.client.get(reverse(view), follow=True).status_code, self.HTTP_OK,
+                                 "Incorrect HTTP response given!")
 
-    def test_add_event(self):
+    def test_can_add_single_worker_event(self):
         """
         Test that we can add an event.
         """
-        event_data = {
-            'name': "Magical Test Event",
-            'date': "2017-01-25",
-            'shifts-0-worker': 3,
-            'shifts-0-wage': 128.00,
-            'shifts-0-hours': 8,
-            'shifts-TOTAL_FORMS': 1,
-            'shifts-MIN_NUM_FORMS': 1,
-            'shifts-INITIAL_FORMS': 0
-        }
+        event_data = dict(self.magic_event)
+        [event_data.pop(key, None) for key in ['shifts-1-worker', 'shifts-1-wage', 'shifts-1-hours']]
+        event_data['shifts-TOTAL_FORMS'] = 1
+
         adding_event = self.client.post(reverse('events-add'), event_data, follow=True)
         self.assertEqual(adding_event.status_code, self.HTTP_OK)
         last_event = Event.objects.last()
-        self.assertEqual(last_event.name, "Magical Test Event")
-        self.assertTrue(last_event.date)
+        self.assertEqual(last_event, adding_event.context['event'])
         self.assertEqual(last_event.shifts.count(), 1)
 
-    def test_add_event_duplicate_worker(self):
+    def test_add_fail_on_duplicate_worker(self):
         """
         Test that we fail when adding a worker twice to an event.
         """
@@ -74,8 +91,19 @@ class EventLoggedInTests(TestCase):
         }
         added_event = self.client.post(reverse('events-add'), event_data, follow=True)
         self.assertTrue(added_event.context['inlines'][0].non_form_errors())
-        last_event = Event.objects.last()
-        self.assertEqual(last_event.name, "Lørdagsparty")
+        self.assertEqual(Event.objects.last(), self.last_event)
+
+    def test_add_fail_on_zero_hours(self):
+        """
+        Test that we fail when trying to send in data that is invalid.
+        """
+        event_data = dict(self.magic_event)
+        # we make it zero hours, which is invalid
+        event_data['shifts-0-hours'] = 0
+
+        added_event = self.client.post(reverse('events-add'), event_data, follow=True)
+        self.assertFalse(added_event.context['inlines'][0].is_valid())
+        self.assertEqual(Event.objects.last(), self.last_event)
 
 
 class EventLoggedOutTests(TestCase):

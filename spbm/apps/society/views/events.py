@@ -1,13 +1,12 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db import transaction
-from django.forms.formsets import formset_factory, all_valid
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
+from django.forms.formsets import all_valid
+from django.shortcuts import render, get_object_or_404
+from django.utils.translation import ugettext as _
 from extra_views import CreateWithInlinesView, InlineFormSet, UpdateWithInlinesView
 
 from spbm.helpers.auth import user_allowed_society, user_society
-from ..forms.events import EventForm, make_shift_base
+from spbm.helpers.mixins import LoginAndPermissionRequiredMixin
+from ..forms.events import make_shift_base
 from ..models import Society, Event, Shift
 
 
@@ -16,6 +15,8 @@ def index(request, society_name=None):
     society = request.user.spfuser.society if society_name is None \
         else get_object_or_404(Society, shortname=society_name)
 
+    # TODO: possibly remove this, while at the same time reworking the entire thought of multi-society editing
+    # it is, by far, more important to have multi-society workers
     if not user_allowed_society(request.user, society):
         return render(request, "errors/unauthorized.jinja")
 
@@ -46,8 +47,10 @@ class ShiftInlineForm(InlineFormSet):
         return kwargs
 
 
-class EventCreateView(LoginRequiredMixin, CreateWithInlinesView):
+class EventCreateView(LoginAndPermissionRequiredMixin, CreateWithInlinesView):
     template_name = "events/add.jinja"
+    permission_required = 'society.add_event'
+    permission_denied_message = _("You are not allowed to create events due to lacking permissions.")
     model = Event
     fields = ['name', 'date']
     inlines = [ShiftInlineForm, ]
@@ -71,51 +74,10 @@ class EventCreateView(LoginRequiredMixin, CreateWithInlinesView):
         return self.forms_invalid(form, inlines)
 
 
-class EventUpdateView(LoginRequiredMixin, UpdateWithInlinesView):
+class EventUpdateView(LoginAndPermissionRequiredMixin, UpdateWithInlinesView):
     template_name = "events/add.jinja"
+    permission_required = 'society.change_event'
+    permission_denied_message = _("You are not allowed to edit events due to lacking permissions.")
     model = Event
     fields = ['name', 'date']
     inlines = [ShiftInlineForm, ]
-
-
-@login_required
-def add(request, society_name=None):
-    society = request.user.spfuser.society if society_name is None \
-        else get_object_or_404(Society, shortname=society_name)
-
-    if not user_allowed_society(request.user, society):
-        return render(request, "errors/unauthorized.jinja")
-
-    event_form = formset_factory(EventForm, min_num=1, max_num=1)
-    shift_form = formset_factory(make_shift_base(society), min_num=6, max_num=12)
-
-    if request.method == "POST":
-        event_formset = event_form(request.POST, prefix="event")
-        shift_formset = shift_form(request.POST, prefix="shift")
-
-        if event_formset.is_valid():
-            with transaction.atomic():
-                event = event_formset[0].save(commit=False)
-                event.society = society
-                event.save()
-
-                for shift in shift_formset:
-                    if not shift.is_valid():
-                        continue
-
-                    if "worker" not in shift.cleaned_data:
-                        continue
-
-                    print(shift.cleaned_data['worker'])
-                    db_shift = Shift()
-                    db_shift.event = event
-                    db_shift.worker = shift.cleaned_data['worker']
-                    db_shift.wage = shift.cleaned_data['wage']
-                    db_shift.hours = shift.cleaned_data['hours']
-                    db_shift.save()
-                return redirect(index)
-    else:
-        event_formset = event_form(prefix="event")
-        shift_formset = shift_form(prefix="shift")
-
-    return render(request, "events/add.jinja", {'event_formset': event_formset, 'shift_formset': shift_formset})
