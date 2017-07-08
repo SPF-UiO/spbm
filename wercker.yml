@@ -48,6 +48,8 @@ build:
     - script:
         name: virtualenv-install
         code: |
+          export PIP_CACHE_DIR=$WERCKER_CACHE_DIR/pip-download-cache
+          export PIP_FIND_LINKS=$WERCKER_CACHE_DIR/pip-wheels
           pip install virtualenv 
 
     # A step that sets up the python virtual environment
@@ -57,9 +59,11 @@ build:
 
 
     # Installing the CI requirements, incl. coveralls and coverage
-    - pip-install:
-        name: pip install ci complete requirements w/wheel
-        requirements_file: "requirements_ci.txt"
+    - script:
+        name: pip install coverage outside of requirements.txt w/wheel
+        code: |
+          pip wheel coverage
+          pip install coverage
 
     # A step that executes `pip install` command.
     - pip-install:
@@ -74,21 +78,35 @@ build:
           echo "pip version $(pip --version) running"
 
     # Then we run the tests of our Django instance
-    - script: run tests with coverage
-      code: |
-        python -m coverage run ./manage.py test -v 3
+    - script:
+        name: run tests with coverage
+        code: |
+          python -m coverage run ./manage.py test -v 3
 
     # Once that's done, let's compile the current translation
-    - script: compile translation messages
-      code: |
-        python ./manage.py compilemessages
+    - script: 
+        name: compile translation messages
+        code: |
+          python ./manage.py compilemessages
 
   after-steps:
-    - script: reporting to coveralls
-      code: |
-        apk add git
-        pip install coveralls
-        COVERALLS_REPO_TOKEN=$COVERALLS_TOKEN coveralls
+    # Installing the CI requirements, incl. coveralls and coverage
+    - script:
+        name: installing software requirements for coveralls
+        code: |
+          export PIP_CACHE_DIR=$WERCKER_CACHE_DIR/pip-download-cache
+          export PIP_FIND_LINKS=$WERCKER_CACHE_DIR/pip-wheels
+          apk add git
+          pip install coveralls
+    - script: 
+        name: reporting to coveralls
+        code: |
+          info "Setting up environment variables for correct coveralls reporting"
+          export CI_NAME='wercker'
+          export CI_BRANCH=$WERCKER_GIT_BRANCH
+          export CI_BUILD_URL=$WERCKER_BUILD_URL
+          info "Report to coveralls"
+          COVERALLS_REPO_TOKEN=$COVERALLS_TOKEN coveralls
         
 ################################################################################
 # Deployment pipeline
