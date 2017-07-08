@@ -1,9 +1,16 @@
-# Ignore build cache
+# Ignore build cache and coverage data
 __pycache__
+.coverage
 *.pyc
 
 # Ignore virtualenv
 .virtualenv/*
+
+# Ignore werckers cache and work folder
+.wercker/*
+
+# Let's ignore JetBrains PyCharm too, if used
+.idea/*
 
 # Ignore site files created/uploaded 
 static_files/*

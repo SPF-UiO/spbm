@@ -2,6 +2,7 @@ SPFs "SPBM"
 ===========
 
 [![build status](https://app.wercker.com/status/9957a592aed9cbb25f335978dfa7ae44/m/master "wercker status")](https://app.wercker.com/project/byKey/9957a592aed9cbb25f335978dfa7ae44)
+[![coverage status](https://coveralls.io/repos/github/SPF-UiO/spbm/badge.svg?branch=master "coverage status")](https://coveralls.io/github/SPF-UiO/spbm?branch=master)
 
 Her er koden for *Studentkjellernes personalforening* sitt nåværende nettbaserte system for grovhåndtering av diverse utlån og leier av lokaler, studentansatte, fakturering av medlemsforeninger, samt lønnsrapportering for utbetaling av lønn.  
 *This is the code for the *Student basement pubs society* current web-based system for roughly managing our various bookings and rentals of our collective premises, student employees, invoicing our member societies, as well as wage reporting to facilitate payroll.*

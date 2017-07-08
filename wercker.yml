@@ -48,40 +48,48 @@ build:
     - script:
         name: virtualenv-install
         code: |
-          pip install virtualenv
+          pip install virtualenv 
 
     # A step that sets up the python virtual environment
     - virtualenv:
         name: setup virtual environment
         install_wheel: True # Enable wheel to speed up builds (experimental)
 
+
+    # Installing the CI requirements, incl. coveralls and coverage
+    - pip-install:
+        name: pip install ci complete requirements w/wheel
+        requirements_file: "requirements_ci.txt"
+
     # A step that executes `pip install` command.
     - pip-install:
-        name: pip install requirements with wheel
+        name: pip install spbm requirements w/wheel
         auto_run_wheel: True
 
-    # # This pip-install clears the local wheel cache
-    # - pip-install:
-    #     clean_wheel_dir: true
-
-    # A custom script step, name value is used in the UI
-    # and the code value contains the command that get executed
+    # Yield some python information
     - script:
-        name: echo python information
+        name: python and pip version information
         code: |
           echo "python version $(python --version) running"
           echo "pip version $(pip --version) running"
 
     # Then we run the tests of our Django instance
-    - script: run tests
+    - script: run tests with coverage
       code: |
-        python ./manage.py test -v 3
+        python -m coverage run ./manage.py test -v 3
 
     # Once that's done, let's compile the current translation
     - script: compile translation messages
       code: |
         python ./manage.py compilemessages
 
+  after-steps:
+    - script: reporting to coveralls
+      code: |
+        apk add git
+        pip install coveralls
+        COVERALLS_REPO_TOKEN=$COVERALLS_TOKEN coveralls
+        
 ################################################################################
 # Deployment pipeline
 # - Takes care of putting the bits and bytes in the right place.
