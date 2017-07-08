@@ -1,13 +1,14 @@
 SPFs "SPBM"
 ===========
 
-Her er koden for SPF sitt nye nettbaserte system.
+[![build status](https://app.wercker.com/status/9957a592aed9cbb25f335978dfa7ae44/m/master "wercker status")](https://app.wercker.com/project/byKey/9957a592aed9cbb25f335978dfa7ae44)
 
-Denne versjonen er en særdeles sterkt omstrukturert og veldig--forhåpentligvis--oppdatert variant av Aleksis originale system fra 2014. 
+Her er koden for *Studentkjellernes personalforening* sitt nåværende nettbaserte system for grovhåndtering av diverse utlån og leier av lokaler, studentansatte, fakturering av medlemsforeninger, samt lønnsrapportering for utbetaling av lønn.  
+*This is the code for the *Student basement pubs society* current web-based system for roughly managing our various bookings and rentals of our collective premises, student employees, invoicing our member societies, as well as wage reporting to facilitate payroll.*
 
-For funksjonalitetsønsker m.m. kan du ta kontakt via e-postlisten, eller registrere et ønske via issue-behandleren.
+For funksjonalitetsønsker, problemer, og spørsmål kan du [opprette et issue her på GitHub][new issue].  
+*For feature requests, problems, and questions, please [create an issue here on GitHub][new issue].*
 
-*The rest of this document is in English.*
 
 Contributing
 ------------
@@ -43,3 +44,4 @@ See `scripts/run_production.sh` for the most important steps that take place upo
 This is combined with the awesome power of our `werker.yml` file, which is our CI of choice as of today.
 
 [issue tracker]: https://github.com/SPF-UiO/spbm/issues
+[new issue]: https://github.com/SPF-UiO/spbm/issues/new
