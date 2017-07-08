@@ -6,10 +6,10 @@ from django.views.generic import UpdateView
 from spbm.helpers.auth import user_allowed_society
 from spbm.apps.society.forms.worker import WorkerForm, WorkerEditForm
 from spbm.apps.society.models import Society, Worker
-from spbm.helpers.mixins import LoggedInPermissionsMixin
+from spbm.helpers.mixins import LoginAndPermissionRequiredMixin
 
 
-class EditWorker(LoggedInPermissionsMixin, UpdateView):
+class EditWorker(LoginAndPermissionRequiredMixin, UpdateView):
     """
     Provides a simple editing interface for workers using #UpdateView.
     """
