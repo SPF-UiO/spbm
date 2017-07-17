@@ -1,3 +1,5 @@
+import itertools
+
 from django.contrib.auth.decorators import login_required
 from django.forms.formsets import all_valid
 from django.shortcuts import render, get_object_or_404
@@ -20,15 +22,16 @@ def index(request, society_name=None):
     if not user_allowed_society(request.user, society):
         return render(request, "errors/unauthorized.jinja")
 
-    events = Event.objects.filter(society=society)
-    processed = events.values('processed').distinct().extra(select={'processed_is_null': 'processed IS NULL'},
-                                                            order_by=['-processed_is_null', '-processed'])
-    events_by_date = {}
-    for event in processed:
-        events_by_date[event['processed']] = events.filter(processed=event['processed']).order_by('-date')
+    """ Create another field so that we can order first the processed = None events, then the processed ones in 
+        the reverse order, e.g. descending """
+    society_events = Event.objects.filter(society=society) \
+        .extra(select={'processed_is_null': 'processed IS NULL'},
+               order_by=['-processed_is_null', '-processed'])
 
-    return render(request, "events/index.jinja",
-                  {'processed': processed, 'events': events_by_date, 'cur_page': 'events'})
+    grouped_events = []
+    for date, event in itertools.groupby(society_events, lambda x: x.processed):
+        grouped_events.append((date, list(event)))
+    return render(request, "events/index.jinja", {'events': grouped_events})
 
 
 class ShiftInlineForm(InlineFormSet):
