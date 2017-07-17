@@ -27,8 +27,9 @@ workers_urls = [
 
 event_urls = [
     url(r'^$', events.index, name='events'),
-    url(r'^add/$', events.EventCreateView.as_view(), name='events-add'),
-    url(r'^edit/(?P<pk>\d+)$', events.EventUpdateView.as_view(), name='events-view'),
+    url(r'^add/$', events.EventCreateView.as_view(), name='event-add'),
+    url(r'^edit/(?P<pk>\d+)$', events.EventUpdateView.as_view(), name='event-edit'),
+    url(r'^view/(?P<pk>\d+)$', events.EventViewView.as_view(), name='event-view'),
 ]
 
 invoicing_urls = [
