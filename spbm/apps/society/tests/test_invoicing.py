@@ -30,6 +30,15 @@ class InvoicingTests(SPFTest, TestCase):
         response = self.client.get(reverse('invoices'))
         self.assertEqual(len(response.context['all_invoices']), len(Invoice.objects.all()))
 
+    def test_view_an_invoice(self):
+        """
+        Show an invoice in HTML-style.
+        """
+        response = self.client.get(reverse('invoice-view', kwargs={'society_name': 'CYB', 'date': '2016-07-17'}))
+        self.assertTrue(response.status_code, 200)
+        # Is there a mention of the SPF-fee?
+        self.assertInHTML("SPF", response)
+
     def test_get_unpaid_invoices(self):
         """
         Show unpaid invoices available for payment.

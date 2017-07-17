@@ -72,12 +72,13 @@ class EventInline(ReadOnlyProtection, admin.TabularInline):
         else:
             super().get_readonly_fields(request, obj)
 
+
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
     inlines = [ShiftInline]
     list_filter = ('society', 'invoice',)
-    list_display = ('__str__', 'get_cost', 'registered', 'date', 'processed',)
+    list_display = ('__str__', 'registered', 'date', 'hours', 'cost', 'processed',)
     exclude = ('invoice',)
 
     def get_readonly_fields(self, request, obj=None):
@@ -125,5 +126,3 @@ class EventAdmin(admin.ModelAdmin):
             return qs.filter(society=request.user.spfuser.society)
         else:
             return qs.none()
-
-

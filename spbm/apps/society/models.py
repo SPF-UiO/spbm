@@ -2,12 +2,12 @@ from decimal import Decimal
 
 from django.contrib.auth.models import User, AbstractUser
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import six
 from django.utils.functional import lazy
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from django.core.validators import MinValueValidator
 
 mark_safe_lazy = lazy(mark_safe, six.text_type)
 
@@ -89,6 +89,7 @@ class Invoice(models.Model):
             ('close_period', "Can close periods to generate invoices"),
             ('mark_paid', "Can mark invoices as paid")
         )
+
     """ The society the invoice belongs to. """
     society = models.ForeignKey(Society, verbose_name=_('society'), related_name="invoices", on_delete=models.PROTECT)
     """ A unique invoice number, which SHOULD be reflected in the external invoice system. """
@@ -110,7 +111,7 @@ class Invoice(models.Model):
         events = Event.objects.filter(invoice=self)
 
         for event in events:
-            cost += event.get_cost()
+            cost += event.cost
 
         return (Decimal(cost) * Decimal('1.3')).quantize(Decimal('.01'))
 
@@ -122,7 +123,7 @@ class Invoice(models.Model):
         cost = 0
         events = Event.objects.filter(invoice=self)
         for event in events:
-            cost += event.get_cost()
+            cost += event.cost
 
         return Decimal(cost).quantize(Decimal('.01'))
 
@@ -148,6 +149,10 @@ class Event(models.Model):
     registered = models.DateField(auto_now_add=True,
                                   editable=False,
                                   verbose_name=_('registered'))
+    ''' 'processed' and 'invoice' are very tightly coupled together.
+    Why exactly are both needed? Any invoice is processed on an exact date. If it shouldn't be part of an invoice,
+    then it is not really processed anyway. '''
+    # TODO: Create migration from processed to purely invoice, alt. from field to property method.
     processed = models.DateField(null=True,
                                  blank=True,
                                  verbose_name=_('processed'))
@@ -161,25 +166,31 @@ class Event(models.Model):
                                 related_name="events",
                                 verbose_name=_('invoice'))
 
-    def get_hours(self):
+    @property
+    def hours(self):
+        """ Get the number of hours registered on an event """
         hours = Decimal(0)
         for shift in self.shifts.all():
             hours += shift.hours
-
+        hours = hours.quantize(Decimal(".01"))
         return hours
 
-    def get_cost(self):
+    hours.fget.short_description = _("Total hours")
+
+    @property
+    def cost(self):
+        """ Get the total cost that will be invoiced from an event """
         total = Decimal(0)
         for s in self.shifts.all():
             total += s.get_total()
         total = total.quantize(Decimal(".01"))
         return total
 
-    get_cost.short_description = _("Total cost")
+    cost.fget.short_description = _("Total cost")
 
     def get_absolute_url(self):
         from django.urls import reverse
-        return reverse('events-view', args=[self.pk])
+        return reverse('event-view', args=[self.pk])
 
     def clean(self):
         if self.invoice is not None:
