@@ -19,9 +19,9 @@ class EventLoggedInWithPermissionsTests(TestCase):
             'name': "Magical Test Event",
             'date': "2017-01-25",
             'shifts-0-worker': 3,
-            'shifts-0-wage': 128.00,
-            'shifts-0-hours': 8,
-            'shifts-1-worker': 3,
+            'shifts-0-wage': 168.00,
+            'shifts-0-hours': 4,
+            'shifts-1-worker': 4,
             'shifts-1-wage': 128.00,
             'shifts-1-hours': 8,
             'shifts-TOTAL_FORMS': 2,
@@ -47,28 +47,42 @@ class EventLoggedInWithPermissionsTests(TestCase):
         """
         events_index = self.client.get(reverse('events'), follow=True)
         self.assertEqual(events_index.status_code, self.HTTP_OK)
-        self.assertEqual(events_index.context['processed'].count(), 0)
+        self.assertEqual(len(events_index.context['events']), 0)
 
     def test_can_access_logged_in(self):
         """
         Test that we can access these pages being logged in.
         """
-        for view in ['events', 'events-add']:
+        for view in ['events', 'event-add']:
             with self.subTest(msg=view):
                 self.assertEqual(self.client.get(reverse(view), follow=True).status_code, self.HTTP_OK,
                                  "Incorrect HTTP response given!")
 
+    def test_can_add_two_workers_event(self):
+        """
+        Test that we can add an event with two workers.
+        """
+        event_data = dict(self.magic_event)
+
+        adding_event = self.client.post(reverse('event-add'), event_data, follow=True)
+        self.assertEqual(adding_event.status_code, self.HTTP_OK)
+        last_event = Event.objects.last()
+        self.assertNotEqual(self.last_event, last_event, "event not added")
+        self.assertEqual(last_event, adding_event.context['event'])
+        self.assertEqual(last_event.shifts.count(), 2)
+
     def test_can_add_single_worker_event(self):
         """
-        Test that we can add an event.
+        Test that we can add an event with one worker.
         """
         event_data = dict(self.magic_event)
         [event_data.pop(key, None) for key in ['shifts-1-worker', 'shifts-1-wage', 'shifts-1-hours']]
         event_data['shifts-TOTAL_FORMS'] = 1
 
-        adding_event = self.client.post(reverse('events-add'), event_data, follow=True)
+        adding_event = self.client.post(reverse('event-add'), event_data, follow=True)
         self.assertEqual(adding_event.status_code, self.HTTP_OK)
         last_event = Event.objects.last()
+        self.assertNotEqual(self.last_event, last_event, "event not added")
         self.assertEqual(last_event, adding_event.context['event'])
         self.assertEqual(last_event.shifts.count(), 1)
 
@@ -89,7 +103,7 @@ class EventLoggedInWithPermissionsTests(TestCase):
             'shifts-MIN_NUM_FORMS': 1,
             'shifts-INITIAL_FORMS': 0
         }
-        added_event = self.client.post(reverse('events-add'), event_data, follow=True)
+        added_event = self.client.post(reverse('event-add'), event_data, follow=True)
         self.assertTrue(added_event.context['inlines'][0].non_form_errors())
         self.assertEqual(Event.objects.last(), self.last_event)
 
@@ -101,7 +115,7 @@ class EventLoggedInWithPermissionsTests(TestCase):
         # we make it zero hours, which is invalid
         event_data['shifts-0-hours'] = 0
 
-        added_event = self.client.post(reverse('events-add'), event_data, follow=True)
+        added_event = self.client.post(reverse('event-add'), event_data, follow=True)
         self.assertFalse(added_event.context['inlines'][0].is_valid())
         self.assertEqual(Event.objects.last(), self.last_event)
 
