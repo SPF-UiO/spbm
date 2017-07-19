@@ -37,7 +37,7 @@ class InvoicingTests(SPFTest, TestCase):
         response = self.client.get(reverse('invoice-view', kwargs={'society_name': 'CYB', 'date': '2016-07-17'}))
         self.assertTrue(response.status_code, 200)
         # Is there a mention of the SPF-fee?
-        self.assertInHTML("SPF", response)
+        self.assertContains(response, "SPF")
 
     def test_get_unpaid_invoices(self):
         """
