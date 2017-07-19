@@ -1,9 +1,8 @@
 {% extends "base.jinja" %}
-
-{% block title -%}
-    {{ _("Invoice #%(id)s: %(date)s %(society)s", id=invoice.invoice_number,
-    date=invoice.period, society=invoice.society) }}
-{%- endblock %}
+{% set title = _("Invoice #%(id)s: %(date)s %(society)s",
+    id=invoice.invoice_number,
+    date=invoice.period,
+    society=invoice.society) %}
 
 {% block content %}
     <article>

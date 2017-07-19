@@ -1,8 +1,5 @@
 {% extends "base.jinja" %}
-
-{% block title -%}
-    {{ _('Society overview') }}
-{%- endblock %}
+{% set title = _('Society overview') %}
 
 {% block content %}
     <p>{{ _("You're logged into an account associated with:") }} {{ society.name }} ({{ society.shortname }})</p>

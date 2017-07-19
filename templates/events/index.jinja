@@ -1,8 +1,5 @@
 {% extends "base.jinja" %}
-
-{% block title -%}
-    {{ _("Events") }}
-{%- endblock %}
+{% set title = _("Events") %}
 
 {% block content -%}
     <a class="btn btn-success btn-lg {%- if not user.has_perm('society.add_event') %} disabled {%- endif %}"
