@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.formats import localize
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -16,7 +17,7 @@ class NorlonnReport(models.Model):
     date = models.DateField()
 
     def __str__(self):
-        return str(self.date)
+        return str(localize(self.date))
 
     class Meta:
         permissions = (
