@@ -2,11 +2,27 @@
 {% set title = _("View event") %}
 {% set title_small = _("Viewing ""%(name)s"" (#%(id)i)", name=event.name, id=event.id) %}
 
+{% from 'events/utils.jinja' import table_of_shifts %}
+
+{% macro field(title, value) -%}
+    <tr>
+        <th class="col-sm-4">{{ title }}</th>
+        <td>{{ value }}</td>
+    </tr>
+{%- endmacro %}
+
+
+{% block toolbar %}
+    {%- if event.processed is none %}
+    <a href="{{ url('event-edit', object.id) }}" class="btn btn-small btn-warning">
+        {{ _("Edit event") }}
+    </a>
+    <a href="{{ url('event-delete', object.id) }}" class="btn btn-small btn-danger">
+        {{ _("Delete event") }}
+    </a>
+    {% endif -%}
+{% endblock %}
+
 {% block content %}
 
-    {% if event.processed is none %}
-        <a href="{{ url('event-delete', object.id) }}" class="pull-right btn btn-small btn-danger">
-            {{ _("Delete...") }}
-        </a>
-    {% endif %}
 {% endblock %}

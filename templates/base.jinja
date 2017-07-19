@@ -84,11 +84,18 @@
 </nav>
 <div class="container">
     {% if title -%}
-        <h1 class="page-header">{{ title }}
-            {%- if title_small %}
-                <small>{{ title_small | striptags }}</small>
-            {% endif -%}
-        </h1>
+        <div class="page-header">
+            {% if self.toolbar() -%}
+                <div class="btn-group pull-right" role="group">
+                    {% block toolbar %}{% endblock %}
+                </div>
+            {%- endif %}
+            <h1>{{ title }}
+                {%- if title_small %}
+                    <small>{{ title_small | striptags }}</small>
+                {% endif -%}
+            </h1>
+        </div>
     {%- endif %}
     {% if messages -%}
         <ul class="messages list-unstyled" role="alert">

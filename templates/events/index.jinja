@@ -1,9 +1,17 @@
 {% extends "base.jinja" %}
 {% set title = _("Events") %}
 
+{% from 'events/utils.jinja' import table_of_shifts %}
+
+{% block toolbar %}
+    <a class="btn btn-success {%- if not user.has_perm('society.add_event') %} disabled {%- endif %}"
+       href="{{ url('event-add') }}">
+        <span class="glyphicon glyphicon-asterisk"></span> {{ _("Add new event") }}
+    </a>
+{% endblock %}
+
 {% block content -%}
-    <a class="btn btn-success btn-lg {%- if not user.has_perm('society.add_event') %} disabled {%- endif %}"
-       href="{{ url('event-add') }}"><i class="glyphicon glyphicon-plus"></i> {{ _("Add new event") }}</a>
+
     {%- for processed, events in events %}
         <h2>
             {%- if processed is none -%}
