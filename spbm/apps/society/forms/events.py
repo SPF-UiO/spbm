@@ -1,31 +1,39 @@
-from django.forms import ModelChoiceField, DecimalField, DateInput
-from django.forms import ModelForm, Form
+from django import forms
 
-from spbm.apps.society.models import Worker, Event
+from spbm.apps.society.models import Worker, Event, Shift
 
 
-class MyDateInput(DateInput):
+class DateInput(forms.DateInput):
     input_type = 'date'
 
 
-class EventForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(EventForm, self).__init__(*args, **kwargs)
-        self.fields['date'].widget = MyDateInput(attrs={'class': 'date'})
-
+class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ['name', 'date']
+        widgets = {
+            'date': DateInput(attrs={'class': 'date'})
+        }
 
 
-def MakeShiftBase(society):
-    class ShiftForm(Form):
+def make_shift_base(society):
+    """ Takes a society and returns a Shift form with initial data populated based of society defaults """
+
+    class ShiftForm(forms.ModelForm):
+        class Meta:
+            model = Shift
+            exclude = ['norlonn_report']
+            widgets = {
+                'wage': forms.NumberInput(attrs={'step': 1}),
+                'hours': forms.NumberInput(attrs={'step': '0.25'})
+            }
+
         def __init__(self, *args, **kwargs):
             super(ShiftForm, self).__init__(*args, initial={'wage': society.default_wage}, **kwargs)
-            self.fields['worker'].queryset = Worker.objects.filter(society=society, active=1)
-
-        worker = ModelChoiceField(queryset=Worker.objects.filter(society=society))
-        wage = DecimalField(max_digits=10, decimal_places=2)
-        hours = DecimalField(max_digits=10, decimal_places=2)
+            self.fields['worker'].queryset = Worker.objects.filter(society=society, active=True)
 
     return ShiftForm
+
+
+
+

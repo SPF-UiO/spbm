@@ -37,6 +37,7 @@ DEBUG = True
 
 # When Debug is False, ALLOWED_HOSTS must be configured correctly.
 ALLOWED_HOSTS = []
+INTERNAL_IPS = ['127.0.0.1']
 ROOT_URLCONF = 'spbm.urls'
 WSGI_APPLICATION = 'spbm.wsgi.application'
 
@@ -55,6 +56,7 @@ INSTALLED_APPS = (
     'spbm.apps.society',
     'spbm.apps.accounts',
     'spbm.apps.norlonn',
+    'debug_toolbar'
 )
 
 # Middleware onion layers
@@ -64,10 +66,11 @@ MIDDLEWARE = (
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
 )
 
 # Database
@@ -129,8 +132,6 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
-                # Added from old SPF
-                # 'django.template.context_processors.request'
             ]
         }
     },

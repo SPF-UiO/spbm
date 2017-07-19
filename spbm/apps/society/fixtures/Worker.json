@@ -37,5 +37,18 @@
       "person_id": "01020334589",
       "norlonn_number": null
     }
+  },
+  {
+    "model": "society.worker",
+    "pk": 4,
+    "fields": {
+      "society": 2,
+      "active": true,
+      "name": "Nicolas H. Normann",
+      "address": "Bygata 2, 1378 Nesøya",
+      "account_no": "",
+      "person_id": "01020334589",
+      "norlonn_number": null
+    }
   }
 ]

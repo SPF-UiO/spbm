@@ -1,0 +1,66 @@
+{% extends "base.jinja" %}
+{% set title = _("View event") %}
+{# Translators: small title for viewing an event #}
+{% set title_small = _("Viewing ""%(name)s"" (#%(id)i)", name=event.name, id=event.id) %}
+
+{% from 'events/utils.jinja' import table_of_shifts %}
+
+{% macro field(title, value) -%}
+    <tr>
+        <th class="col-sm-4">{{ title }}</th>
+        <td>{{ value }}</td>
+    </tr>
+{%- endmacro %}
+
+
+{% block toolbar %}
+    {%- if event.processed is none %}
+    <a href="{{ url('event-edit', object.id) }}" class="btn btn-small btn-warning">
+        {{ _("Edit event") }}
+    </a>
+    <a href="{{ url('event-delete', object.id) }}" class="btn btn-small btn-danger">
+        {{ _("Delete event") }}
+    </a>
+    {% endif -%}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-7">
+            <h2>{{ _("Event details") }}</h2>
+            <table class="table table-bordered table-striped table-responsive">
+                <tbody>
+                {{ field(_("Name"), object.name) }}
+                {{ field(_("Society"), object.society.name) }}
+                {{ field(_("Date"), object.date | localize) }}
+                {{ field(_("Total hours"),  _('%(hours)sh', hours = object.hours | intcomma )) }}
+                {{ field(_("Total cost"), _('NOK %(cost)s', cost = object.cost | intcomma)) }}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-5">
+            <h2>{{ _("Invoicing and wage details") }}</h2>
+            {% if event.processed is none %}
+                <div class="alert-info alert">
+                    <p>{% trans invoices = url('invoices') -%}
+                        This event has yet to be invoiced to a society. Please see
+                        <a href="{{ invoices }}" class="alert-link">the invoice section</a> to close the
+                        current invoice period.
+                    {% endtrans %}</p>
+                </div>
+            {% elif event.processed %}
+                <div class="alert alert-success">
+                    <p>{% trans society = event.society.name, payroll = url('wages') -%}
+                        This event has been invoiced to {{ society }}, and the wages will be paid to workers as soon as
+                        a <a class="alert-link" href="{{ payroll }}">payroll report has been created</a> for all valid
+                        workers.
+                    {% endtrans %}</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <h2>{{ _("Shift details") }}</h2>
+    {{ table_of_shifts(object.shifts.all(), payroll=True) }}
+
+{% endblock %}

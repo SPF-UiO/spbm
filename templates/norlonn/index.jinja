@@ -1,9 +1,8 @@
 {% extends "base.jinja" %}
-
-{% block title %}
+{% set title -%}
     {# Translators: Title for reports page. #}
     {{ _("Wage Reports") }}
-{% endblock %}
+{%- endset %}
 
 {% block content %}
     <p>

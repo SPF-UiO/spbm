@@ -60,10 +60,11 @@ build:
 
     # Installing the CI requirements, incl. coveralls and coverage
     - script:
-        name: pip install coverage outside of requirements.txt w/wheel
+        name: install coverage/coveralls outside of requirements.txt w/wheel
         code: |
-          pip wheel coverage
-          pip install coverage
+          apk add git
+          pip wheel coverage coveralls
+          pip install coverage coveralls
 
     # A step that executes `pip install` command.
     - pip-install:
@@ -89,16 +90,10 @@ build:
         code: |
           python ./manage.py compilemessages
 
-  after-steps:
-    # Installing the CI requirements, incl. coveralls and coverage
+    # We're done with our building now: seeing as the build has successfully been completed,
+    # we now report the coverage for our tests.
+
     - script:
-        name: installing software requirements for coveralls
-        code: |
-          export PIP_CACHE_DIR=$WERCKER_CACHE_DIR/pip-download-cache
-          export PIP_FIND_LINKS=$WERCKER_CACHE_DIR/pip-wheels
-          apk add git
-          pip install coveralls
-    - script: 
         name: reporting to coveralls
         code: |
           info "Setting up environment variables for correct coveralls reporting"
@@ -107,7 +102,7 @@ build:
           export CI_BUILD_URL=$WERCKER_BUILD_URL
           info "Report to coveralls"
           COVERALLS_REPO_TOKEN=$COVERALLS_TOKEN coveralls
-        
+
 ################################################################################
 # Deployment pipeline
 # - Takes care of putting the bits and bytes in the right place.

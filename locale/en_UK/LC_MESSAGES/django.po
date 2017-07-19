@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-02-20 01:05+0000\n"
+"POT-Creation-Date: 2017-07-19 18:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "SPF-users"
 msgstr ""
 
-#: spbm/apps/accounts/models.py:12 templates/invoices/index.jinja:144
+#: spbm/apps/accounts/models.py:12 templates/events/view.jinja:34 templates/invoices/index.jinja:142
 msgid "Society"
 msgstr ""
 
@@ -37,12 +37,12 @@ msgstr ""
 msgid "SPF-member connected to {society}"
 msgstr ""
 
-#: spbm/apps/norlonn/models.py:13
-msgid "norlÃ¸nn report"
+#: spbm/apps/norlonn/models.py:14
+msgid "norlønn report"
 msgstr ""
 
-#: spbm/apps/norlonn/models.py:14
-msgid "norlÃ¸nn reports"
+#: spbm/apps/norlonn/models.py:15
+msgid "norlønn reports"
 msgstr ""
 
 #: spbm/apps/norlonn/views.py:26
@@ -78,156 +78,188 @@ msgstr ""
 msgid "SPBM"
 msgstr ""
 
-#: spbm/apps/society/models.py:20 spbm/apps/society/models.py:47 spbm/apps/society/models.py:92 spbm/apps/society/models.py:142
+#: spbm/apps/society/models.py:21 spbm/apps/society/models.py:52 spbm/apps/society/models.py:100 spbm/apps/society/models.py:154
 msgid "society"
 msgstr ""
 
-#: spbm/apps/society/models.py:21
+#: spbm/apps/society/models.py:22
 msgid "societies"
 msgstr ""
 
-#: spbm/apps/society/models.py:24 spbm/apps/society/models.py:54 spbm/apps/society/models.py:145
+#: spbm/apps/society/models.py:25 spbm/apps/society/models.py:59 spbm/apps/society/models.py:157
 msgid "name"
 msgstr ""
 
-#: spbm/apps/society/models.py:26
+#: spbm/apps/society/models.py:27
 msgid "abbreviated name"
 msgstr ""
 
-#: spbm/apps/society/models.py:28
+#: spbm/apps/society/models.py:29
 msgid "invoice e-mail"
 msgstr ""
 
-#: spbm/apps/society/models.py:30
+#: spbm/apps/society/models.py:31
 msgid "default wage per hour"
 msgstr ""
 
-#: spbm/apps/society/models.py:31
+#: spbm/apps/society/models.py:32
 msgid "logo"
 msgstr ""
 
-#: spbm/apps/society/models.py:43 spbm/apps/society/models.py:202
+#: spbm/apps/society/models.py:44 spbm/apps/society/models.py:233
 msgid "worker"
 msgstr ""
 
-#: spbm/apps/society/models.py:44
+#: spbm/apps/society/models.py:45
 msgid "workers"
 msgstr ""
 
-#: spbm/apps/society/models.py:51
+#: spbm/apps/society/models.py:56
 msgid "active"
 msgstr ""
 
-#: spbm/apps/society/models.py:52
+#: spbm/apps/society/models.py:57
 msgid "Check off if the worker is still actively working."
 msgstr ""
 
-#: spbm/apps/society/models.py:55
+#: spbm/apps/society/models.py:60
 msgid "Full name, with first name first."
 msgstr ""
 
-#: spbm/apps/society/models.py:57
+#: spbm/apps/society/models.py:62
 msgid "address"
 msgstr ""
 
-#: spbm/apps/society/models.py:58
+#: spbm/apps/society/models.py:63
 msgid "Full address including postal code and area."
 msgstr ""
 
-#: spbm/apps/society/models.py:61
+#: spbm/apps/society/models.py:66
 msgid "account no."
 msgstr ""
 
-#: spbm/apps/society/models.py:62
+#: spbm/apps/society/models.py:67
 msgid "Norwegian bank account number, no periods, 11 digits."
 msgstr ""
 
-#: spbm/apps/society/models.py:65
+#: spbm/apps/society/models.py:70
 msgid "person ID"
 msgstr ""
 
-#: spbm/apps/society/models.py:69
+#: spbm/apps/society/models.py:74
 msgid "norl&oslash;nn number"
 msgstr ""
 
-#: spbm/apps/society/models.py:70
+#: spbm/apps/society/models.py:75
 msgid "Employee number in the wage system, Norl&oslash;nn. <strong>Must</strong> exist and be correct!"
 msgstr ""
 
-#: spbm/apps/society/models.py:84 spbm/apps/society/models.py:161
+#: spbm/apps/society/models.py:91 spbm/apps/society/models.py:180
 msgid "invoice"
 msgstr ""
 
-#: spbm/apps/society/models.py:85
+#: spbm/apps/society/models.py:92
 msgid "invoices"
 msgstr ""
 
-#: spbm/apps/society/models.py:94
+#: spbm/apps/society/models.py:102
 msgid "invoice number"
 msgstr ""
 
-#: spbm/apps/society/models.py:96
+#: spbm/apps/society/models.py:104
 msgid "period"
 msgstr ""
 
-#: spbm/apps/society/models.py:98
+#: spbm/apps/society/models.py:106
 msgid "invoice paid"
 msgstr ""
 
-#: spbm/apps/society/models.py:100
+#: spbm/apps/society/models.py:108
 msgid "User which closed the period the invoice belongs to."
 msgstr ""
 
-#: spbm/apps/society/models.py:139
+#: spbm/apps/society/models.py:147
 msgid "event"
 msgstr ""
 
-#: spbm/apps/society/models.py:140
+#: spbm/apps/society/models.py:148
 msgid "events"
 msgstr ""
 
-#: spbm/apps/society/models.py:146
+#: spbm/apps/society/models.py:158
+msgid "Name or title describing the event."
+msgstr ""
+
+#: spbm/apps/society/models.py:159
 msgid "event date"
 msgstr ""
 
-#: spbm/apps/society/models.py:149
+#: spbm/apps/society/models.py:160
+msgid "The date of the event in the format of <em>YYYY-MM-DD</em>."
+msgstr ""
+
+#: spbm/apps/society/models.py:163
 msgid "registered"
 msgstr ""
 
-#: spbm/apps/society/models.py:152
+#: spbm/apps/society/models.py:164
+msgid "Date of event registration."
+msgstr ""
+
+#: spbm/apps/society/models.py:171
 msgid "processed"
 msgstr ""
 
-#: spbm/apps/society/models.py:180 templates/invoices/view.jinja:38
+#: spbm/apps/society/models.py:193 templates/events/index.jinja:28 templates/events/view.jinja:36
+msgid "Total hours"
+msgstr ""
+
+#: spbm/apps/society/models.py:204 templates/events/index.jinja:29 templates/events/view.jinja:37 templates/invoices/view.jinja:37
 msgid "Total cost"
 msgstr ""
 
-#: spbm/apps/society/models.py:194
+#: spbm/apps/society/models.py:225
 msgid "shift"
 msgstr ""
 
-#: spbm/apps/society/models.py:195
+#: spbm/apps/society/models.py:226
 msgid "shifts"
 msgstr ""
 
-#: spbm/apps/society/models.py:205
+#: spbm/apps/society/models.py:236
 msgid "wage"
 msgstr ""
 
-#: spbm/apps/society/models.py:208
+#: spbm/apps/society/models.py:240
 msgid "hours"
 msgstr ""
 
-#: spbm/apps/society/models.py:214
+#: spbm/apps/society/models.py:247
 msgid "norl&oslash;nn report"
 msgstr ""
 
-#: spbm/apps/society/forms/worker.py:14 templates/workers/index.jinja:25 templates/workers/index.jinja:48
+#: spbm/apps/society/models.py:254
+msgid "Worker on shift does not belong to the same society as the event."
+msgstr ""
+
+#: spbm/apps/society/models.py:256
+msgid "You must select a worker for this shift."
+msgstr ""
+
+#: spbm/apps/society/forms/worker.py:14 templates/workers/index.jinja:22 templates/workers/index.jinja:45
 msgid "National ID"
 msgstr ""
 
 #: spbm/apps/society/forms/worker.py:15
 msgid "National social security ID, 11 digits."
+msgstr ""
+
+#: spbm/apps/society/views/events.py:54
+msgid "You are not allowed to create events due to lacking permissions."
+msgstr ""
+
+#: spbm/apps/society/views/events.py:81
+msgid "You are not allowed to edit events due to lacking permissions."
 msgstr ""
 
 #: spbm/apps/society/views/invoicing.py:55
@@ -259,63 +291,63 @@ msgstr ""
 msgid "SPF fee: {percent}% of {event_cost}"
 msgstr ""
 
-#: templates/base.jinja:22
+#: templates/base.jinja:27
 msgid "Toggle navigation"
 msgstr ""
 
-#: templates/base.jinja:33
+#: templates/base.jinja:38
 msgid "Your Society"
 msgstr ""
 
-#: templates/base.jinja:38
+#: templates/base.jinja:43
 msgid "Bookings"
 msgstr ""
 
-#: templates/base.jinja:40
+#: templates/base.jinja:45
 msgid "Workers and registrations"
 msgstr ""
 
-#: templates/base.jinja:41 templates/workers/index.jinja:4
+#: templates/base.jinja:46 templates/events/index.jinja:30 templates/workers/index.jinja:2
 msgid "Workers"
 msgstr ""
 
-#: templates/base.jinja:43
+#: templates/base.jinja:48
 msgid "Events and registrations"
 msgstr ""
 
-#: templates/base.jinja:44 templates/events/index.jinja:4
+#: templates/base.jinja:49 templates/events/index.jinja:2
 msgid "Events"
 msgstr ""
 
-#: templates/base.jinja:49
+#: templates/base.jinja:54
 msgid "Invoicing"
 msgstr ""
 
-#: templates/base.jinja:54
+#: templates/base.jinja:59
 msgid "Wages"
 msgstr ""
 
-#: templates/base.jinja:62
+#: templates/base.jinja:67
 msgid "Administration"
 msgstr ""
 
-#: templates/base.jinja:67
+#: templates/base.jinja:72
 msgid "Log out of SPFs SPBM"
 msgstr ""
 
-#: templates/base.jinja:68
+#: templates/base.jinja:73
 msgid "Logout"
 msgstr ""
 
-#: templates/index.jinja:4
+#: templates/index.jinja:2
 msgid "Society overview"
 msgstr ""
 
-#: templates/index.jinja:8
+#: templates/index.jinja:5
 msgid "You're logged into an account associated with:"
 msgstr ""
 
-#: templates/index.jinja:9
+#: templates/index.jinja:6
 msgid "As of right now, this page exactly doesn't really do anything, so take a look at the navigation bar!."
 msgstr ""
 
@@ -361,246 +393,338 @@ msgstr ""
 msgid "403 Permission Denied"
 msgstr ""
 
-#: templates/events/add.jinja:4
+#: templates/events/add.jinja:2
 msgid "Add event"
 msgstr ""
 
-#: templates/events/add.jinja:30
+#: templates/events/add.jinja:7
 msgid "Create event"
 msgstr ""
 
-#: templates/events/add.jinja:32 templates/events/add.jinja:33
+#: templates/events/add.jinja:9 templates/events/add.jinja:10
 msgid "Cancel creating this event"
 msgstr ""
 
-#: templates/events/index.jinja:8
+#: templates/events/delete.jinja:2
+msgid "Confirm deletion of event"
+msgstr ""
+
+#: templates/events/delete.jinja:10
+msgid "Confirm deletion"
+msgstr ""
+
+#: templates/events/delete.jinja:14
+#, python-format
+msgid "Are you sure that you wish to delete the event %(event)s?"
+msgstr ""
+
+#: templates/events/delete.jinja:17
+msgid "Cancel deleting and take me back"
+msgstr ""
+
+#: templates/events/delete.jinja:19
+msgid "Delete the event"
+msgstr ""
+
+#: templates/events/edit.jinja:2 templates/events/index.jinja:60 templates/events/view.jinja:19
+msgid "Edit event"
+msgstr ""
+
+#: templates/events/edit.jinja:7
+msgid "Update event with changes"
+msgstr ""
+
+#: templates/events/edit.jinja:9 templates/events/edit.jinja:10
+msgid "Cancel changes"
+msgstr ""
+
+#: templates/events/form.jinja:8 templates/events/view.jinja:30
+msgid "Event details"
+msgstr ""
+
+#: templates/events/form.jinja:13
+msgid "Shift workers"
+msgstr ""
+
+#: templates/events/index.jinja:9
 msgid "Add new event"
 msgstr ""
 
-#: templates/events/index.jinja:13
+#: templates/events/index.jinja:18
 msgid "Not processed yet"
 msgstr ""
 
-#: templates/events/index.jinja:15
+#: templates/events/index.jinja:20
 #, python-format
 msgid "Processed on %(date)s"
 msgstr ""
 
-#: templates/events/index.jinja:24
-msgid "Event"
-msgstr ""
-
-#: templates/events/index.jinja:25 templates/workers/index.jinja:22 templates/workers/index.jinja:45
-msgid "Name"
-msgstr ""
-
-#: templates/events/index.jinja:26
-msgid "Hourly"
+#: templates/events/index.jinja:26 templates/events/view.jinja:35 templates/invoices/index.jinja:104
+msgid "Date"
 msgstr ""
 
 #: templates/events/index.jinja:27
-msgid "Hours"
+msgid "Event"
 msgstr ""
 
-#: templates/events/index.jinja:28 templates/invoices/view.jinja:53
-msgid "Sum"
+#: templates/events/index.jinja:39 templates/events/utils.jinja:16 templates/events/view.jinja:36
+#, python-format
+msgid "%(hours)sh"
 msgstr ""
 
-#: templates/events/index.jinja:37 templates/events/index.jinja:42 templates/invoices/index.jinja:110 templates/invoices/index.jinja:169 templates/invoices/view.jinja:48
-#: templates/invoices/view.jinja:54
+#: templates/events/index.jinja:40 templates/events/utils.jinja:15 templates/events/utils.jinja:17 templates/events/view.jinja:37 templates/invoices/index.jinja:108 templates/invoices/index.jinja:167
+#: templates/invoices/view.jinja:47 templates/invoices/view.jinja:53
 #, python-format
 msgid "NOK %(cost)s"
 msgstr ""
 
-#: templates/events/index.jinja:42
-msgid "Total"
+#: templates/events/index.jinja:51
+msgid "View the details of the event"
 msgstr ""
 
-#: templates/invoices/index.jinja:3
+#: templates/events/index.jinja:53 templates/events/view.jinja:2
+msgid "View event"
+msgstr ""
+
+#: templates/events/index.jinja:57
+msgid "Edit the event, such as date, workers, and more"
+msgstr ""
+
+#: templates/events/utils.jinja:5 templates/events/view.jinja:33 templates/workers/index.jinja:19 templates/workers/index.jinja:42
+msgid "Name"
+msgstr ""
+
+#: templates/events/utils.jinja:6
+msgid "Hourly"
+msgstr ""
+
+#: templates/events/utils.jinja:7
+msgid "Hours"
+msgstr ""
+
+#: templates/events/utils.jinja:8 templates/invoices/view.jinja:52
+msgid "Sum"
+msgstr ""
+
+#: templates/events/utils.jinja:9
+msgid "Payrolled"
+msgstr ""
+
+#: templates/events/utils.jinja:25 templates/events/utils.jinja:27
+msgid "Not payrolled"
+msgstr ""
+
+#. small title for viewing an event
+#: templates/events/view.jinja:4
+#, python-format
+msgid "Viewing %(name)s (#%(id)i)"
+msgstr ""
+
+#: templates/events/view.jinja:22
+msgid "Delete event"
+msgstr ""
+
+#: templates/events/view.jinja:42
+msgid "Invoicing and wage details"
+msgstr ""
+
+#: templates/events/view.jinja:45
+#, python-format
+msgid "This event has yet to be invoiced to a society. Please see <a href=\"%(invoices)s\" class=\"alert-link\">the invoice section</a> to close the current invoice period."
+msgstr ""
+
+#: templates/events/view.jinja:53
+#, python-format
+msgid ""
+"This event has been invoiced to %(society)s, and the wages will be paid to workers as soon as a <a class=\"alert-link\" href=\"%(payroll)s\">payroll report has been created</a> for all valid "
+"workers."
+msgstr ""
+
+#: templates/events/view.jinja:63
+msgid "Shift details"
+msgstr ""
+
+#: templates/invoices/index.jinja:2
 msgid "Invoice Management"
 msgstr ""
 
-#: templates/invoices/index.jinja:23
+#: templates/invoices/index.jinja:21
 #, python-format
 msgid "%(days)s days"
 msgstr ""
 
-#: templates/invoices/index.jinja:31
+#: templates/invoices/index.jinja:29
 msgid "Period status"
 msgstr ""
 
-#: templates/invoices/index.jinja:33
+#: templates/invoices/index.jinja:31
 #, python-format
 msgid "%(num)d unprocessed event"
 msgid_plural "%(num)d unprocessed events"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/invoices/index.jinja:44
+#: templates/invoices/index.jinja:42
 msgid "There are unprocessed events, which means you can close the period, if it is the right time of month."
 msgstr ""
 
-#: templates/invoices/index.jinja:51
+#: templates/invoices/index.jinja:49
 msgid "Close period"
 msgstr ""
 
-#: templates/invoices/index.jinja:52 templates/norlonn/index.jinja:42
+#: templates/invoices/index.jinja:50 templates/norlonn/index.jinja:41
 msgid "Not easily reversible!"
 msgstr ""
 
-#: templates/invoices/index.jinja:56
+#: templates/invoices/index.jinja:54
 msgid "Remember to only close the invoice period <strong>max once a month, on the 15th</strong>."
 msgstr ""
 
-#: templates/invoices/index.jinja:65 templates/invoices/index.jinja:122
+#: templates/invoices/index.jinja:63 templates/invoices/index.jinja:120
 msgid "So far, so good!"
 msgstr ""
 
-#: templates/invoices/index.jinja:67
+#: templates/invoices/index.jinja:65
 msgid "There are no unprocessed events currently registered. You can register some events if you wish, <em>or</em> wait until next month."
 msgstr ""
 
-#: templates/invoices/index.jinja:79
+#: templates/invoices/index.jinja:77
 msgid "Unpaid invoices"
 msgstr ""
 
-#: templates/invoices/index.jinja:88
+#: templates/invoices/index.jinja:86
 msgid "The following invoices have yet to be paid, and will affect the next payroll thusly."
 msgstr ""
 
-#: templates/invoices/index.jinja:101
+#: templates/invoices/index.jinja:99
 msgid "Mark as paid"
 msgstr ""
 
-#: templates/invoices/index.jinja:106
-msgid "Date"
-msgstr ""
-
-#: templates/invoices/index.jinja:109
+#: templates/invoices/index.jinja:107
 msgid "Amount"
 msgstr ""
 
-#: templates/invoices/index.jinja:119
+#: templates/invoices/index.jinja:117
 msgid "There aren't any unpaid invoices! That's great!"
 msgstr ""
 
-#: templates/invoices/index.jinja:130
+#: templates/invoices/index.jinja:128
 msgid "Complete invoice overview"
 msgstr ""
 
-#: templates/invoices/index.jinja:135
+#: templates/invoices/index.jinja:133
 msgid "Overview over all the various invoices that <em>should have</em> been sent to the respective societies."
 msgstr ""
 
-#: templates/invoices/index.jinja:143
+#: templates/invoices/index.jinja:141
 msgid "Period"
 msgstr ""
 
-#: templates/invoices/index.jinja:145
+#: templates/invoices/index.jinja:143
 msgid "Invoice sum"
 msgstr ""
 
-#: templates/invoices/index.jinja:146
+#: templates/invoices/index.jinja:144
 msgid "Paid?"
 msgstr ""
 
-#: templates/invoices/index.jinja:147
+#: templates/invoices/index.jinja:145
 msgid "Actions"
 msgstr ""
 
-#: templates/invoices/index.jinja:172 templates/workers/index.jinja:35
+#: templates/invoices/index.jinja:170 templates/workers/index.jinja:32
 msgid "Yes"
 msgstr ""
 
-#: templates/invoices/index.jinja:174 templates/workers/index.jinja:35
+#: templates/invoices/index.jinja:172 templates/workers/index.jinja:32
 msgid "No"
 msgstr ""
 
-#: templates/invoices/index.jinja:180
+#: templates/invoices/index.jinja:178
 msgid "View the details of the invoice"
 msgstr ""
 
-#: templates/invoices/index.jinja:182
+#: templates/invoices/index.jinja:180
 msgid "View invoice"
 msgstr ""
 
-#: templates/invoices/index.jinja:185
+#: templates/invoices/index.jinja:183
 msgid "View PDF"
 msgstr ""
 
-#: templates/invoices/index.jinja:187
+#: templates/invoices/index.jinja:185
 msgid "View invoice PDF"
 msgstr ""
 
-#: templates/invoices/view.jinja:4
+#: templates/invoices/view.jinja:2
 #, python-format
 msgid "Invoice #%(id)s: %(date)s %(society)s"
 msgstr ""
 
-#: templates/invoices/view.jinja:13
+#: templates/invoices/view.jinja:12
 #, python-format
 msgid "Invoiced at %(period)s"
 msgstr ""
 
-#: templates/invoices/view.jinja:17
+#: templates/invoices/view.jinja:16
 #, python-format
 msgid "%(society)s"
 msgstr ""
 
-#: templates/invoices/view.jinja:26
+#: templates/invoices/view.jinja:25
 #, python-format
 msgid "Period closed by %(user)s"
 msgstr ""
 
-#: templates/invoices/view.jinja:31
+#: templates/invoices/view.jinja:30
 #, python-format
 msgid "Overview over events and costs associated with invoice number %(id)d."
 msgstr ""
 
-#: templates/invoices/view.jinja:35
+#: templates/invoices/view.jinja:34
 msgid "Description"
 msgstr ""
 
-#: templates/invoices/view.jinja:36
+#: templates/invoices/view.jinja:35
 msgid "Count"
 msgstr ""
 
-#: templates/invoices/view.jinja:37
+#: templates/invoices/view.jinja:36
 msgid "Unit cost"
 msgstr ""
 
-#: templates/invoices/view.jinja:60
+#: templates/invoices/view.jinja:59
 msgid "Return to invoice overview"
 msgstr ""
 
 #. Title for reports page.
-#: templates/norlonn/index.jinja:5
+#: templates/norlonn/index.jinja:4
 msgid "Wage Reports"
 msgstr ""
 
-#: templates/norlonn/index.jinja:10
+#: templates/norlonn/index.jinja:9
 msgid "Access to wage reports for importing into the <em>Norlønn</em> payroll system."
 msgstr ""
 
-#: templates/norlonn/index.jinja:17
+#: templates/norlonn/index.jinja:16
 msgid "Current report errors"
 msgstr ""
 
-#: templates/norlonn/index.jinja:19
+#: templates/norlonn/index.jinja:18
 msgid ""
 "There are some errors present. Please fix the errors before you attempt generating a report, as to avoid workers missing out on their wages. If the errors are associated with a different society "
 "than yours, get in touch with them over the mailing list."
 msgstr ""
 
-#: templates/norlonn/index.jinja:41
+#: templates/norlonn/index.jinja:40
 msgid "Generate new wage report"
 msgstr ""
 
-#: templates/norlonn/index.jinja:48
+#: templates/norlonn/index.jinja:47
 msgid "Existing reports"
 msgstr ""
 
-#: templates/norlonn/index.jinja:51
+#: templates/norlonn/index.jinja:50
 msgid ""
 "The following is the list of the payment reports that have been created in the past. They detail the amount of money and payments for each worker, and should only <strong>be imported once</strong> "
 "into Norlønn."
@@ -618,42 +742,42 @@ msgstr ""
 msgid "Successful elements"
 msgstr ""
 
-#: templates/workers/edit.jinja:3
+#: templates/workers/edit.jinja:2
 msgid "Edit worker"
 msgstr ""
 
-#: templates/workers/edit.jinja:17
+#: templates/workers/edit.jinja:16
 msgid "Save changes"
 msgstr ""
 
-#: templates/workers/edit.jinja:19
+#: templates/workers/edit.jinja:18
 msgid "Cancel editing this worker"
 msgstr ""
 
-#: templates/workers/edit.jinja:20
+#: templates/workers/edit.jinja:19
 msgid "Cancel editing & changes"
 msgstr ""
 
-#: templates/workers/index.jinja:8
+#: templates/workers/index.jinja:5
 msgid "Add new worker"
 msgstr ""
 
-#: templates/workers/index.jinja:14
+#: templates/workers/index.jinja:11
 msgid "Add worker"
 msgstr ""
 
-#: templates/workers/index.jinja:18
+#: templates/workers/index.jinja:15
 msgid "List of workers"
 msgstr ""
 
-#: templates/workers/index.jinja:23 templates/workers/index.jinja:46
+#: templates/workers/index.jinja:20 templates/workers/index.jinja:43
 msgid "Address"
 msgstr ""
 
-#: templates/workers/index.jinja:24 templates/workers/index.jinja:47
+#: templates/workers/index.jinja:21 templates/workers/index.jinja:44
 msgid "Account No."
 msgstr ""
 
-#: templates/workers/index.jinja:41
+#: templates/workers/index.jinja:38
 msgid "List of inactive workers"
 msgstr ""

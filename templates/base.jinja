@@ -5,8 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>
-        {%- block title %}{% endblock -%}
-        {%- if self.title() %} · {% endif -%}
+        {%- if title -%}
+            {{ title | striptags }}
+            {% if title_small -%}
+                - {{ title_small | striptags }}
+            {%- endif %}
+            ·
+        {% endif -%}
         SPFs ❝SPBM❞
     </title>
     <link href="{{ static("css/bootstrap.min.css") }}" rel="stylesheet">
@@ -78,8 +83,19 @@
     </div>
 </nav>
 <div class="container">
-    {% if self.title() -%}
-        <h1 class="page-header">{{ self.title() }}</h1>
+    {% if title -%}
+        <div class="page-header">
+            {% if self.toolbar() -%}
+                <div class="btn-group pull-right" role="group">
+                    {% block toolbar %}{% endblock %}
+                </div>
+            {%- endif %}
+            <h1>{{ title }}
+                {%- if title_small %}
+                    <small>{{ title_small | striptags }}</small>
+                {% endif -%}
+            </h1>
+        </div>
     {%- endif %}
     {% if messages -%}
         <ul class="messages list-unstyled" role="alert">

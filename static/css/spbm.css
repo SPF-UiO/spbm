@@ -45,3 +45,21 @@ Table paddings for wide-spanning row headers
 .table .table-sum > td {
     padding-top: 1em;
 }
+
+/*
+Vertical spacing when stacking forms
+ */
+.form-stack.form-group [class*="col-"] + [class*="col-"] {
+    margin-bottom: 10px;
+}
+
+@media (min-width: 1200px) {
+    .form-stack.form-group [class*="col-lg-"] + [class*="col-lg-"] {
+        margin-bottom: 0;
+    }
+}
+@media (min-width: 992px) {
+    .form-stack.form-group [class*="col-md-"] + [class*="col-md-"] {
+        margin-bottom: 0;
+    }
+}

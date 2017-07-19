@@ -1,0 +1,13 @@
+{% extends "events/form.jinja" %}
+{% set title = _("Edit event") %}
+
+{% block buttons %}
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-success">
+                {{ _('Update event with changes') }}
+            </button>
+            <a href="{{ url("events") }}" title="{{ _('Cancel changes') }}" class="btn btn-warning">
+                {{ _('Cancel changes') }}
+            </a>
+        </div>
+{% endblock buttons %}

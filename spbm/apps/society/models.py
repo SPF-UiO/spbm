@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from django.contrib.auth.models import User, AbstractUser
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import six
 from django.utils.functional import lazy
@@ -43,6 +44,10 @@ class Worker(models.Model):
         verbose_name = _('worker')
         verbose_name_plural = _('workers')
 
+    class WorkerManager(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().select_related('society')
+
     society = models.ForeignKey(Society,
                                 verbose_name=_('society'),
                                 on_delete=models.PROTECT,
@@ -71,6 +76,8 @@ class Worker(models.Model):
                                              "Employee number in the wage system, Norl&oslash;nn. " +
                                              "<strong>Must</strong> exist and be correct!")))
 
+    objects = WorkerManager()
+
     def __str__(self):
         return self.name + " (" + self.society.shortname + ")"
 
@@ -88,6 +95,7 @@ class Invoice(models.Model):
             ('close_period', "Can close periods to generate invoices"),
             ('mark_paid', "Can mark invoices as paid")
         )
+
     """ The society the invoice belongs to. """
     society = models.ForeignKey(Society, verbose_name=_('society'), related_name="invoices", on_delete=models.PROTECT)
     """ A unique invoice number, which SHOULD be reflected in the external invoice system. """
@@ -109,7 +117,7 @@ class Invoice(models.Model):
         events = Event.objects.filter(invoice=self)
 
         for event in events:
-            cost += event.get_cost()
+            cost += event.cost
 
         return (Decimal(cost) * Decimal('1.3')).quantize(Decimal('.01'))
 
@@ -121,7 +129,7 @@ class Invoice(models.Model):
         cost = 0
         events = Event.objects.filter(invoice=self)
         for event in events:
-            cost += event.get_cost()
+            cost += event.cost
 
         return Decimal(cost).quantize(Decimal('.01'))
 
@@ -139,14 +147,25 @@ class Event(models.Model):
         verbose_name = _('event')
         verbose_name_plural = _('events')
 
+    class EventManager(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().prefetch_related('shifts__worker', 'society')
+
     society = models.ForeignKey(Society, null=False, verbose_name=_('society'), related_name="society",
                                 on_delete=models.PROTECT)
     name = models.CharField(max_length=100,
-                            verbose_name=_('name'))
-    date = models.DateField(verbose_name=_('event date'))
+                            verbose_name=_('name'),
+                            help_text=_('Name or title describing the event.'))
+    date = models.DateField(verbose_name=_('event date'),
+                            help_text=_('The date of the event in the format of <em>YYYY-MM-DD</em>.'))
     registered = models.DateField(auto_now_add=True,
                                   editable=False,
-                                  verbose_name=_('registered'))
+                                  verbose_name=_('registered'),
+                                  help_text=_('Date of event registration.'))
+    ''' 'processed' and 'invoice' are very tightly coupled together.
+    Why exactly are both needed? Any invoice is processed on an exact date. If it shouldn't be part of an invoice,
+    then it is not really processed anyway. '''
+    # TODO: Create migration from processed to purely invoice, alt. from field to property method.
     processed = models.DateField(null=True,
                                  blank=True,
                                  verbose_name=_('processed'))
@@ -160,29 +179,41 @@ class Event(models.Model):
                                 related_name="events",
                                 verbose_name=_('invoice'))
 
-    def __str__(self):
-        return self.society.shortname + " - " + str(self.date) + ": " + self.name
+    objects = EventManager()
 
-    def get_hours(self):
+    @property
+    def hours(self):
+        """ Get the number of hours registered on an event """
         hours = Decimal(0)
         for shift in self.shifts.all():
             hours += shift.hours
-
+        hours = hours.quantize(Decimal(".01"))
         return hours
 
-    def get_cost(self):
+    hours.fget.short_description = _("Total hours")
+
+    @property
+    def cost(self):
+        """ Get the total cost that will be invoiced from an event """
         total = Decimal(0)
         for s in self.shifts.all():
             total += s.get_total()
         total = total.quantize(Decimal(".01"))
         return total
 
-    get_cost.short_description = _("Total cost")
+    cost.fget.short_description = _("Total cost")
+
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('event-view', args=[self.pk])
 
     def clean(self):
         if self.invoice is not None:
             if self.invoice.society != self.society:
                 raise ValidationError("Cannot add event to another society invoice!")
+
+    def __str__(self):
+        return self.society.shortname + " - " + str(self.date) + ": " + self.name
 
 
 class Shift(models.Model):
@@ -202,10 +233,12 @@ class Shift(models.Model):
                                verbose_name=_('worker'))
     wage = models.DecimalField(max_digits=10,
                                decimal_places=2,
-                               verbose_name=_('wage'))
+                               verbose_name=_('wage'),
+                               validators=[MinValueValidator(10)])
     hours = models.DecimalField(max_digits=10,
                                 decimal_places=2,
-                                verbose_name=_('hours'))
+                                verbose_name=_('hours'),
+                                validators=[MinValueValidator(0.25)])
     norlonn_report = models.ForeignKey('norlonn.NorlonnReport',
                                        blank=True,
                                        null=True,
@@ -218,9 +251,9 @@ class Shift(models.Model):
     def clean(self):
         try:
             if self.worker.society != self.event.society:
-                raise ValidationError("Worker on shift does not belong to the same society as the event")
+                raise ValidationError(_('Worker on shift does not belong to the same society as the event.'))
         except:
-            raise ValidationError("No worker or event")
+            raise ValidationError(_('You must select a worker for this shift.'))
 
     def get_total(self):
         return (self.wage * self.hours).quantize(Decimal(".01"))

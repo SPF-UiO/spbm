@@ -153,8 +153,8 @@ def view_invoice(request, society_name, date):
 
     # Go through all the events
     for event in events:
-        event_hours = event.get_hours()
-        event_cost = event.get_cost()
+        event_hours = event.hours
+        event_cost = event.cost
         items.append({
             'description': "{date}: {title}".format(date=event.date, title=event.name),
             'count': event_hours,

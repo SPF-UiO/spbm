@@ -1,0 +1,35 @@
+{% macro table_of_shifts(shifts, classes='table-striped', payroll=False) %}
+    <table class="table {{ classes }}">
+        <thead>
+        <tr>
+            <th class="col-md-4">{{ _("Name") }}</th>
+            <th class="col-md-2 text-right">{{ _("Hourly") }}</th>
+            <th class="col-md-2 text-right">{{ _("Hours") }}</th>
+            <th class="col-md-2 text-right">{{ _("Sum") }}</th>
+            {% if payroll -%}<th class="text-center col-md-2">{{ _("Payrolled") }}</th>{%- endif %}
+        </thead>
+        <tbody>
+        {%- for shift in shifts %}
+            <tr>
+                <td>{{ shift.worker.name }}</td>
+                <td class="text-right">{{ _('NOK %(cost)s', cost=shift.wage | intcomma) }}</td>
+                <td class="text-right">{{ _('%(hours)sh', hours=shift.hours | intcomma) }}</td>
+                <td class="text-right">{{ _('NOK %(cost)s', cost=shift.get_total() | intcomma) }}</td>
+                {% if payroll -%}
+                    <td class="text-center">
+                        {%- if shift.norlonn_report -%}
+                            <i title="{{ shift.norlonn_report | localize }}"
+                               class="glyphicon glyphicon-ok-circle text-success"></i>
+                            <span class="sr-only">{{ shift.norlonn_report }}</span>
+                        {%- else -%}
+                            <i title="{{ _("Not payrolled") }}"
+                               class="glyphicon glyphicon-exclamation-sign text-warning"></i>
+                            <span class="sr-only">{{ _("Not payrolled") }}</span>
+                        {%- endif -%}
+                    </td>
+                {%- endif %}
+            </tr>
+        {%- endfor %}
+        </tbody>
+    </table>
+{% endmacro %}

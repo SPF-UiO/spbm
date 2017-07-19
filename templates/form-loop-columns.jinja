@@ -1,0 +1,47 @@
+{% macro fielder(field, sm=10, label_sm=2, lg=10, label_lg=2, group=False) %}
+    {% if not field.errors and not field.is_hidden %}
+        <div>
+            <label class="col-sm-{{ label_sm }} col-lg-{{ label_lg }} control-label" for="{{ field.auto_id }}">{{ field.label }}</label>
+            <div class="col-sm-{{ sm }} col-lg-{{ lg }}">
+                {{ field | attr("class:form-control") }}
+                {% if field.help_text %}
+                    <p class="help-block">
+                        <small>{{ field.help_text | safe }}</small>
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    {% elif field.errors %}
+        <div class="has-error">
+            <label class="col-sm-{{ label_sm }} col-lg-{{ label_lg }} control-label" for="{{ field.auto_id }}">{{ field.label }}</label>
+            <div class="col-sm-{{ sm }} col-lg-{{ lg }}">
+                {{ field | attr("class:form-control") }}
+                <span class="help-block">
+                    {% for error in field.errors %}{{ error }}{% endfor %}
+                </span>
+            </div>
+        </div>
+    {% elif field.is_hidden %}
+        {{ field }}
+    {% endif %}
+{% endmacro %}
+
+
+{% if form.non_field_errors() %}
+    {% for error in form.non_field_errors() %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endfor %}
+    <div class="form-group form-stack has-error">
+{% else %}
+    <div class="form-group form-stack">
+{% endif %}
+    {% for field in form %}
+        {% if field.name == "worker" %}
+            {{ fielder(field, lg=4) }}
+        {% elif field.name == "hours" or field.name == "wage" %}
+            {{ fielder(field, label_lg=1, lg=2) }}
+        {% else %}
+            {{ fielder(field) }}
+        {% endif %}
+    {% endfor %}
+</div>

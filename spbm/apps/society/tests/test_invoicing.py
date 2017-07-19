@@ -2,12 +2,12 @@ from django.contrib.auth.models import User, Permission
 from django.test import TestCase
 from django.urls import reverse
 
-from . import test_fixtures
+from . import test_fixtures, SPFTest
 from ..models import Invoice, Society, Event
 from ...accounts.models import SpfUser
 
 
-class InvoicingTests(TestCase):
+class InvoicingTests(SPFTest, TestCase):
     fixtures = test_fixtures
 
     def setUp(self):
@@ -29,6 +29,15 @@ class InvoicingTests(TestCase):
         """
         response = self.client.get(reverse('invoices'))
         self.assertEqual(len(response.context['all_invoices']), len(Invoice.objects.all()))
+
+    def test_view_an_invoice(self):
+        """
+        Show an invoice in HTML-style.
+        """
+        response = self.client.get(reverse('invoice-view', kwargs={'society_name': 'CYB', 'date': '2016-07-17'}))
+        self.assertTrue(response.status_code, 200)
+        # Is there a mention of the SPF-fee?
+        self.assertContains(response, "SPF")
 
     def test_get_unpaid_invoices(self):
         """
