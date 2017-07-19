@@ -1,0 +1,36 @@
+{% extends "base.jinja" %}
+
+{% block content %}
+<form class="form-horizontal" method="post" action="">
+    {% csrf_token %}
+    {% autoescape off %}
+
+    <h3>{{ _('Event details') }}</h3>
+
+    {# Include and enumerate through the main form #}
+    {% include 'form-loop.jinja' %}
+
+    <h3>{{ _('Shift workers') }}</h3>
+
+    {# Go through all of the inline forms that are #}
+    {% for inline in inlines %}
+        {# If the formset has errors, show these #}
+        {% if inline.non_form_errors() %}
+            {% for error in inline.non_form_errors() %}
+            <div class="alert alert-warning">{{ error }}</div>
+            {% endfor %}
+        {% endif %}
+        {% for form in inline %}
+            {% include 'form-loop-columns.jinja' %}
+        {% endfor %}
+        {{ inline.management_form }}
+    {% endfor %}
+
+    {# Add the submit and cancel buttons #}
+    <div class="form-group">
+        {% block buttons -%}
+        {%- endblock buttons %}
+    </div>
+    {% endautoescape %}
+</form>
+{% endblock %}

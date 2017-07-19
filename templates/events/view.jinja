@@ -1,0 +1,12 @@
+{% extends "base.jinja" %}
+{% set title = _("View event") %}
+{% set title_small = _("Viewing ""%(name)s"" (#%(id)i)", name=event.name, id=event.id) %}
+
+{% block content %}
+
+    {% if event.processed is none %}
+        <a href="{{ url('event-delete', object.id) }}" class="pull-right btn btn-small btn-danger">
+            {{ _("Delete...") }}
+        </a>
+    {% endif %}
+{% endblock %}

@@ -1,29 +1,10 @@
-{% extends "base.jinja" %}
+{% extends "events/form.jinja" %}
 
 {% block title -%}
     {{ _("Edit event") }}
 {%- endblock %}
 
-{% block content %}
-<form class="form-horizontal" method="post" action="">
-    {% csrf_token %}
-    {% autoescape off %}
-
-    <h3>{{ _('Event details') }}</h3>
-
-    {# Include and enumerate through the main form #}
-    {% include 'form-loop.jinja' %}
-
-    {# Go through all of the inline forms that are #}
-    {% for inline in inlines %}
-        {% for form in inline %}
-            {% include 'form-loop.jinja' %}
-        {% endfor %}
-        {{ inline.management_form }}
-    {% endfor %}
-
-    {# Add the submit and cancel buttons #}
-    <div class="form-group">
+{% block buttons %}
         <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" class="btn btn-success">
                 {{ _('Update event with changes') }}
@@ -32,7 +13,4 @@
                 {{ _('Cancel changes') }}
             </a>
         </div>
-    </div>
-    {% endautoescape %}
-    {% endblock %}
-</form>
+{% endblock buttons %}

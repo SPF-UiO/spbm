@@ -4,43 +4,80 @@
     {{ _("Events") }}
 {%- endblock %}
 
-{% block content %}
-    <a class="btn btn-success btn-lg" href="add/">{{ _("Add new event") }}</a>
-    {% for proc in processed %}
-        <p style="font-size: 150%; padding-top: 10pt;">
-            <strong>
-                {% if proc['processed'] is none %}
-                    {{ _("Not processed yet") }}
-                {% else %}
-                    {{ _('Processed on %(date)s', date=proc['processed']) }}
-                {% endif %}
-            </strong>
-        </p>
-        {% for event in events[proc['processed']] %}
-            <div class="event" style="padding-top: 10px">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th style="width: 20%;">{{ _("Event") }}</th>
-                        <th style="width: 20%;">{{ _("Name") }}</th>
-                        <th style="width: 10%">{{ _("Hourly") }}</th>
-                        <th style="width: 10%">{{ _("Hours") }}</th>
-                        <th style="width: 10%">{{ _("Sum") }}</th>
-                    </thead>
-                    <tbody>
-                    {% for shift in event.shifts.all() %}
-                        <tr>
-                            <td>{% if loop.first %}{{ event.date }}: {{ event.name }}{% endif %}</td>
-                            <td>{{ shift.worker.name }}</td>
-                            <td>{{ shift.wage | intcomma }}</td>
-                            <td>{{ shift.hours | intcomma }}</td>
-                            <td>{{ _('NOK %(cost)s', cost=shift.get_total() | intcomma) }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-                {{ _('Total') }}: {{ _('NOK %(cost)s', cost=event.get_cost() | intcomma) }}
-            </div>
-        {% endfor %}
-    {% endfor %}
+{% block content -%}
+    <a class="btn btn-success btn-lg {%- if not user.has_perm('society.add_event') %} disabled {%- endif %}"
+       href="{{ url('event-add') }}"><i class="glyphicon glyphicon-plus"></i> {{ _("Add new event") }}</a>
+    {%- for processed, events in events %}
+        <h2>
+            {%- if processed is none -%}
+                {{ _("Not processed yet") }}
+            {%- else -%}
+                {{ _('Processed on %(date)s', date=processed | localize) }}
+            {%- endif -%}
+        </h2>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>{{ _("Date") }}</th>
+                <th>{{ _("Event") }}</th>
+                <th>{{ _("Total hours") }}</th>
+                <th>{{ _("Total cost") }}</th>
+                <th>{{ _("Shift details") }}</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {%- for event in events %}
+                <tr>
+                    <td>{{ event.date | localize }}</td>
+                    <td>{{ event.name }}</td>
+                    <td>{{ _('%(hours)sh', hours=event.hours | intcomma) }}</td>
+                    <td>{{ _('NOK %(cost)s', cost=event.cost | intcomma) }}</td>
+                    <td>
+                        <div class="event" style="padding-top: 10px">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th style="width: 20%;">{{ _("Name") }}</th>
+                                    <th style="width: 10%">{{ _("Hourly") }}</th>
+                                    <th style="width: 10%">{{ _("Hours") }}</th>
+                                    <th style="width: 10%">{{ _("Sum") }}</th>
+                                </thead>
+                                <tbody>
+                                {%- for shift in event.shifts.all() %}
+                                    <tr>
+                                        <td>{{ shift.worker.name }}</td>
+                                        <td>{{ shift.wage | intcomma }}</td>
+                                        <td>{{ shift.hours | intcomma }}</td>
+                                        <td>{{ _('NOK %(cost)s', cost=shift.get_total() | intcomma) }}</td>
+                                    </tr>
+                                {%- endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <a href="{{ url('event-view', event.id) }}"
+                               title="{{ _("View the details of the event") }}" class="btn btn-info">
+                                <i class="glyphicon glyphicon-eye-open"></i>
+                                <span class="sr-only">{{ _("View event") }}</span>
+                            </a>
+                            {% if user.has_perm('society.change_event') and event.processed is none -%}
+                                <a href="{{ url('event-edit', event.id) }}"
+                                   title="{{ _("Edit the event, such as date, workers, and more") }}"
+                                   class="btn btn-warning">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                    <span class="sr-only">{{ _("Edit event") }}</span>
+                                </a>
+                            {%- endif %}
+                        </div>
+
+                    </td>
+                </tr>
+                </a>
+            {%- endfor %}
+            </tbody>
+        </table>
+    {%- endfor %}
 {% endblock %}

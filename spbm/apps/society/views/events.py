@@ -1,14 +1,17 @@
 import itertools
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms.formsets import all_valid
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy
 from django.utils.translation import ugettext as _
+from django.views.generic import DetailView, DeleteView
 from extra_views import CreateWithInlinesView, InlineFormSet, UpdateWithInlinesView
 
-from spbm.helpers.auth import user_allowed_society, user_society
+from spbm.helpers.auth import user_society
 from spbm.helpers.mixins import LoginAndPermissionRequiredMixin
-from ..forms.events import make_shift_base
+from ..forms.events import make_shift_base, EventForm
 from ..models import Society, Event, Shift
 
 
@@ -16,11 +19,6 @@ from ..models import Society, Event, Shift
 def index(request, society_name=None):
     society = request.user.spfuser.society if society_name is None \
         else get_object_or_404(Society, shortname=society_name)
-
-    # TODO: possibly remove this, while at the same time reworking the entire thought of multi-society editing
-    # it is, by far, more important to have multi-society workers
-    if not user_allowed_society(request.user, society):
-        return render(request, "errors/unauthorized.jinja")
 
     """ Create another field so that we can order first the processed = None events, then the processed ones in 
         the reverse order, e.g. descending """
@@ -55,7 +53,7 @@ class EventCreateView(LoginAndPermissionRequiredMixin, CreateWithInlinesView):
     permission_required = 'society.add_event'
     permission_denied_message = _("You are not allowed to create events due to lacking permissions.")
     model = Event
-    fields = ['name', 'date']
+    form_class = EventForm
     inlines = [ShiftInlineForm, ]
 
     def post(self, request, *args, **kwargs):
@@ -78,9 +76,22 @@ class EventCreateView(LoginAndPermissionRequiredMixin, CreateWithInlinesView):
 
 
 class EventUpdateView(LoginAndPermissionRequiredMixin, UpdateWithInlinesView):
-    template_name = "events/add.jinja"
+    template_name = "events/edit.jinja"
     permission_required = 'society.change_event'
     permission_denied_message = _("You are not allowed to edit events due to lacking permissions.")
     model = Event
-    fields = ['name', 'date']
+    form_class = EventForm
     inlines = [ShiftInlineForm, ]
+
+
+class EventViewView(LoginRequiredMixin, DetailView):
+    template_name = "events/view.jinja"
+    model = Event
+
+
+class EventDeleteView(LoginRequiredMixin, DeleteView):
+    template_name = "events/delete.jinja"
+    model = Event
+    success_url = reverse_lazy('events')
+    queryset = Event.objects.filter(processed__isnull=True)
+
