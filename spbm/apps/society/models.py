@@ -251,9 +251,9 @@ class Shift(models.Model):
     def clean(self):
         try:
             if self.worker.society != self.event.society:
-                raise ValidationError("Worker on shift does not belong to the same society as the event")
+                raise ValidationError(_('Worker on shift does not belong to the same society as the event.'))
         except:
-            raise ValidationError("No worker or event")
+            raise ValidationError(_('You must select a worker for this shift.'))
 
     def get_total(self):
         return (self.wage * self.hours).quantize(Decimal(".01"))
