@@ -44,6 +44,10 @@ class Worker(models.Model):
         verbose_name = _('worker')
         verbose_name_plural = _('workers')
 
+    class WorkerManager(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().select_related('society')
+
     society = models.ForeignKey(Society,
                                 verbose_name=_('society'),
                                 on_delete=models.PROTECT,
@@ -71,6 +75,8 @@ class Worker(models.Model):
                                          help_text=mark_safe_lazy(_(
                                              "Employee number in the wage system, Norl&oslash;nn. " +
                                              "<strong>Must</strong> exist and be correct!")))
+
+    objects = WorkerManager()
 
     def __str__(self):
         return self.name + " (" + self.society.shortname + ")"
@@ -141,6 +147,10 @@ class Event(models.Model):
         verbose_name = _('event')
         verbose_name_plural = _('events')
 
+    class EventManager(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().prefetch_related('shifts__worker')
+
     society = models.ForeignKey(Society, null=False, verbose_name=_('society'), related_name="society",
                                 on_delete=models.PROTECT)
     name = models.CharField(max_length=100,
@@ -165,6 +175,8 @@ class Event(models.Model):
                                 on_delete=models.PROTECT,
                                 related_name="events",
                                 verbose_name=_('invoice'))
+
+    objects = EventManager()
 
     @property
     def hours(self):
