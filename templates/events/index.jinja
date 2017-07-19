@@ -23,12 +23,12 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th>{{ _("Date") }}</th>
-                <th>{{ _("Event") }}</th>
-                <th>{{ _("Total hours") }}</th>
-                <th>{{ _("Total cost") }}</th>
-                <th>{{ _("Shift details") }}</th>
-                <th></th>
+                <th class="col-md-2">{{ _("Date") }}</th>
+                <th class="col-md-3">{{ _("Event") }}</th>
+                <th class="col-md-1">{{ _("Total hours") }}</th>
+                <th class="col-md-2">{{ _("Total cost") }}</th>
+                <th class="col-md-2 col-lg-3">{{ _("Workers") }}</th>
+                <th class="col-sm-2 col-md-1 col-lg-1"></th>
             </tr>
             </thead>
             <tbody>
@@ -39,29 +39,13 @@
                     <td>{{ _('%(hours)sh', hours=event.hours | intcomma) }}</td>
                     <td>{{ _('NOK %(cost)s', cost=event.cost | intcomma) }}</td>
                     <td>
-                        <div class="event" style="padding-top: 10px">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th style="width: 20%;">{{ _("Name") }}</th>
-                                    <th style="width: 10%">{{ _("Hourly") }}</th>
-                                    <th style="width: 10%">{{ _("Hours") }}</th>
-                                    <th style="width: 10%">{{ _("Sum") }}</th>
-                                </thead>
-                                <tbody>
-                                {%- for shift in event.shifts.all() %}
-                                    <tr>
-                                        <td>{{ shift.worker.name }}</td>
-                                        <td>{{ shift.wage | intcomma }}</td>
-                                        <td>{{ shift.hours | intcomma }}</td>
-                                        <td>{{ _('NOK %(cost)s', cost=shift.get_total() | intcomma) }}</td>
-                                    </tr>
-                                {%- endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                            {# {{ table_of_shifts(event.shifts.all()) }} #}
+                            {%- for shift in event.shifts.all() -%}
+                                {{ shift.worker.name }}
+                                {%- if not loop.last %}, {% endif -%}
+                            {%- endfor %}
                     </td>
-                    <td>
+                    <td class="col-md-1">
                         <div class="btn-group btn-group-sm">
                             <a href="{{ url('event-view', event.id) }}"
                                title="{{ _("View the details of the event") }}" class="btn btn-info">
@@ -77,7 +61,6 @@
                                 </a>
                             {%- endif %}
                         </div>
-
                     </td>
                 </tr>
                 </a>

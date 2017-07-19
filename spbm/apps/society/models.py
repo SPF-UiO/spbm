@@ -149,16 +149,19 @@ class Event(models.Model):
 
     class EventManager(models.Manager):
         def get_queryset(self):
-            return super().get_queryset().prefetch_related('shifts__worker')
+            return super().get_queryset().prefetch_related('shifts__worker', 'society')
 
     society = models.ForeignKey(Society, null=False, verbose_name=_('society'), related_name="society",
                                 on_delete=models.PROTECT)
     name = models.CharField(max_length=100,
-                            verbose_name=_('name'))
-    date = models.DateField(verbose_name=_('event date'))
+                            verbose_name=_('name'),
+                            help_text=_('Name or title describing the event.'))
+    date = models.DateField(verbose_name=_('event date'),
+                            help_text=_('The date of the event in the format of <em>YYYY-MM-DD</em>.'))
     registered = models.DateField(auto_now_add=True,
                                   editable=False,
-                                  verbose_name=_('registered'))
+                                  verbose_name=_('registered'),
+                                  help_text=_('Date of event registration.'))
     ''' 'processed' and 'invoice' are very tightly coupled together.
     Why exactly are both needed? Any invoice is processed on an exact date. If it shouldn't be part of an invoice,
     then it is not really processed anyway. '''
