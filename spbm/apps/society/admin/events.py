@@ -21,7 +21,7 @@ def is_readonly(obj: object) -> bool:
         # If we're looking from an Invoice, we exist, thus it's read-only.
         return True
     else:
-        return obj is not None and obj.processed
+        return False
 
 
 class ReadOnlyProtection:

@@ -120,6 +120,60 @@ class EventLoggedInWithPermissionsTests(TestCase):
         self.assertEqual(Event.objects.last(), self.last_event)
 
 
+class EventAdminTests(TestCase):
+    fixtures = test_fixtures
+
+    def setUp(self):
+        self.user = User(username='the_admin', is_staff=True)
+        self.user.save()
+        self.user.user_permissions.add(Permission.objects.get(codename='add_event'),
+                                       Permission.objects.get(codename='change_event'))
+
+        # set him as part of a society, then force login
+        self.spf_user = SpfUser(user=self.user, society=Society.objects.get(pk=1))
+        self.spf_user.save()
+        self.client.force_login(self.user)
+
+    def test_view_processed_event(self):
+        """
+        We can access the change page of an processed event.
+        """
+        e = Event.objects.filter(processed__isnull=False).first()
+        response = self.client.get(reverse('admin:society_event_change', args=(e.id,)))
+        self.assertTrue(response.status_code, 200)
+
+    def test_view_unprocessed_event(self):
+        """
+        We can access the change page of an unprocessed event.
+        """
+        e = Event.objects.filter(processed__isnull=True).first()
+        response = self.client.get(reverse('admin:society_event_change', args=(e.id,)))
+        self.assertTrue(response.status_code, 200)
+
+    def test_update_shift_processed_event(self):
+        """
+        We can update the hours of the shift object of an event that is processed.
+        """
+        e = Event.objects.first()
+        self.assertTrue(e.shifts.first().hours != 8, "Hours from testdata is incorrect")
+        event_data = {
+            'name': e.name,
+            'date': e.date,
+            'society': e.society.id,
+            'shifts-0-id': 1,
+            'shifts-0-event': 1,
+            'shifts-0-worker': 1,
+            'shifts-0-wage': 300,
+            'shifts-0-hours': 8,
+            'shifts-TOTAL_FORMS': 1,
+            'shifts-MIN_NUM_FORMS': 0,
+            'shifts-INITIAL_FORMS': 1
+        }
+        response = self.client.post(reverse('admin:society_event_change', args=(e.id,)), event_data, follow=True)
+        self.assertTrue(response.status_code, 200)
+        self.assertEqual(Event.objects.get(pk=e.id).hours, event_data['shifts-0-hours'])
+
+
 class EventLoggedOutTests(TestCase):
     def test_cannot_access_logged_out(self):
         """
