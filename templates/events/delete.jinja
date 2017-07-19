@@ -13,7 +13,7 @@
             <div class="panel-body">
                 <p>{{ _("Are you sure that you wish to delete the event %(event)s?", event=object) }}</p>
                 <div class="">
-                    <a href="{{ url('events') }}" class="btn btn-success">
+                    <a href="{{ url('event-view', object.id) }}" class="btn btn-success">
                         {{ _("Cancel deleting and take me back") }}
                     </a>
                     <input class="btn btn-danger" type="submit" value="{{ _("Delete the event") }}"/>
