@@ -4,7 +4,7 @@
 source .virtualenv/bin/activate
 
 # Ensure requirements are up to date
-pip install -r requirements.txt
+pip install -Ur requirements.txt
 
 # Execute database migrations
 ./manage.py migrate
