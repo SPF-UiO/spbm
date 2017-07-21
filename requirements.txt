@@ -1,29 +1,31 @@
 # Main framework
-Django>=1.11,<1.12
-django-jinja==2.2.2
-django-debug-toolbar
+Django==1.11.3
+django-debug-toolbar==1.8
 
-# Data
-psycopg2==2.6.2
+# PostgreSQL-connector
+psycopg2==2.7.1
 
 # Jinja2 improved translation tags & i18n
+django-jinja==2.3.1
 jinja2==2.9.6
 puente==0.5
 markupsafe==1.0
 pytz==2017.02
 
-# PDF-generation
-reportlab==3.4.0
+## Other various Django packages
 # Localisation and handling local input
-django-localflavor==1.4.1
+django-localflavor==1.5.2
 # Widget tweaks to avoid editing forms in code
 django-widget-tweaks==1.4.1
+# Extra class-based generic views
+django-extra-views==0.9.0
 
 # Execution for the moment
 uwsgi==2.0.15
 
+## Other external dependencies
+# PDF-generation
+reportlab==3.4.0
 # Sane relative dates
-python-dateutil==2.6.0
+python-dateutil==2.6.1
 
-# Extra class-based generic views
-django-extra-views
