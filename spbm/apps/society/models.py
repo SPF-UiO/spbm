@@ -4,10 +4,11 @@ from django.contrib.auth.models import User, AbstractUser
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.urls import reverse
 from django.utils import six
 from django.utils.functional import lazy
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 
 mark_safe_lazy = lazy(mark_safe, six.text_type)
 
@@ -44,10 +45,11 @@ class Worker(models.Model):
         verbose_name = _('worker')
         verbose_name_plural = _('workers')
 
-    class WorkerManager(models.Manager):
-        def get_queryset(self):
-            return super().get_queryset().select_related('society')
-
+    # Cheeky way to create a manager! :) Practically an anonymous class instance
+    """ Prevents us from lookup societies once per worker, per query """
+    objects = type('WorkerManager', (models.Manager, object,), {
+        'get_queryset': lambda self: super(models.Manager, self).get_queryset().select_related()
+    })()
 
     societies = models.ManyToManyField(Society,
                                        through='Employment',
@@ -76,10 +78,12 @@ class Worker(models.Model):
                                              "Employee number in the wage system, Norl&oslash;nn. " +
                                              "<strong>Must</strong> exist and be correct!")))
 
-    objects = WorkerManager()
-
     def __str__(self):
-        return self.name + " (" + self.society.shortname + ")"
+        return self.name + " (#" + str(self.id) + ")"
+
+    def get_absolute_url(self):
+        return reverse('worker-view', args=[str(self.id)])
+
 
 class Employment(models.Model):
     """
@@ -150,8 +154,9 @@ class Invoice(models.Model):
         return Decimal(cost).quantize(Decimal('.01'))
 
     def __str__(self):
-        return "Invoice #{id}: {period} {society} ".format(id=str(self.invoice_number),
-                                                           society=str(self.invoice_number), period=str(self.period))
+        return ugettext("Invoice #{id}: {period} {society}").format(id=str(self.invoice_number),
+                                                                    society=str(self.society.shortname),
+                                                                    period=str(self.period))
 
 
 class Event(models.Model):
@@ -163,9 +168,11 @@ class Event(models.Model):
         verbose_name = _('event')
         verbose_name_plural = _('events')
 
-    class EventManager(models.Manager):
-        def get_queryset(self):
-            return super().get_queryset().prefetch_related('shifts__worker', 'society')
+    """ Prevents us from looking up the worker associated with a shift once per shift per worker """
+    objects = type('EventManager', (models.Manager, object,), {
+        'get_queryset': lambda self: super(models.Manager, self).get_queryset().prefetch_related(
+            'shifts__worker', 'society')
+    })()
 
     society = models.ForeignKey(Society, null=False, verbose_name=_('society'), related_name="society",
                                 on_delete=models.PROTECT)
@@ -195,8 +202,6 @@ class Event(models.Model):
                                 related_name="events",
                                 verbose_name=_('invoice'))
 
-    objects = EventManager()
-
     @property
     def hours(self):
         """ Get the number of hours registered on an event """
@@ -220,8 +225,7 @@ class Event(models.Model):
     cost.fget.short_description = _("Total cost")
 
     def get_absolute_url(self):
-        from django.urls import reverse
-        return reverse('event-view', args=[self.pk])
+        return reverse('event-view', args=[self.id])
 
     def clean(self):
         if self.invoice is not None:
@@ -241,6 +245,13 @@ class Shift(models.Model):
         verbose_name = _('shift')
         verbose_name_plural = _('shifts')
         unique_together = ("event", "worker")
+
+    class ShiftManager(models.Manager):
+        def get_queryset(self):
+            """ Saves from looking up the society per shift, as well as the Norlønn-report if it exists """
+            return super().get_queryset().select_related('event__society', 'norlonn_report')
+
+    objects = ShiftManager()
 
     event = models.ForeignKey(Event, related_name="shifts", on_delete=models.CASCADE)
     worker = models.ForeignKey(Worker,
