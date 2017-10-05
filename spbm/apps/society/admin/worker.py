@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .events import ShiftInline
-from ..forms.worker import WorkerForm
+from ..forms.workers import WorkerForm
 from ..models import Society, Worker
 
 
@@ -10,7 +10,7 @@ class WorkersModelAdmin(admin.ModelAdmin):
     # We have a customized widget form that we should use here, see ../forms/worker.py
     form = WorkerForm
     inlines = [ShiftInline]
-    list_filter = ('society',)
+    list_filter = ('societies',)
     list_display = ('__str__', 'address', 'person_id', 'account_no', 'norlonn_number')
 
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):

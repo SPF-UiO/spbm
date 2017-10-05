@@ -48,10 +48,10 @@ class Worker(models.Model):
         def get_queryset(self):
             return super().get_queryset().select_related('society')
 
-    society = models.ForeignKey(Society,
-                                verbose_name=_('society'),
-                                on_delete=models.PROTECT,
-                                related_name="workers")
+
+    societies = models.ManyToManyField(Society,
+                                       through='Employment',
+                                       related_name='workers')
     active = models.BooleanField(default=True,
                                  verbose_name=_('active'),
                                  help_text=_('Check off if the worker is still actively working.'))
@@ -80,6 +80,22 @@ class Worker(models.Model):
 
     def __str__(self):
         return self.name + " (" + self.society.shortname + ")"
+
+class Employment(models.Model):
+    """
+    Through-model for the relationship between a worker and a society.
+    :keyword !Society
+    :keyword !Worker
+    """
+
+    class Meta:
+        unique_together = ('worker', 'society')
+
+    worker = models.ForeignKey(Worker,
+                               on_delete=models.CASCADE)
+    society = models.ForeignKey(Society,
+                                on_delete=models.PROTECT)
+    active = models.BooleanField(default=True, null=False)
 
 
 class Invoice(models.Model):
@@ -249,8 +265,9 @@ class Shift(models.Model):
     norlonn_report.short_description = "Sent to norlønn"
 
     def clean(self):
+        """ Cleans the shift, making sure it isn't attached to a worker not part of the society """
         try:
-            if self.worker.society != self.event.society:
+            if self.event.society not in self.worker.societies.all():
                 raise ValidationError(_('Worker on shift does not belong to the same society as the event.'))
         except:
             raise ValidationError(_('You must select a worker for this shift.'))

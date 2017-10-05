@@ -30,7 +30,7 @@ def make_shift_base(society):
 
         def __init__(self, *args, **kwargs):
             super(ShiftForm, self).__init__(*args, initial={'wage': society.default_wage}, **kwargs)
-            self.fields['worker'].queryset = Worker.objects.filter(society=society, active=True)
+            self.fields['worker'].queryset = Worker.objects.filter(societies__exact=society, active=True)
 
     return ShiftForm
 

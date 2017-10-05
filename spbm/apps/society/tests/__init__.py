@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.test import SimpleTestCase
 
-test_fixtures = ['Event', 'Invoice', 'Shift', 'Society', 'Worker', 'NorlonnReport', 'User',
+test_fixtures = ['Event', 'Invoice', 'Shift', 'Society', 'Worker', 'Employment', 'NorlonnReport', 'User',
                  'SpfUser']
 
 # Turn on the django-jinja template debug to provide response.context in the client.

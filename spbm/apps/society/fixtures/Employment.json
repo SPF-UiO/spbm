@@ -1,0 +1,38 @@
+[
+  {
+    "model": "society.employment",
+    "pk": 1,
+    "fields": {
+      "worker": 1,
+      "society": 1,
+      "active": true
+    }
+  },
+  {
+    "model": "society.employment",
+    "pk": 2,
+    "fields": {
+      "worker": 2,
+      "society": 1,
+      "active": true
+    }
+  },
+  {
+    "model": "society.employment",
+    "pk": 3,
+    "fields": {
+      "worker": 3,
+      "society": 2,
+      "active": true
+    }
+  },
+  {
+    "model": "society.employment",
+    "pk": 4,
+    "fields": {
+      "worker": 4,
+      "society": 2,
+      "active": true
+    }
+  }
+]

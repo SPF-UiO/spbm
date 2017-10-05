@@ -52,7 +52,7 @@ class ShiftInline(ReadOnlyProtection, admin.TabularInline):
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
         if db_field.name == "worker":
             if not request.user.is_superuser:
-                kwargs['queryset'] = Worker.objects.filter(society=request.user.spfuser.society)
+                kwargs['queryset'] = Worker.objects.filter(societies=request.user.spfuser.society)
         return super(ShiftInline, self).formfield_for_choice_field(db_field, request, **kwargs)
 
     def get_readonly_fields(self, request, obj=None):
