@@ -48,7 +48,7 @@ class ShiftInlineForm(InlineFormSet):
         return kwargs
 
 
-class EventCreateView(LoginAndPermissionRequiredMixin, CreateWithInlinesView):
+class CreateEvent(LoginAndPermissionRequiredMixin, CreateWithInlinesView):
     template_name = "events/add.jinja"
     permission_required = 'society.add_event'
     permission_denied_message = _("You are not allowed to create events due to lacking permissions.")
@@ -75,7 +75,7 @@ class EventCreateView(LoginAndPermissionRequiredMixin, CreateWithInlinesView):
         return self.forms_invalid(form, inlines)
 
 
-class EventUpdateView(LoginAndPermissionRequiredMixin, UpdateWithInlinesView):
+class UpdateEvent(LoginAndPermissionRequiredMixin, UpdateWithInlinesView):
     template_name = "events/edit.jinja"
     permission_required = 'society.change_event'
     permission_denied_message = _("You are not allowed to edit events due to lacking permissions.")
@@ -84,14 +84,13 @@ class EventUpdateView(LoginAndPermissionRequiredMixin, UpdateWithInlinesView):
     inlines = [ShiftInlineForm, ]
 
 
-class EventViewView(LoginRequiredMixin, DetailView):
+class ViewEvent(LoginRequiredMixin, DetailView):
     template_name = "events/view.jinja"
     model = Event
 
 
-class EventDeleteView(LoginRequiredMixin, DeleteView):
-    template_name = "events/delete.jinja"
+class DeleteEvent(LoginRequiredMixin, DeleteView):
+    template_name = "delete.jinja"
     model = Event
     success_url = reverse_lazy('events')
     queryset = Event.objects.filter(processed__isnull=True)
-

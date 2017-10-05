@@ -1,0 +1,32 @@
+{% extends 'base.jinja' %}
+{% if worker %}
+{% set title = _('Associate existing worker') %}
+{% else %}
+{% set title = _('Add worker') %}
+{% endif %}
+
+{% block content %}
+{%- if not worker -%}
+<form class="form-horizontal" method="post" action="">
+    {% csrf_token %}
+    {% autoescape off %}
+
+    {# Include and enumerate through the main form #}
+    {% include 'form-loop.jinja' %}
+
+    {# Add the submit and cancel buttons #}
+    <div class="form-group">
+        {% block buttons -%}
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-success">
+                    {{ _('Create new or associate with existing worker') }}
+                </button>
+            </div>
+        {%- endblock buttons %}
+    </div>
+    {% endautoescape %}
+</form>
+{%- else -%}
+{%- endif -%}
+{% endblock %}
+

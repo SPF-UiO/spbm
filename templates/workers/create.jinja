@@ -1,0 +1,27 @@
+{% extends 'base.jinja' %}
+{% set title = _('Add worker') %}
+
+{% block content %}
+<form class="form-horizontal" method="post" action="">
+    {% csrf_token %}
+    {% autoescape off %}
+
+    {# Include and enumerate through the main form #}
+    {% include 'form-loop.jinja' %}
+
+    {# Add the submit and cancel buttons #}
+    <div class="form-group">
+        {% block buttons -%}
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-success">
+                    {{ _('Create worker') }}
+                </button>
+                <a href="{{ url('workers') }}" title="{{ _('Cancel creating this event') }}" class="btn btn-warning">
+                    {{ _('Cancel creating this worker') }}
+                </a>
+            </div>
+        {%- endblock buttons %}
+    </div>
+    {% endautoescape %}
+</form>
+{% endblock %}

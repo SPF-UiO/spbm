@@ -1,7 +1,7 @@
 {% extends "base.jinja" %}
 {% set title = _("Events") %}
 
-{% from 'events/utils.jinja' import table_of_shifts %}
+{% from 'utils.jinja' import table_of_shifts %}
 
 {% block toolbar %}
     <a class="btn btn-success {%- if not user.has_perm('society.add_event') %} disabled {%- endif %}"

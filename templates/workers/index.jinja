@@ -1,18 +1,49 @@
 {% extends "base.jinja" %}
 {% set title = _("Workers") %}
 
-{% block content %}
-    <h2>{{ _('Add new worker') }}</h2>
-    <form class="form-horizontal" role="form" action="{{ post_url }}" method="POST">
+{# TODO: Simplify form for national ID lookup, possibly with an include or a macro #}
+{% block toolbar %}
+    {%- if user.has_perms(['society.add_worker', 'society.add_employment']) -%}
+        {%- set disabled_attr = '' -%}
+        {%- set title = _('Enter a national ID to find an existing worker, or to create a new one.') -%}
+    {%- else -%}
+        {%- set disabled_attr = ' disabled="disabled"' -%}
+        {%- set title = _('You do not have the permission to associate or add new workers.') -%}
+    {%- endif -%}
+    <form method="post" action="" {%- if form.errors %}class="has-error"{% endif %}>
         {% csrf_token %}
-        {% include "form-loop.jinja" %}
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">{{ _('Add worker') }}</button>
+        {% for field in form %}
+            <label class="sr-only" for="id_person_id" {{- disabled_attr }}>{{ _("National ID") }}</label>
+            <div class="input-group" title="{{ title }}">
+                <input id="id_person_id" name="person_id" type="text" class="form-control" {{- disabled_attr }}
+                       placeholder="{{ _("National ID number...") }}">
+                <span class="input-group-btn">
+                    <button class="btn btn-success" type="submit" {{- disabled_attr }}>
+                        <span class="glyphicon glyphicon-search"></span>
+                        {{ _("Find or add worker") }}</button>
+                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false"><span
+                                    class="caret"></span></button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="{{ url('worker-create', society_name=society) }}"
+                                        title="{{ _("Go directly to the creation form") }}">
+                                    {{ _("Add worker") }}</a></li>
+                            </ul>
+                </span>
             </div>
-        </div>
+            {% if field.errors -%}
+                <span class="help-block">
+            {%- for error in field.errors %}
+                {{ error }}
+            {%- endfor -%}
+            </span>
+            {% endif %}
+        {% endfor -%}
     </form>
-    <h2>{{ _("List of workers") }}</h2>
+{% endblock %}
+
+{% block content %}
+    <h2>{{ _("Current workers") }}</h2>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -24,9 +55,9 @@
         </tr>
         </thead>
         <tbody>
-        {% for worker in workers %}
+        {% for worker in active_workers %}
             <tr>
-                <th><a href="{{ url('workers-edit', society, worker.id) }}">{{ worker.name }}</a></th>
+                <th><a href="{{ worker.get_absolute_url() }}">{{ worker.name }}</a></th>
                 <th>{{ worker.address }}</th>
                 <th>{{ worker.account_no }}</th>
                 <th>{% if worker.person_id %} {{ _("Yes") }}{% else %} {{ _("No") }} {% endif %}</th>
@@ -36,26 +67,37 @@
         </tbody>
     </table>
     <h2>{{ _("List of inactive workers") }}</h2>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>{{ _("Name") }}</th>
-            <th>{{ _("Address") }}</th>
-            <th>{{ _("Account No.") }}</th>
-            <th>{{ _("National ID") }}</th>
-            <th>Norlønn</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for worker in old_workers %}
+    {% if inactive_workers -%}
+        <table class="table table-striped">
+            <thead>
             <tr>
-                <th><a href="{{ url('workers-edit', society, worker.id) }}">{{ worker.name }}</a></th>
-                <th>{{ worker.address }}</th>
-                <th>{{ worker.account_no }}</th>
-                <th>{{ worker.person_id }}</th>
-                <th>{{ worker.norlonn_number }}</th>
+                <th>{{ _("Name") }}</th>
+                <th>{{ _("Address") }}</th>
+                <th>{{ _("Account No.") }}</th>
+                <th>{{ _("National ID") }}</th>
+                <th>Norlønn</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for worker in old_workers %}
+                <tr>
+                    <th><a href="{{ url('worker-edit', worker.id) }}">{{ worker.name }}</a></th>
+                    <th>{{ worker.address }}</th>
+                    <th>{{ worker.account_no }}</th>
+                    <th>{{ worker.person_id }}</th>
+                    <th>{{ worker.norlonn_number }}</th>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {%- else -%}
+        <div class="alert alert-info">
+            <p>
+                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                <span class="sr-only">Info: </span>
+                {% trans %}
+                    Your society doesn't seem to have any inactive workers. That's great! :-)
+                {% endtrans %}</p>
+        </div>
+    {%- endif %}
 {% endblock %}

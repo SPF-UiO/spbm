@@ -1,0 +1,55 @@
+{% extends "base.jinja" %}
+{% set title = _("Worker") %}
+{# Translators: small title for viewing an event #}
+{% set title_small = _("Viewing ""%(name)s"" (#%(id)i)", name=object.name, id=object.id) %}
+
+{% from 'utils.jinja' import table_of_shifts %}
+
+{% macro field(title, value) -%}
+    <tr>
+        <th class="col-sm-4">{{ title }}</th>
+        <td>{{ value }}</td>
+    </tr>
+{%- endmacro %}
+
+
+{% block toolbar %}
+    <a href="{{ url('worker-edit', object.id) }}" class="btn btn-small btn-warning">
+        {{ _("Edit worker") }}
+    </a>
+    <a href="{{ url('worker-delete', object.id) }}" class="btn btn-small btn-danger">
+        {{ _("Delete worker") }}
+    </a>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-7">
+            <h2>{{ _("Personalia") }}</h2>
+            <table class="table table-bordered table-striped table-responsive">
+                <tbody>
+                {{ field(_("Name"), object.name) }}
+                {{ field(_("Address"), object.address) }}
+                {{ field(_("Societies"), object.societies.all() | join(", ")) }}
+                {{ field(_("Norlønn number"), object.norlonn_number) }}
+                {{ field(_("Account No."), object.account_no) }}
+                {{ field(_("National ID"), object.person_id) }}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-5">
+            <h2>{{ _("Invoicing and wage details") }}</h2>
+                <div class="alert-info alert">
+                    <p>{% trans invoices = url('invoices') -%}
+                        This event has yet to be invoiced to a society. Please see
+                        <a href="{{ invoices }}" class="alert-link">the invoice section</a> to close the
+                        current invoice period.
+                    {% endtrans %}</p>
+                </div>
+        </div>
+    </div>
+
+    <h2>{{ _("Shifts") }}</h2>
+    {{ table_of_shifts(object.shifts.all(), payroll=True, pov='worker') }}
+
+{% endblock %}

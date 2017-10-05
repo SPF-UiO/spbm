@@ -2,7 +2,7 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import render
 from django.views import View
 
-from . import views_overview, views_workers
+from . import views_overview, workers, events, invoicing
 
 
 class PermissionDeniedView(View):

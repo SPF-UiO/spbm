@@ -2,8 +2,7 @@ from django.conf.urls import url, include
 
 # TODO: Create intermediate class to decouple Norlønn from wage reporting
 from spbm.apps.norlonn import views as wages
-
-from .views import views_overview as overview, views_workers as workers, \
+from .views import views_overview as overview, workers, \
     events, invoicing
 from .views.views_overview import index as standard_index
 
@@ -19,25 +18,30 @@ overview_urls = [
 workers_urls = [
     url(r'^$', workers.redirect_society, name='workers'),
     url(r'^' + society_match, include([
-        url(r'^$', workers.index, name='workers-overview'),
-        url(r'^add/$', workers.add, name='workers-add'),
-        url(r'^edit/(?P<worker_id>\d+)$', workers.EditWorker.as_view(), name='workers-edit'),
+        url(r'^$', workers.IndexWorker.as_view(), name='workers-overview'),
+        url(r'^add/$', workers.AddWorker.as_view(), name='worker-add'),
+        url(r'^create/$', workers.CreateWorker.as_view(), name='worker-create'),
+        url(r'^create/(?P<nid>\d+)$', workers.CreateWorker.as_view(), name='worker-create'),
     ])),
+    url(r'^edit/(?P<pk>\d+)$', workers.UpdateWorker.as_view(), name='worker-edit'),
+    url(r'^view/(?P<pk>\d+)$', workers.ViewWorker.as_view(), name='worker-view'),
+    url(r'^delete/(?P<pk>\d+)$', workers.DeleteWorker.as_view(), name='worker-delete'),
 ]
 
 event_urls = [
     url(r'^$', events.index, name='events'),
-    url(r'^add/$', events.EventCreateView.as_view(), name='event-add'),
-    url(r'^view/(?P<pk>\d+)$', events.EventViewView.as_view(), name='event-view'),
-    url(r'^edit/(?P<pk>\d+)$', events.EventUpdateView.as_view(), name='event-edit'),
-    url(r'^delete/(?P<pk>\d+)$', events.EventDeleteView.as_view(), name='event-delete'),
+    url(r'^add/$', events.CreateEvent.as_view(), name='event-add'),
+    url(r'^view/(?P<pk>\d+)$', events.ViewEvent.as_view(), name='event-view'),
+    url(r'^edit/(?P<pk>\d+)$', events.UpdateEvent.as_view(), name='event-edit'),
+    url(r'^delete/(?P<pk>\d+)$', events.DeleteEvent.as_view(), name='event-delete'),
 ]
 
 invoicing_urls = [
     url(r'^$', invoicing.InvoicingView.as_view(), name="invoices"),
     url(r'^$', invoicing.InvoicingView.as_view(), name="invoicing"),
     url(r'^view/' + society_match + r'(?P<date>\d{4}-\d{2}-\d{2})/$', invoicing.view_invoice, name='invoice-view'),
-    url(r'^view/' + society_match + r'(?P<date>\d{4}-\d{2}-\d{2}).pdf$', invoicing.generate_pdf, name='invoice-view-pdf'),
+    url(r'^view/' + society_match + r'(?P<date>\d{4}-\d{2}-\d{2}).pdf$', invoicing.generate_pdf,
+        name='invoice-view-pdf'),
 ]
 
 wages_urls = [
