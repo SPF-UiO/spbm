@@ -1,6 +1,6 @@
 from django.forms import ModelForm, Form
 from django.utils.translation import ugettext_lazy as _
-from localflavor.no.forms import NOSocialSecurityNumber
+from localflavor.no.forms import NOSocialSecurityNumber, NOBankAccountNumber
 
 from ..models import Worker
 
@@ -10,6 +10,10 @@ def person_id(**kwargs):
                                   help_text=_('National social security ID, 11 digits.'),
                                   **kwargs)
 
+def account_no(**kwargs):
+    return NOBankAccountNumber(label=_('Bank account'),
+                                  help_text=_('Bank account number, 11 digits.'),
+                                  **kwargs)
 
 class WorkerForm(ModelForm):
     """
@@ -17,6 +21,7 @@ class WorkerForm(ModelForm):
     """
     # This overwrites the meta definition.
     person_id = person_id(required=False)
+    account_no = account_no(required=False)
 
     class Meta:
         model = Worker
