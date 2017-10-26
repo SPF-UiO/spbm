@@ -65,7 +65,7 @@ class InvoicingView(LoginRequiredMixin, TemplateView):
             'days_left': next_period - today,
             'warning': warning,
             'unprocessed_events': Event.objects.filter(processed__isnull=True).count(),
-            'unpaid_invoices': Invoice.objects.filter(paid=True),
+            'unpaid_invoices': Invoice.objects.filter(paid=False),
             'all_invoices': Invoice.objects.all(),
         }
 
