@@ -50,6 +50,10 @@ class InvoicingView(LoginRequiredMixin, TemplateView):
         today = datetime.date.today()
         next_period = datetime.date(last_period.year, last_period.month,
                                     settings.SPBM['dates']['invoicing']) + relativedelta(months=1)
+        # Fixes the no events in period problem
+        if ((Event.objects.filter(processed__isnull=True).count()) == False):
+            while next_period < today:
+                next_period += relativedelta(months=1)
 
         if last_period.month == today.month:
             warning = _("You <strong>should not</strong> close a period twice in a month without good reason!")
@@ -61,7 +65,7 @@ class InvoicingView(LoginRequiredMixin, TemplateView):
             'days_left': next_period - today,
             'warning': warning,
             'unprocessed_events': Event.objects.filter(processed__isnull=True).count(),
-            'unpaid_invoices': Invoice.objects.filter(paid=False),
+            'unpaid_invoices': Invoice.objects.filter(paid=True),
             'all_invoices': Invoice.objects.all(),
         }
 
