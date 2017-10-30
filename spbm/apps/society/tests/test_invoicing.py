@@ -18,11 +18,6 @@ class InvoicingTests(SPFTest, TestCase):
         self.spf_user.save()
         self.client.force_login(self.user)
 
-    def assertMessagesContains(self, response, needle: str, msg=None):
-        if not any(needle in str(x) for x in list(response.context['messages'])):
-            msg = self._formatMessage(msg, "'%s' not contained in messages" % needle)
-            raise self.failureException(msg)
-
     def test_get_all_invoices(self):
         """
         Return list of invoices to viewer.
