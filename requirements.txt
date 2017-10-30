@@ -1,5 +1,5 @@
 # Main framework
-Django==1.11.3
+Django==1.11.6
 django-debug-toolbar==1.8
 
 # PostgreSQL-connector
@@ -10,11 +10,13 @@ django-jinja==2.3.1
 jinja2==2.9.6
 puente==0.5
 markupsafe==1.0
-pytz==2017.02
+pytz==2017.3
 
 ## Other various Django packages
 # Localisation and handling local input
-django-localflavor==1.5.2
+# temporarily my own repo, until fix for NOBankAccountNumber is there
+#django-localflavor==1.5.2
+https://github.com/thor/django-localflavor/archive/master.zip#egg=django-localflavor==1.5.3
 # Widget tweaks to avoid editing forms in code
 django-widget-tweaks==1.4.1
 # Extra class-based generic views
