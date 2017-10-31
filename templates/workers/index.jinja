@@ -79,12 +79,12 @@
             </tr>
             </thead>
             <tbody>
-            {% for worker in old_workers %}
+            {% for worker in inactive_workers %}
                 <tr>
-                    <th><a href="{{ url('worker-edit', worker.id) }}">{{ worker.name }}</a></th>
+                    <th><a href="{{ worker.get_absolute_url() }}">{{ worker.name }}</a></th>
                     <th>{{ worker.address }}</th>
                     <th>{{ worker.account_no }}</th>
-                    <th>{{ worker.person_id }}</th>
+                    <th>{% if worker.person_id %} {{ _("Yes") }}{% else %} {{ _("No") }} {% endif %}</th>
                     <th>{{ worker.norlonn_number }}</th>
                 </tr>
             {% endfor %}
