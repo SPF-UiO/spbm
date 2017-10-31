@@ -18,24 +18,42 @@ def create_employment(apps, schema_editor):
             .values('person_id')
             .order_by()
             .filter(count__gt=1)
+            .exclude(person_id='')
     )
     duplicated_workers = Worker.objects.using(db_alias) \
         .filter(person_id__in=duplicated_person_ids) \
         .exclude(person_id='') \
         .order_by('id')
 
+    print()
     # Followed by reassigning all the shifts and whatnots -- we can do this without having Employments ready!
-    for worker in duplicated_workers:
-        for dups in Shift.objects.using(db_alias).filter(worker__person_id=worker.person_id).exclude(
-                worker__pk=worker.pk):
-            dups.worker = worker
-        # Create Employments, then give the duplicates an awful name so they have to be deleted
-        for dups in duplicated_workers.filter(person_id=worker.person_id).exclude(pk=worker.pk):
-            Employment.objects.using(db_alias).create(worker=worker, society=dups.society, active=dups.active)
-            dups.name = "DUPLICATE: " + dups.name
+    for dup_id in duplicated_person_ids:
+        # we get the workers in this way to make sure we don't go over the canonical worker again, creating duplicated
+        # unneccessary Employments
+        worker = Worker.objects.using(db_alias).filter(person_id=dup_id['person_id']).order_by('id').first()
 
-    # First, create the employment relationships for all the non-duplicates
-    for worker in Worker.objects.using(db_alias).all():
+        print("Processing: {name} ({id}): {sn}".format(name=worker.name, id=worker.id, sn=worker.society.shortname))
+        Employment.objects.using(db_alias).create(worker=worker, society=worker.society, active=worker.active)
+        Shift.objects.using(db_alias)\
+            .filter(worker__person_id=worker.person_id)\
+            .exclude(worker__pk=worker.pk)\
+            .update(worker=worker)
+
+        # Create Employments for non-same society duplicates (UNIQUE constraint)
+        for dups in duplicated_workers.filter(person_id=worker.person_id) \
+                .exclude(id=worker.id).exclude(society=worker.society):
+            print(" - Employment: {name} ({sn}): {id}".format(name=dups.name, id=dups.id, sn=dups.society.shortname))
+            Employment.objects.using(db_alias).create(worker=worker, society=dups.society, active=dups.active)
+
+        # Change activeness and name for all duplicates, no matter the society
+        for dups in duplicated_workers.filter(person_id=worker.person_id).exclude(id=worker.id):
+            print(" - Deactivation: {name} ({sn}): {id}".format(name=dups.name, sn=dups.society.shortname, id=dups.id))
+            dups.active = False
+            dups.name = "DUPLICATE: " + dups.name
+            dups.save()
+
+    # Last, but not least, create Employment relationships for all non-duplicates
+    for worker in Worker.objects.using(db_alias).filter(employment__isnull=True):
         Employment.objects.using(db_alias).create(worker=worker, society=worker.society, active=worker.active)
 
 
