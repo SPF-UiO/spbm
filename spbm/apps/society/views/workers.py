@@ -44,11 +44,12 @@ class IndexWorker(LoginRequiredMixin, FormMixin, TemplateView):
         # Get the society from the keyword arguments, via URLconf
         society = get_object_or_404(Society, shortname=self.kwargs['society_name'])
 
-        workers = Worker.objects.filter(societies=society).select_related().order_by("norlonn_number")
+        workers = Worker.objects.filter(employment__society=society)\
+            .select_related().order_by("norlonn_number").distinct()
         context = super().get_context_data()
         context.update({
-            'inactive_workers': workers.filter(active=False),
-            'active_workers': workers.filter(active=True),
+            'inactive_workers': workers.filter(employment__active=False),
+            'active_workers': workers.filter(employment__active=True),
             'society': society,
         })
         return context
