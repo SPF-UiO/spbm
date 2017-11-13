@@ -25,7 +25,6 @@ def create_employment(apps, schema_editor):
         .exclude(person_id='') \
         .order_by('id')
 
-    print()
     # Followed by reassigning all the shifts and whatnots -- we can do this without having Employments ready!
     for dup_id in duplicated_person_ids:
         # we get the workers in this way to make sure we don't go over the canonical worker again, creating duplicated
@@ -46,10 +45,12 @@ def create_employment(apps, schema_editor):
             Employment.objects.using(db_alias).create(worker=worker, society=dups.society, active=dups.active)
 
         # Change activeness and name for all duplicates, no matter the society
+        # Note that we also blank their national ID, so that we can migrate safely to that come next migration.
         for dups in duplicated_workers.filter(person_id=worker.person_id).exclude(id=worker.id):
             print(" - Deactivation: {name} ({sn}): {id}".format(name=dups.name, sn=dups.society.shortname, id=dups.id))
             dups.active = False
             dups.name = "DUPLICATE: " + dups.name
+            dups.person_id = ""
             dups.save()
 
     # Last, but not least, create Employment relationships for all non-duplicates
@@ -114,13 +115,21 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='employment',
-            unique_together=set([('worker', 'society')]),
+            unique_together={('worker', 'society')},
         ),
+        # The most important part: one-way migration.
         migrations.RunPython(
             create_employment,
         ),
+        # Get rid of the old society field
         migrations.RemoveField(
             model_name='worker',
             name='society',
+        ),
+        # Let's make it unique
+        migrations.AlterField(
+            model_name='worker',
+            name='person_id',
+            field=models.CharField(blank=True, max_length=20, unique=True, verbose_name='person ID'),
         ),
     ]
