@@ -69,6 +69,7 @@ class Worker(models.Model):
                                   help_text=_('Norwegian bank account number, no periods, 11 digits.'))
     person_id = models.CharField(max_length=20,
                                  blank=True,
+                                 null=True,
                                  unique=True,
                                  verbose_name=_('person ID'))
     norlonn_number = models.IntegerField(blank=True,

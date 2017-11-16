@@ -50,8 +50,15 @@ def create_employment(apps, schema_editor):
             print(" - Deactivation: {name} ({sn}): {id}".format(name=dups.name, sn=dups.society.shortname, id=dups.id))
             dups.active = False
             dups.name = "DUPLICATE: " + dups.name
-            dups.person_id = ""
+            dups.person_id = None
             dups.save()
+
+    # Ensure that we clean up all blank objects
+    print("Nulling out blank workers IDs:")
+    for blank_worker_person_id in Worker.objects.using(db_alias).filter(person_id=""):
+        blank_worker_person_id.person_id = None
+        blank_worker_person_id.save()
+        print(" - {} ({} job(s))".format(blank_worker_person_id.name, blank_worker_person_id.shifts.count()))
 
     # Last, but not least, create Employment relationships for all non-duplicates
     for worker in Worker.objects.using(db_alias).filter(employment__isnull=True):
@@ -117,6 +124,12 @@ class Migration(migrations.Migration):
             name='employment',
             unique_together={('worker', 'society')},
         ),
+        # Allow for nulling out
+        migrations.AlterField(
+            model_name='worker',
+            name='person_id',
+            field=models.CharField(blank=True, null=True, unique=False, max_length=20, verbose_name='person id'),
+        ),
         # The most important part: one-way migration.
         migrations.RunPython(
             create_employment,
@@ -130,6 +143,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='worker',
             name='person_id',
-            field=models.CharField(blank=True, max_length=20, unique=True, verbose_name='person ID'),
+            field=models.CharField(blank=True, null=True, unique=True, max_length=20, verbose_name='person ID'),
         ),
     ]
