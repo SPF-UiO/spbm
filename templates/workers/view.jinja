@@ -1,6 +1,6 @@
 {% extends "base.jinja" %}
 {% set title = _("Worker") %}
-{# Translators: small title for viewing an event #}
+{# Translators: small title for viewing a worker #}
 {% set title_small = _("Viewing ""%(name)s"" (#%(id)i)", name=object.name, id=object.id) %}
 
 {% from 'utils.jinja' import table_of_shifts %}
@@ -17,9 +17,11 @@
     <a href="{{ url('worker-edit', object.id) }}" class="btn btn-small btn-warning">
         {{ _("Edit worker") }}
     </a>
+    {%- if worker.shifts.count() == 0 %}
     <a href="{{ url('worker-delete', object.id) }}" class="btn btn-small btn-danger">
         {{ _("Delete worker") }}
     </a>
+    {%- endif %}
 {% endblock %}
 
 {% block content %}
