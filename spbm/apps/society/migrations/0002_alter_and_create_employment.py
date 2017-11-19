@@ -33,9 +33,9 @@ def create_employment(apps, schema_editor):
 
         print("Processing: {name} ({id}): {sn}".format(name=worker.name, id=worker.id, sn=worker.society.shortname))
         Employment.objects.using(db_alias).create(worker=worker, society=worker.society, active=worker.active)
-        Shift.objects.using(db_alias)\
-            .filter(worker__person_id=worker.person_id)\
-            .exclude(worker__pk=worker.pk)\
+        Shift.objects.using(db_alias) \
+            .filter(worker__person_id=worker.person_id) \
+            .exclude(worker__pk=worker.pk) \
             .update(worker=worker)
 
         # Create Employments for non-same society duplicates (UNIQUE constraint)
@@ -54,11 +54,11 @@ def create_employment(apps, schema_editor):
             dups.save()
 
     # Ensure that we clean up all blank objects
-    print("Nulling out blank workers IDs:")
     for blank_worker_person_id in Worker.objects.using(db_alias).filter(person_id=""):
         blank_worker_person_id.person_id = None
         blank_worker_person_id.save()
-        print(" - {} ({} job(s))".format(blank_worker_person_id.name, blank_worker_person_id.shifts.count()))
+        print("Nulled out blank ID for '{}' ({} job(s))".format(blank_worker_person_id.name,
+                                                                blank_worker_person_id.shifts.count()))
 
     # Last, but not least, create Employment relationships for all non-duplicates
     for worker in Worker.objects.using(db_alias).filter(employment__isnull=True):
@@ -106,7 +106,8 @@ class Migration(migrations.Migration):
             name='Employment',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('active', models.BooleanField(default=True)),
+                ('active', models.BooleanField(default=True, verbose_name='active',
+                                               help_text='Check off if the worker is still actively working.')),
                 ('society', models.ForeignKey(on_delete=models.PROTECT, to='society.Society')),
             ],
         ),
@@ -149,5 +150,12 @@ class Migration(migrations.Migration):
             model_name='worker',
             name='person_id',
             field=models.CharField(blank=True, null=True, unique=True, max_length=20, verbose_name='person ID'),
+        ),
+        # Let's also make our account numbers nullable like they should be
+        migrations.AlterField(
+            model_name='worker',
+            name='account_no',
+            field=models.CharField(blank=True, help_text='Norwegian bank account number, no periods, 11 digits.',
+                                   max_length=20, null=True, verbose_name='account no.'),
         ),
     ]

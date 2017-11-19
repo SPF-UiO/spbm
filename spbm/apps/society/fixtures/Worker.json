@@ -3,7 +3,6 @@
     "model": "society.worker",
     "pk": 1,
     "fields": {
-      "active": true,
       "name": "Ola S. Normann",
       "address": "Olegata 43b, 0123 Oslo",
       "account_no": "99002279610",
@@ -15,7 +14,6 @@
     "model": "society.worker",
     "pk": 2,
     "fields": {
-      "active": true,
       "name": "James McMay",
       "address": "Jameston Street",
       "account_no": "12345678903",
@@ -27,10 +25,9 @@
     "model": "society.worker",
     "pk": 3,
     "fields": {
-      "active": true,
       "name": "Kari Normann",
       "address": "Trondheimsveien 235, 0586 Oslo",
-      "account_no": "",
+      "account_no": null,
       "person_id": "01020399631",
       "norlonn_number": null
     }
@@ -39,10 +36,9 @@
     "model": "society.worker",
     "pk": 4,
     "fields": {
-      "active": true,
       "name": "Nicolas H. Normann",
       "address": "Bygata 2, 1378 Nesøya",
-      "account_no": "",
+      "account_no": null,
       "person_id": "01020399712",
       "norlonn_number": null
     }

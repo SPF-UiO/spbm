@@ -54,9 +54,6 @@ class Worker(models.Model):
     societies = models.ManyToManyField(Society,
                                        through='Employment',
                                        related_name='workers')
-    active = models.BooleanField(default=True,
-                                 verbose_name=_('active'),
-                                 help_text=_('Check off if the worker is still actively working.'))
     name = models.CharField(max_length=1000,
                             verbose_name=_('name'),
                             help_text=_('Full name, with first name first.'))
@@ -65,6 +62,7 @@ class Worker(models.Model):
                                help_text=_('Full address including postal code and area.'))
     account_no = models.CharField(max_length=20,
                                   blank=True,
+                                  null=True,
                                   verbose_name=_('account no.'),
                                   help_text=_('Norwegian bank account number, no periods, 11 digits.'))
     person_id = models.CharField(max_length=20,
@@ -101,7 +99,8 @@ class Employment(models.Model):
                                on_delete=models.CASCADE)
     society = models.ForeignKey(Society,
                                 on_delete=models.PROTECT)
-    active = models.BooleanField(default=True, null=False)
+    active = models.BooleanField(default=True, null=False, verbose_name=_('active'),
+                                 help_text=_('Check off if the worker is still actively working.'))
 
 
 class Invoice(models.Model):
