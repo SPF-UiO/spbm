@@ -155,10 +155,10 @@ def view_invoice(request, society_name, date):
     :param date: The date for the invoice.
     :return:
     """
-    invoice = get_object_or_404(Invoice, society__shortname=society_name, period=date)
+    invoice = get_object_or_404(Invoice.objects.select_related(), society__shortname=society_name, period=date)
     events = Event.objects.filter(society__shortname=society_name, processed=date).annotate(
         total_cost=Sum(F('shifts__hours') * F('shifts__wage'),
-                        output_field=models.DecimalField(decimal_places=2))
+                       output_field=models.DecimalField(decimal_places=2))
     ).annotate(total_hours=Sum('shifts__hours'))
 
     event_total = invoice.get_total_event_cost()

@@ -172,7 +172,11 @@ class Event(models.Model):
     """ Prevents us from looking up the worker associated with a shift once per shift per worker """
     objects = type('EventManager', (models.Manager, object,), {
         'get_queryset': lambda self: super(models.Manager, self).get_queryset().prefetch_related(
-            'shifts__worker', 'society')
+            'shifts__worker') \
+                   .annotate(total_cost=Sum(F('shifts__hours') * F('shifts__wage'),
+                                            output_field=models.DecimalField(decimal_places=2))) \
+                   .annotate(total_hours=Sum('shifts__hours'))
+
     })()
 
     society = models.ForeignKey(Society, null=False, verbose_name=_('society'), related_name="society",
@@ -186,6 +190,7 @@ class Event(models.Model):
                                   editable=False,
                                   verbose_name=_('registered'),
                                   help_text=_('Date of event registration.'))
+
     ''' 'processed' and 'invoice' are very tightly coupled together.
     Why exactly are both needed? Any invoice is processed on an exact date. If it shouldn't be part of an invoice,
     then it is not really processed anyway. '''
@@ -193,6 +198,7 @@ class Event(models.Model):
     processed = models.DateField(null=True,
                                  blank=True,
                                  verbose_name=_('processed'))
+
     # If you've got an invoice, maybe it shouldn't be allowed to be deleted.
     # However, do we have some other good ways of doing it? :/ I mean, *easy* ways of doing it?
     # Let's be difficult with ourselves. Don't delete the invoices, just remove the invoice from the event!
@@ -217,9 +223,11 @@ class Event(models.Model):
     @property
     def cost(self):
         """ Get the total cost that will be invoiced from an event """
-        return Decimal(self.shifts.all().
-                       aggregate(sum_costs=Sum(F('hours') * F('wage'),
-                                                output_field=models.DecimalField(decimal_places=2)))['sum_costs'])
+        cost = Decimal(0)
+        for shift in self.shifts.all():
+            cost += (shift.hours * shift.wage)
+        cost = cost.quantize(Decimal(".01"))
+        return cost
 
     cost.fget.short_description = _("Total cost")
 

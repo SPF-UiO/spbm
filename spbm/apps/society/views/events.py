@@ -22,7 +22,9 @@ def index(request, society_name=None):
 
     """ Create another field so that we can order first the processed = None events, then the processed ones in 
         the reverse order, e.g. descending """
+    # TODO: Create another Manager, or tweak the query to annotate the cost right here and now.
     society_events = Event.objects.filter(society=society) \
+        .prefetch_related('shifts__worker') \
         .extra(select={'processed_is_null': 'processed IS NULL'},
                order_by=['-processed_is_null', '-processed'])
 
