@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 
+from spbm.helpers.auth import user_society
 from .models import NorlonnReport
 from ..society.models import Shift
 
@@ -15,11 +16,13 @@ def index(request):
     reports = NorlonnReport.objects.all().order_by('-date')
     errors = []
 
+    queryset = Shift.objects.select_related().prefetch_related('event__invoice').filter(norlonn_report__isnull=True,
+                                                                                        event__processed__isnull=False)
+
     if request.user.has_perm('norlonn.generate_report'):
-        shifts = Shift.objects.filter(norlonn_report__isnull=True, event__processed__isnull=False)
+        shifts = queryset
     else:
-        shifts = Shift.objects.filter(norlonn_report__isnull=True, event__processed__isnull=False,
-                                      event__society=request.user.spfuser.society)
+        shifts = queryset.filter(event__society=user_society(request.user.spfuser))
 
     for s in shifts:
         if s.worker.norlonn_number is None:
