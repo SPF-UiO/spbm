@@ -139,6 +139,11 @@ class Migration(migrations.Migration):
             model_name='worker',
             name='society',
         ),
+        # Get rid of the old activity field too
+        migrations.RemoveField(
+            model_name='worker',
+            name='active',
+        ),
         # Let's make it unique
         migrations.AlterField(
             model_name='worker',

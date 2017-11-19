@@ -41,4 +41,4 @@ class WorkerEditForm(WorkerForm):
     """
 
     class Meta(WorkerForm.Meta):
-        fields = ['name', 'address', 'account_no', 'person_id', 'norlonn_number', 'active']
+        fields = ['name', 'address', 'account_no', 'person_id', 'norlonn_number']
