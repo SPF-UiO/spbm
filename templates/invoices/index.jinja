@@ -105,7 +105,7 @@
                             {{ invoice.period | localize }}
                             <span class="glyphicon glyphicon-transfer" style="margin-left: 10px;"></span>
                             <span class="sr-only">{{ _("Amount") }}:</span>
-                            {{ _("NOK %(cost)s", cost=invoice.get_total_cost()|intcomma) }}
+                            {{ _("NOK %(cost)s", cost=invoice.total_cost | intcomma) }}
                         </div>
                     {% endfor %}
                 </div>
@@ -164,7 +164,7 @@
                     <th>
                         {{ invoice.society.name }}
                     </th>
-                    <td class="text-right">{{ _('NOK %(cost)s', cost=invoice.get_total_cost() | intcomma | localize) }}</td>
+                    <td class="text-right">{{ _('NOK %(cost)s', cost=invoice.total_cost | intcomma | localize) }}</td>
                     <td>
                         {%- if invoice.paid -%}
                             <span class="glyphicon glyphicon-ok"></span> {{ _("Yes") }}

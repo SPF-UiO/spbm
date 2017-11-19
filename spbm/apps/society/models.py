@@ -4,6 +4,7 @@ from django.contrib.auth.models import User, AbstractUser
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models import Sum, Avg, F
 from django.urls import reverse
 from django.utils import six
 from django.utils.functional import lazy
@@ -134,25 +135,24 @@ class Invoice(models.Model):
         Calculates the cost for an event, including the percentage fee.
         :return: Decimal of total event cost, including the fee.
         """
-        cost = 0
-        events = Event.objects.filter(invoice=self)
+        costs = self.events.all() \
+            .aggregate(total_cost=Sum(F('shifts__hours') * F('shifts__wage'),
+                                      output_field=models.FloatField())) \
+            .get('total_cost')
 
-        for event in events:
-            cost += event.cost
-
-        return (Decimal(cost) * Decimal('1.3')).quantize(Decimal('.01'))
+        return (Decimal(costs) * Decimal('1.3')).quantize(Decimal('.01'))
 
     def get_total_event_cost(self):
         """
         Calculates the cost for the invoice in regards to the events alone.
         :return: Decimal of total event cost, not including the fee.
         """
-        cost = 0
-        events = Event.objects.filter(invoice=self)
-        for event in events:
-            cost += event.cost
+        costs = self.events.all() \
+            .aggregate(total_cost=Sum(F('shifts__hours') * F('shifts__wage'),
+                                      output_field=models.FloatField())) \
+            .get('total_cost')
 
-        return Decimal(cost).quantize(Decimal('.01'))
+        return Decimal(costs).quantize(Decimal('.01'))
 
     def __str__(self):
         return ugettext("Invoice #{id}: {period} {society}").format(id=str(self.invoice_number),
@@ -217,11 +217,9 @@ class Event(models.Model):
     @property
     def cost(self):
         """ Get the total cost that will be invoiced from an event """
-        total = Decimal(0)
-        for s in self.shifts.all():
-            total += s.get_total()
-        total = total.quantize(Decimal(".01"))
-        return total
+        return Decimal(self.shifts.all().
+                       aggregate(sum_costs=Sum(F('hours') * F('wage'),
+                                                output_field=models.DecimalField(decimal_places=2)))['sum_costs'])
 
     cost.fget.short_description = _("Total cost")
 
