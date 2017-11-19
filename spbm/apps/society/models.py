@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from django.conf import settings
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -137,6 +137,7 @@ class Invoice(models.Model):
         Calculates the cost for an event, including the percentage fee.
         :return: Decimal of total event cost, including the fee.
         """
+        # FIXME: Decimal issues: should we add output_field=models.FloatField?
         total_costs = Decimal(
             self.events.all()
                 .aggregate(total_cost=Sum('sum_costs'))

@@ -57,7 +57,7 @@ class InvoicingView(LoginRequiredMixin, TemplateView):
                                         settings.SPBM['dates']['invoicing']) + relativedelta(months=1)
 
         # Fixes the no events in period problem
-        if not (Event.objects.filter(processed__isnull=True).count()):
+        if not Event.objects.filter(processed__isnull=True).exists():
             while next_period < today:
                 next_period += relativedelta(months=1)
 
