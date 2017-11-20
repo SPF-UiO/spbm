@@ -169,16 +169,17 @@ def view_invoice(request, society_name, date):
         items.append({
             'description': "{date}: {title}".format(date=event.date, title=event.name),
             'count': event.sum_hours,
-            'item_cost': (event.sum_costs / event.sum_hours).quantize(Decimal(".01")),
-            'line_cost': event.sum_costs,
+            'item_cost': (event.sum_costs / event.sum_hours).quantize(Decimal('.01')),
+            'line_cost': event.sum_costs.quantize(Decimal('.01')),
         })
 
     # Add the SPF fee at the end
     items.append({
-        'description': _(
-            "SPF fee: {percent}% of {event_cost}".format(percent=30, event_cost=localize(invoice_event_only_sum))),
         'item_cost': spf_fee,
         'line_cost': spf_fee,
+        'description': _(
+            "SPF fee: {percent:.1%} of NOK {event_cost}".format(percent=settings.SPBM.get('fee'),
+                                                                event_cost=localize(invoice_event_only_sum))),
     })
 
     return render(request, "invoices/view.jinja", {

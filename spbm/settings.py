@@ -17,7 +17,7 @@ SPBM = {
         'deadline': 10,
         'wages': 25,
     },
-    'fee': 1.3,
+    'fee': 0.3,
 }
 
 import os

@@ -141,22 +141,30 @@ class Invoice(models.Model):
         Calculates the cost for an event, including the percentage fee.
         :return: Decimal of total event cost, including the fee.
         """
-        total_costs = self.events.all() \
-            .aggregate(total_cost=Sum('sum_costs')) \
-            .get('total_cost')
+        total_costs = Decimal(
+            self.events.all()
+                .aggregate(total_cost=Sum('sum_costs'))
+                .get('total_cost'))
 
-        return (Decimal(total_costs) * Decimal(settings.SPBM.get('fee'))).quantize(Decimal('.01'))
+        fee = self.get_fee_cost(total_costs)
+
+        return (total_costs + fee).quantize(Decimal('.01'))
 
     def get_total_event_cost(self):
         """
         Calculates the cost for the invoice in regards to the events alone.
         :return: Decimal of total event cost, not including the fee.
         """
-        total_event_costs = self.events.all() \
-            .aggregate(total_event_cost=Sum('sum_costs')) \
-            .get('total_event_cost')
+        total_event_costs = Decimal(
+            self.events.all()
+                .aggregate(total_event_cost=Sum('sum_costs'))
+                .get('total_event_cost'))
 
-        return (Decimal(total_event_costs)).quantize(Decimal('.01'))
+        return total_event_costs.quantize(Decimal('.01'))
+
+    @classmethod
+    def get_fee_cost(cls, event_total_cost):
+        return (Decimal(event_total_cost) * Decimal(settings.SPBM.get('fee'))).quantize(Decimal('.01'))
 
     def __str__(self):
         return ugettext("Invoice #{id}: {period} {society}").format(id=str(self.invoice_number),
