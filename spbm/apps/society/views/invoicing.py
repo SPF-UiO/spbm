@@ -52,7 +52,7 @@ class InvoicingView(LoginRequiredMixin, TemplateView):
                                     settings.SPBM['dates']['invoicing']) + relativedelta(months=1)
 
         # Fixes the no events in period problem
-        if (Event.objects.filter(processed__isnull=True).count()) == False:
+        if not (Event.objects.filter(processed__isnull=True).count()):
             while next_period < today:
                 next_period += relativedelta(months=1)
 
@@ -63,7 +63,7 @@ class InvoicingView(LoginRequiredMixin, TemplateView):
 
         # Uses SUM over each invoices series of shifts hours and shift wages
         invoices_with_cost_annotation = Invoice.objects.all().annotate(
-            total_cost=Sum(F('events__shifts__hours') * F('events__shifts__wage'),
+            total_cost=Sum(F('events__shifts__hours') * F('events__shifts__wage') * settings.SPBM.get('fee'),
                            output_field=models.DecimalField(decimal_places=2))).select_related()
 
         unpaid_invoices_with_cost_annotation = Invoice.objects.filter(paid=False).annotate(
@@ -158,9 +158,9 @@ def view_invoice(request, society_name, date):
     invoice = get_object_or_404(Invoice.objects.select_related(), society__shortname=society_name, period=date)
     events = Event.objects.filter(society__shortname=society_name, processed=date)
 
-    event_sum = invoice.get_total_event_cost()
-    invoice_sum = invoice.get_total_cost()
-    spf_fee = invoice_sum - event_sum
+    invoice_event_only_sum = invoice.get_total_event_cost()
+    invoice_with_fee_sum = invoice.get_total_cost()
+    spf_fee = invoice_with_fee_sum - invoice_event_only_sum
 
     items = []
 
@@ -175,7 +175,8 @@ def view_invoice(request, society_name, date):
 
     # Add the SPF fee at the end
     items.append({
-        'description': _("SPF fee: {percent}% of {event_cost}".format(percent=30, event_cost=localize(event_sum))),
+        'description': _(
+            "SPF fee: {percent}% of {event_cost}".format(percent=30, event_cost=localize(invoice_event_only_sum))),
         'item_cost': spf_fee,
         'line_cost': spf_fee,
     })
@@ -183,8 +184,8 @@ def view_invoice(request, society_name, date):
     return render(request, "invoices/view.jinja", {
         'items': items,
         'cost': {
-            'total': invoice_sum,
-            'events': event_sum,
+            'total': invoice_with_fee_sum,
+            'events': invoice_event_only_sum,
             'fee': spf_fee,
         },
         'invoice': invoice,

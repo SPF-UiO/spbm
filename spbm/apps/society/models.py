@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.contrib.auth.models import User, AbstractUser
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
+from django.conf import settings
 from django.db import models
 from django.db.models import Sum, Avg, F
 from django.urls import reverse
@@ -144,7 +145,7 @@ class Invoice(models.Model):
             .aggregate(total_cost=Sum('sum_costs')) \
             .get('total_cost')
 
-        return (Decimal(total_costs) * Decimal('1.3')).quantize(Decimal('.01'))
+        return (Decimal(total_costs) * Decimal(settings.SPBM.get('fee'))).quantize(Decimal('.01'))
 
     def get_total_event_cost(self):
         """
@@ -215,6 +216,28 @@ class Event(models.Model):
 
     def get_absolute_url(self):
         return reverse('event-view', args=[self.id])
+
+    @property
+    def hours(self):
+        """ Get the number of hours registered on an event """
+        hours = Decimal(0)
+        for shift in self.shifts.all():
+            hours += shift.hours
+        hours = hours.quantize(Decimal(".01"))
+        return hours
+
+    hours.fget.short_description = _("Total hours")
+
+    @property
+    def cost(self):
+        """ Get the total cost that will be invoiced from an event """
+        cost = Decimal(0)
+        for shift in self.shifts.all():
+            cost += (shift.hours * shift.wage)
+        cost = cost.quantize(Decimal(".01"))
+        return cost
+
+    cost.fget.short_description = _("Total cost")
 
     def clean(self):
         if self.invoice is not None:
