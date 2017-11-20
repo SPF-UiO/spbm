@@ -41,16 +41,16 @@
                     <td>{{ item.description }}</td>
                     <td class="text-right">{{ item.count | localize | default(1) }}</td>
                     <td class="text-right">
-                        {{ "%s" | format(item.item_cost | intcomma ) }}
+                        {{ "%s" | format(item.item_cost | localize ) }}
                     </td>
                     <td class="text-right">
-                        {{ _("NOK %(cost)s", cost=item.line_cost | intcomma) | default('') }}
+                        {{ _("NOK %(cost)s", cost=item.line_cost | localize) | default('') }}
                     </td>
                 </tr>
             {% endfor -%}
             <tr class="table-sum">
                 <td colspan="3"><strong>{{ _("Sum") }}</strong></td>
-                <td class="text-right"><strong>{{ _("NOK %(cost)s", cost=cost.total | intcomma) }}</strong></td>
+                <td class="text-right"><strong>{{ _("NOK %(cost)s", cost=cost.total | localize) }}</strong></td>
             </tr>
         </table>
         <nav aria-label="...">
