@@ -156,31 +156,26 @@ def view_invoice(request, society_name, date):
     :return:
     """
     invoice = get_object_or_404(Invoice.objects.select_related(), society__shortname=society_name, period=date)
-    events = Event.objects.filter(society__shortname=society_name, processed=date).annotate(
-        total_cost=Sum(F('shifts__hours') * F('shifts__wage'),
-                       output_field=models.DecimalField(decimal_places=2))
-    ).annotate(total_hours=Sum('shifts__hours'))
+    events = Event.objects.filter(society__shortname=society_name, processed=date)
 
-    event_total = invoice.get_total_event_cost()
+    event_sum = invoice.get_total_event_cost()
     invoice_sum = invoice.get_total_cost()
-    spf_fee = invoice_sum - event_total
+    spf_fee = invoice_sum - event_sum
 
     items = []
 
     # Go through all the events
     for event in events:
-        event_hours = event.total_hours
-        event_cost = event.total_cost
         items.append({
             'description': "{date}: {title}".format(date=event.date, title=event.name),
-            'count': event_hours,
-            'item_cost': (event_cost / event_hours).quantize(Decimal('.01')),
-            'line_cost': event_cost,
+            'count': event.sum_hours,
+            'item_cost': (event.sum_costs / event.sum_hours).quantize(Decimal(".01")),
+            'line_cost': event.sum_costs,
         })
 
     # Add the SPF fee at the end
     items.append({
-        'description': _("SPF fee: {percent}% of {event_cost}".format(percent=30, event_cost=localize(event_total))),
+        'description': _("SPF fee: {percent}% of {event_cost}".format(percent=30, event_cost=localize(event_sum))),
         'item_cost': spf_fee,
         'line_cost': spf_fee,
     })
@@ -189,7 +184,7 @@ def view_invoice(request, society_name, date):
         'items': items,
         'cost': {
             'total': invoice_sum,
-            'events': event_total,
+            'events': event_sum,
             'fee': spf_fee,
         },
         'invoice': invoice,

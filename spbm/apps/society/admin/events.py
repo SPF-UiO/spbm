@@ -79,6 +79,7 @@ class EventAdmin(admin.ModelAdmin):
     inlines = [ShiftInline]
     list_filter = ('society', 'invoice',)
     list_display = ('__str__', 'registered', 'date', 'hours', 'cost', 'processed',)
+    list_select_related = True
     exclude = ('invoice',)
 
     def get_readonly_fields(self, request, obj=None):
@@ -116,6 +117,12 @@ class EventAdmin(admin.ModelAdmin):
             if not request.user.is_superuser:
                 kwargs['queryset'] = Society.objects.filter(id=request.user.spfuser.society.id)
         return super(EventAdmin, self).formfield_for_choice_field(db_field, request, **kwargs)
+
+    def hours(self, obj):
+        return obj.sum_hours
+
+    def cost(self, obj):
+        return obj.sum_costs
 
     def get_queryset(self, request):
         qs = super(EventAdmin, self).get_queryset(request)

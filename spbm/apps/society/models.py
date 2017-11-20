@@ -118,6 +118,11 @@ class Invoice(models.Model):
             ('mark_paid', "Can mark invoices as paid")
         )
 
+    # Select the related associations
+    objects = type('InvoiceManager', (models.Manager, object,), {
+        'get_queryset': lambda self: super(models.Manager, self).get_queryset().select_related()
+    })()
+
     """ The society the invoice belongs to. """
     society = models.ForeignKey(Society, verbose_name=_('society'), related_name="invoices", on_delete=models.PROTECT)
     """ A unique invoice number, which SHOULD be reflected in the external invoice system. """
@@ -135,24 +140,22 @@ class Invoice(models.Model):
         Calculates the cost for an event, including the percentage fee.
         :return: Decimal of total event cost, including the fee.
         """
-        costs = self.events.all() \
-            .aggregate(total_cost=Sum(F('shifts__hours') * F('shifts__wage'),
-                                      output_field=models.FloatField())) \
+        total_costs = self.events.all() \
+            .aggregate(total_cost=Sum('sum_costs')) \
             .get('total_cost')
 
-        return (Decimal(costs) * Decimal('1.3')).quantize(Decimal('.01'))
+        return (Decimal(total_costs) * Decimal('1.3')).quantize(Decimal('.01'))
 
     def get_total_event_cost(self):
         """
         Calculates the cost for the invoice in regards to the events alone.
         :return: Decimal of total event cost, not including the fee.
         """
-        costs = self.events.all() \
-            .aggregate(total_cost=Sum(F('shifts__hours') * F('shifts__wage'),
-                                      output_field=models.FloatField())) \
-            .get('total_cost')
+        total_event_costs = self.events.all() \
+            .aggregate(total_event_cost=Sum('sum_costs')) \
+            .get('total_event_cost')
 
-        return Decimal(costs).quantize(Decimal('.01'))
+        return (Decimal(total_event_costs)).quantize(Decimal('.01'))
 
     def __str__(self):
         return ugettext("Invoice #{id}: {period} {society}").format(id=str(self.invoice_number),
@@ -169,13 +172,14 @@ class Event(models.Model):
         verbose_name = _('event')
         verbose_name_plural = _('events')
 
-    """ Prevents us from looking up the worker associated with a shift once per shift per worker """
+    # Prevents us from looking up the worker associated with a shift once per shift per worker
     objects = type('EventManager', (models.Manager, object,), {
-        'get_queryset': lambda self: super(models.Manager, self).get_queryset().prefetch_related(
-            'shifts__worker') \
-                   .annotate(total_cost=Sum(F('shifts__hours') * F('shifts__wage'),
-                                            output_field=models.DecimalField(decimal_places=2))) \
-                   .annotate(total_hours=Sum('shifts__hours'))
+        'get_queryset': lambda self: super(models.Manager, self).get_queryset().select_related() \
+                   .prefetch_related('shifts__worker') \
+                   .annotate(sum_costs=Sum(F('shifts__hours') * F('shifts__wage'),
+                                           output_field=models.DecimalField(decimal_places=2)),
+                             sum_hours=Sum('shifts__hours',
+                                           output_field=models.DecimalField(decimal_places=2)))
 
     })()
 
@@ -208,28 +212,6 @@ class Event(models.Model):
                                 on_delete=models.PROTECT,
                                 related_name="events",
                                 verbose_name=_('invoice'))
-
-    @property
-    def hours(self):
-        """ Get the number of hours registered on an event """
-        hours = Decimal(0)
-        for shift in self.shifts.all():
-            hours += shift.hours
-        hours = hours.quantize(Decimal(".01"))
-        return hours
-
-    hours.fget.short_description = _("Total hours")
-
-    @property
-    def cost(self):
-        """ Get the total cost that will be invoiced from an event """
-        cost = Decimal(0)
-        for shift in self.shifts.all():
-            cost += (shift.hours * shift.wage)
-        cost = cost.quantize(Decimal(".01"))
-        return cost
-
-    cost.fget.short_description = _("Total cost")
 
     def get_absolute_url(self):
         return reverse('event-view', args=[self.id])
