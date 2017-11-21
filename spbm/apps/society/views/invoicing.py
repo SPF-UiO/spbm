@@ -64,11 +64,11 @@ class InvoicingView(LoginRequiredMixin, TemplateView):
         # Uses SUM over each invoices series of shifts hours and shift wages
         invoices_with_cost_annotation = Invoice.objects.all().annotate(
             total_cost=Sum(F('events__shifts__hours') * F('events__shifts__wage') * settings.SPBM.get('fee'),
-                           output_field=models.DecimalField(decimal_places=2))).select_related()
+                           output_field=models.DecimalField())).select_related()
 
         unpaid_invoices_with_cost_annotation = Invoice.objects.filter(paid=False).annotate(
             total_cost=Sum(F('events__shifts__hours') * F('events__shifts__wage'),
-                           output_field=models.DecimalField(decimal_places=2))).select_related()
+                           output_field=models.DecimalField())).select_related()
 
         return {
             'progress': (today - last_period) / (next_period - last_period),
