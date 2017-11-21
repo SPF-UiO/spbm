@@ -70,7 +70,7 @@ class InvoicingView(LoginRequiredMixin, TemplateView):
 
         unpaid_invoices_with_cost_annotation = Invoice.objects.filter(paid=False).annotate(
             total_cost=Sum(F('events__shifts__hours') * F('events__shifts__wage'),
-                           output_field=models.DecimalField())).select_related()
+                           output_field=models.DecimalField(decimal_places=2))).select_related()
 
         return {
             'progress': (today - last_period) / (next_period - last_period),
