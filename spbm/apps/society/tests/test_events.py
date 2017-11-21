@@ -2,6 +2,7 @@ from django.contrib.auth.models import User, Permission
 from django.test import TestCase
 from django.urls import reverse
 
+from spbm.helpers.auth import user_society
 from . import test_fixtures
 from ..models import Event, Society
 from ...accounts.models import SpfUser
@@ -18,16 +19,17 @@ class EventLoggedInWithPermissionsTests(TestCase):
         cls.magic_event = {
             'name': "Magical Test Event",
             'date': "2017-01-25",
-            'shifts-0-worker': 3,
+            'shifts-0-worker': 1,
             'shifts-0-wage': 168.00,
             'shifts-0-hours': 4,
-            'shifts-1-worker': 4,
+            'shifts-1-worker': 2,
             'shifts-1-wage': 128.00,
             'shifts-1-hours': 8,
             'shifts-TOTAL_FORMS': 2,
             'shifts-MIN_NUM_FORMS': 1,
             'shifts-INITIAL_FORMS': 0
         }
+        cls.society_id = 1
 
     def setUp(self):
         # Create the user and add the needed permissions
@@ -37,7 +39,7 @@ class EventLoggedInWithPermissionsTests(TestCase):
                                        Permission.objects.get(codename='change_event'))
 
         # set him as part of a society, then force login
-        self.spf_user = SpfUser(user=self.user, society=Society.objects.get(pk=2))
+        self.spf_user = SpfUser(user=self.user, society=Society.objects.get(pk=self.society_id))
         self.spf_user.save()
         self.client.force_login(self.user)
 
@@ -45,6 +47,8 @@ class EventLoggedInWithPermissionsTests(TestCase):
         """
         Test the events index page returns a 200 with an empty list of processed events.
         """
+        self.assertTrue(Event.objects.filter(society=self.user.spfuser.society).count() != 0,
+                        "No events loaded for the view")
         events_index = self.client.get(reverse('events'), follow=True)
         self.assertEqual(events_index.status_code, self.HTTP_OK)
         self.assertEqual(len(events_index.context['events']), 0)
@@ -93,10 +97,10 @@ class EventLoggedInWithPermissionsTests(TestCase):
         event_data = {
             'name': "Magical Test Event",
             'date': "2017-01-25",
-            'shifts-0-worker': 3,
+            'shifts-0-worker': 1,
             'shifts-0-wage': 128.00,
             'shifts-0-hours': 8,
-            'shifts-1-worker': 3,
+            'shifts-1-worker': 1,
             'shifts-1-wage': 128.00,
             'shifts-1-hours': 8,
             'shifts-TOTAL_FORMS': 2,
