@@ -1,13 +1,13 @@
 # Main framework
-Django==1.11.6
-django-debug-toolbar==1.8
+Django==1.11.7
+django-debug-toolbar==1.9.1
 
-# PostgreSQL-connector
-psycopg2==2.7.1
+# PostgreSQL-connector, not required for development
+psycopg2==2.7.3.2
 
 # Jinja2 improved translation tags & i18n
-django-jinja==2.3.1
-jinja2==2.9.6
+django-jinja==2.4.0
+jinja2==2.10
 puente==0.5
 markupsafe==1.0
 pytz==2017.3
