@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError, models
 from django.db import transaction
-from django.db.models import Max, Count, Sum, Avg, F
+from django.db.models import Max, Count, Sum, Avg, F, Value, ExpressionWrapper
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
@@ -63,8 +63,10 @@ class InvoicingView(LoginRequiredMixin, TemplateView):
 
         # Uses SUM over each invoices series of shifts hours and shift wages
         invoices_with_cost_annotation = Invoice.objects.all().annotate(
-            total_cost=Sum(F('events__shifts__hours') * F('events__shifts__wage') * settings.SPBM.get('fee'),
-                           output_field=models.DecimalField())).select_related()
+            event_cost=Sum(F('events__shifts__hours') * F('events__shifts__wage'),
+                           output_field=models.DecimalField(decimal_places=2))).annotate(
+            total_cost=ExpressionWrapper(F('event_cost') + (F('event_cost') * settings.SPBM.get('fee')),
+                                         output_field=models.DecimalField(decimal_places=2))).select_related()
 
         unpaid_invoices_with_cost_annotation = Invoice.objects.filter(paid=False).annotate(
             total_cost=Sum(F('events__shifts__hours') * F('events__shifts__wage'),
