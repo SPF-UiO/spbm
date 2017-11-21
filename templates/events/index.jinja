@@ -36,8 +36,8 @@
                 <tr>
                     <td>{{ event.date | localize }}</td>
                     <td>{{ event.name }}</td>
-                    <td>{{ _('%(hours)sh', hours=event.total_hours | intcomma) }}</td>
-                    <td>{{ _('NOK %(cost)s', cost=event.total_cost | intcomma) }}</td>
+                    <td>{{ _('%(hours)sh', hours=event.sum_hours | intcomma) }}</td>
+                    <td>{{ _('NOK %(cost)s', cost=event.sum_costs | intcomma) }}</td>
                     <td>
                             {# {{ table_of_shifts(event.shifts.all()) }} #}
                             {%- for shift in event.shifts.all() -%}

@@ -45,13 +45,14 @@ class EventLoggedInWithPermissionsTests(TestCase):
 
     def test_index(self):
         """
-        Test the events index page returns a 200 with an empty list of processed events.
+        Test the events index page returns a 200 with a short list of processed events.
+        NOTE: Depends heavily on the fixtures.
         """
         self.assertTrue(Event.objects.filter(society=self.user.spfuser.society).count() != 0,
                         "No events loaded for the view")
         events_index = self.client.get(reverse('events'), follow=True)
         self.assertEqual(events_index.status_code, self.HTTP_OK)
-        self.assertEqual(len(events_index.context['events']), 0)
+        self.assertEqual(len(events_index.context['events']), 3)
 
     def test_can_access_logged_in(self):
         """
