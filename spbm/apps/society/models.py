@@ -47,12 +47,6 @@ class Worker(models.Model):
         verbose_name = _('worker')
         verbose_name_plural = _('workers')
 
-    # Cheeky way to create a manager! :) Practically an anonymous class instance
-    """ Prevents us from lookup societies once per worker, per query """
-    objects = type('WorkerManager', (models.Manager, object,), {
-        'get_queryset': lambda self: super(models.Manager, self).get_queryset().select_related()
-    })()
-
     societies = models.ManyToManyField(Society,
                                        through='Employment',
                                        related_name='workers')
@@ -80,11 +74,11 @@ class Worker(models.Model):
                                              "Employee number in the wage system, Norl&oslash;nn. " +
                                              "<strong>Must</strong> exist and be correct!")))
 
-    def __str__(self):
-        return self.name + " (#" + str(self.id) + ")"
-
     def get_absolute_url(self):
         return reverse('worker-view', args=[str(self.id)])
+
+    def __str__(self):
+        return self.name + " (#" + str(self.id) + ")"
 
 
 class Employment(models.Model):
@@ -119,22 +113,24 @@ class Invoice(models.Model):
             ('mark_paid', "Can mark invoices as paid")
         )
 
-    # Select the related associations
-    objects = type('InvoiceManager', (models.Manager, object,), {
-        'get_queryset': lambda self: super(models.Manager, self).get_queryset().select_related()
-    })()
+    class InvoiceManager(models.Manager):
+        def get_queryset(self):
+            """ select_related() to improve performance """
+            return super().get_queryset().select_related()
 
-    """ The society the invoice belongs to. """
+    """ The society the invoice belongs to """
     society = models.ForeignKey(Society, verbose_name=_('society'), related_name="invoices", on_delete=models.PROTECT)
-    """ A unique invoice number, which SHOULD be reflected in the external invoice system. """
+    """ A unique invoice number, which SHOULD be reflected in the external invoice system """
     invoice_number = models.IntegerField(verbose_name=_('invoice number'), unique=True)
-    """ The date for which the period is valid. """
+    """ The date for which the period is valid """
     period = models.DateField(verbose_name=_('period'))
-    """ Status of received payment. """
+    """ Status of received payment """
     paid = models.BooleanField(verbose_name=_('invoice paid'), default=False)
-    """ User who created the invoice, i.e. closed the invoice period. """
+    """ User who created the invoice, i.e. closed the invoice period """
     created_by = models.ForeignKey(User, help_text=_('User which closed the period the invoice belongs to.'),
                                    on_delete=models.PROTECT, null=True, default=None)
+
+    objects = InvoiceManager()
 
     def get_total_cost(self):
         """
@@ -181,16 +177,15 @@ class Event(models.Model):
         verbose_name = _('event')
         verbose_name_plural = _('events')
 
-    # Prevents us from looking up the worker associated with a shift once per shift per worker
-    objects = type('EventManager', (models.Manager, object,), {
-        'get_queryset': lambda self: super(models.Manager, self).get_queryset().select_related() \
-                   .prefetch_related('shifts__worker') \
-                   .annotate(sum_costs=Sum(F('shifts__hours') * F('shifts__wage'),
-                                           output_field=models.DecimalField(decimal_places=2)),
-                             sum_hours=Sum('shifts__hours',
-                                           output_field=models.DecimalField(decimal_places=2)))
-
-    })()
+    class EventManager(models.Manager):
+        def get_queryset(self):
+            """ Changed manager to include sum of costs and hours, plus related society by default """
+            return (super().get_queryset().select_related()
+                    .prefetch_related('shifts__worker')
+                    .annotate(sum_costs=Sum(F('shifts__hours') * F('shifts__wage'),
+                                            output_field=models.DecimalField(decimal_places=2)),
+                              sum_hours=Sum('shifts__hours',
+                                            output_field=models.DecimalField(decimal_places=2))))
 
     society = models.ForeignKey(Society, null=False, verbose_name=_('society'), related_name="society",
                                 on_delete=models.PROTECT)
@@ -222,12 +217,11 @@ class Event(models.Model):
                                 related_name="events",
                                 verbose_name=_('invoice'))
 
-    def get_absolute_url(self):
-        return reverse('event-view', args=[self.id])
+    objects = EventManager()
 
     @property
     def hours(self):
-        """ Get the number of hours registered on an event """
+        """ Dynamically get the number of hours registered on an event """
         hours = Decimal(0)
         for shift in self.shifts.all():
             hours += shift.hours
@@ -238,7 +232,7 @@ class Event(models.Model):
 
     @property
     def cost(self):
-        """ Get the total cost that will be invoiced from an event """
+        """ Dynamically get the total cost that will be invoiced from an event """
         cost = Decimal(0)
         for shift in self.shifts.all():
             cost += (shift.hours * shift.wage)
@@ -252,8 +246,13 @@ class Event(models.Model):
             if self.invoice.society != self.society:
                 raise ValidationError("Cannot add event to another society invoice!")
 
+    def get_absolute_url(self):
+        return reverse('event-view', args=[self.id])
+
     def __str__(self):
-        return self.society.shortname + " - " + str(self.date) + ": " + self.name
+        return "{short_name} - {date}: {name}".format(short_name=self.society.shortname,
+                                                      date=self.date,
+                                                      name=self.name)
 
 
 class Shift(models.Model):
@@ -268,10 +267,8 @@ class Shift(models.Model):
 
     class ShiftManager(models.Manager):
         def get_queryset(self):
-            """ Saves from looking up the society per shift, as well as the Norlønn-report if it exists """
+            """ Changed default manager to select related event's society and report """
             return super().get_queryset().select_related('event__society', 'norlonn_report')
-
-    objects = ShiftManager()
 
     event = models.ForeignKey(Event, related_name="shifts", on_delete=models.CASCADE)
     worker = models.ForeignKey(Worker,
@@ -295,6 +292,8 @@ class Shift(models.Model):
 
     norlonn_report.short_description = "Sent to norlønn"
 
+    objects = ShiftManager()
+
     def clean(self):
         """ Cleans the shift, making sure it isn't attached to a worker not part of the society """
         try:
@@ -305,3 +304,6 @@ class Shift(models.Model):
 
     def get_total(self):
         return (self.wage * self.hours).quantize(Decimal(".01"))
+
+    def get_absolute_url(self):
+        return self.event.get_absolute_url()
