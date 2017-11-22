@@ -68,9 +68,7 @@ class InvoicingView(LoginRequiredMixin, TemplateView):
             total_cost=ExpressionWrapper(F('event_cost') + (F('event_cost') * settings.SPBM.get('fee')),
                                          output_field=models.DecimalField(decimal_places=2))).select_related()
 
-        unpaid_invoices_with_cost_annotation = Invoice.objects.filter(paid=False).annotate(
-            total_cost=Sum(F('events__shifts__hours') * F('events__shifts__wage'),
-                           output_field=models.DecimalField(decimal_places=2))).select_related()
+        unpaid_invoices_with_cost_annotation = invoices_with_cost_annotation.filter(paid=False)
 
         return {
             'progress': (today - last_period) / (next_period - last_period),
