@@ -1,3 +1,6 @@
+from spbm.apps.accounts.models import SpfUser
+
+
 def user_allowed_society(user, target_society):
     # Superusers go straight ahead
     if user.is_superuser:
