@@ -111,7 +111,7 @@ production:
         user: $SPF_USERNAME
     - wercker/add-to-known_hosts@2.0.1:
         hostname: spf.cyb.no
-        fingerprint: SHA256:KiAgxHLl7nmtUXSt9upc5kITU4ptvJAaTYkusTMequA
+        fingerprint: SHA256:z1n0z2+/B6JFYsET70Lg9AAIUTmvnDKblG7cz6AOOLA
     - script: execute deployment script
       code: |
         ssh spf@spf.cyb.no /bin/bash << EOF
