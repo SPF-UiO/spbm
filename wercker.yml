@@ -36,7 +36,7 @@ build:
         name: alpine pre-requisites
         code: |
           apk update
-          apk add gettext gcc linux-headers jpeg-dev postgresql-dev musl-dev 
+          apk add gettext gcc linux-headers jpeg-dev postgresql-dev musl-dev zlib-dev
 
     # Once done, install virtualenv so we're ready to use it
     - script:
