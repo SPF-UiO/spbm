@@ -1,9 +1,8 @@
 from django.urls import path, re_path, include
 
 from spbm.apps.norlonn import views as wages
-from .views import views_overview as overview, workers, \
+from .views import overview as overview, workers, \
     events, invoicing
-from .views.views_overview import index as standard_index
 
 # TODO: Create intermediate class to decouple current wage system from wage reporting
 
@@ -11,10 +10,6 @@ from .views.views_overview import index as standard_index
 # Admittedly I feel like this ought to be scrapped, seeing as we could simply keep track of permitted societies
 # in the session instead, allowing to change and keep the change between each.
 society_match = r'(?P<society_name>[A-Za-z]+)/'
-
-overview_urls = [
-    path('', overview.index, name='index'),
-]
 
 workers_urls = [
     path('', workers.redirect_society, name='workers'),
@@ -52,8 +47,7 @@ wages_urls = [
 ]
 
 urlpatterns = [
-    path('', standard_index),
-    path('society/', include(overview_urls)),
+    path('', overview.Overview.as_view(), name="overview"),
     path('workers/', include(workers_urls)),
     path('events/', include(event_urls)),
     path('invoices/', include(invoicing_urls)),

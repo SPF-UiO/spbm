@@ -113,8 +113,8 @@ TEMPLATES = [
             'newstyle_gettext': True,
             'match_extension': '.jinja',
             'extensions': DEFAULT_EXTENSIONS + [
-                              'puente.ext.i18n',
-                          ],
+                'puente.ext.i18n',
+            ],
             'filters': {
                 'attr': 'widget_tweaks.templatetags.widget_tweaks.set_attr',
                 'localize': 'django.utils.formats.localize',

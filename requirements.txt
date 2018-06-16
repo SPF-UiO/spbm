@@ -1,5 +1,5 @@
 # Main framework
-Django==2.0
+Django==2.0.6
 django-debug-toolbar==1.9.1
 
 # PostgreSQL-connector, not required for development
@@ -14,7 +14,7 @@ pytz==2017.3
 
 ## Other various Django packages
 # Localisation and handling local input
-django-localflavor==1.6.2
+django-localflavor==2.0
 # Widget tweaks to avoid editing forms in code
 django-widget-tweaks==1.4.1
 # Extra class-based generic views
@@ -27,5 +27,5 @@ uwsgi==2.0.15
 # PDF-generation
 reportlab==3.4.0
 # Sane relative dates
-python-dateutil==2.6.1
+python-dateutil==2.7.3
 

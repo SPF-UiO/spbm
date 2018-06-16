@@ -15,6 +15,7 @@ class SPFBackend(object):
             - Same applies as above. By always computing a hash-function, you mitigate (somewhat?) against
               timing attacks to brute-force a correct and valid username.
     """
+
     def authenticate(self, username=None, password=None):
         try:
             user = User.objects.get(username__iexact=username)
@@ -28,6 +29,7 @@ class SPFBackend(object):
 
     def get_user(self, user_id):
         try:
-            return User.objects.get(pk=user_id)
+            # Without select_related() we will have the n+1 query problem.
+            return User.objects.select_related('spfuser__society').get(pk=user_id)
         except User.DoesNotExist:
             return None
