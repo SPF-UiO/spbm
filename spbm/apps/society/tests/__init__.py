@@ -15,7 +15,7 @@ test_fixtures = ['Event', 'Invoice', 'Shift', 'Society', 'Worker', 'Employment',
 settings.TEMPLATES[0]['OPTIONS']['debug'] = True
 
 
-class SPFTestMixin(test.SimpleTestCase):
+class SPFTestMixin(test.SimpleTestCase):  # pragma: no cover
     """
     Helper for tests, use as a mix-in to add any extra assertions.
     """

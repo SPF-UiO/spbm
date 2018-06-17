@@ -27,6 +27,18 @@
     "model": "society.event",
     "pk": 3,
     "fields": {
+      "society": 2,
+      "name": "Bjørnebles 2016",
+      "date": "2016-05-28",
+      "registered": "2016-07-16",
+      "processed": "2016-07-17",
+      "invoice": 3
+    }
+  },
+  {
+    "model": "society.event",
+    "pk": 4,
+    "fields": {
       "society": 1,
       "name": "Testarrangementet 2016",
       "date": "2016-07-28",
@@ -37,7 +49,7 @@
   },
   {
     "model": "society.event",
-    "pk": 4,
+    "pk": 5,
     "fields": {
       "society": 1,
       "name": "L\u00f8rdagsparty",

@@ -64,5 +64,38 @@
       "hours": "7.00",
       "norlonn_report": null
     }
+  },
+  {
+    "model": "society.shift",
+    "pk": 7,
+    "fields": {
+      "event": 3,
+      "worker": 3,
+      "wage": "160.00",
+      "hours": "8.50",
+      "norlonn_report": null
+    }
+  },
+  {
+    "model": "society.shift",
+    "pk": 8,
+    "fields": {
+      "event": 3,
+      "worker": 4,
+      "wage": "160.00",
+      "hours": "7.50",
+      "norlonn_report": null
+    }
+  },
+  {
+    "model": "society.shift",
+    "pk": 9,
+    "fields": {
+      "event": 5,
+      "worker": 2,
+      "wage": "160.00",
+      "hours": "5.50",
+      "norlonn_report": null
+    }
   }
 ]

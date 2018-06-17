@@ -47,7 +47,7 @@
     <h2>{{ _("Existing reports") }}</h2>
     <div class="alert alert-info">
         <p>
-            {% trans %}
+            {% trans trimmed %}
                 The following is the list of the payment reports that have been created in the past.
                 They detail the amount of money and payments for each worker, and should only <strong>be
                 imported once</strong> into Norlønn.
@@ -58,8 +58,8 @@
     <ol>
         {% for report in reports %}
             <li>
-                {% if user.has_perm('norlonn.view_report') %}
-                    <a href="{{ url('wages-report', date=report.date) }}">{{ report.date }}</a>
+                {% if user.has_perm('norlonn.export_report') %}
+                    <a href="{{ url('wages-export_report', date=report.date) }}">{{ report.date }}</a>
                 {% else %}
                     {{ report.date }}
                 {% endif %}
