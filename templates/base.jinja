@@ -5,83 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>
-        {%- if title -%}
+        {% if title -%}
             {{ title | striptags }}
-            {% if title_small -%}
+            {%- if title_small -%}
                 - {{ title_small | striptags }}
-            {%- endif %}
-            ·
-        {% endif -%}
-        SPFs ❝SPBM❞
+            {%- endif %} ·
+        {%- endif %} SPFs ❝SPBM❞
     </title>
     <link href="{{ static("css/bootstrap.min.css") }}" rel="stylesheet">
     <link href="{{ static("css/jquery-ui.min.css") }}" rel="stylesheet">
     <link href="{{ static("css/spbm.css") }}" rel="stylesheet">
 </head>
 <body role="document">
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#navbar" aria-expanded="false">
-                <span class="sr-only">{{ _("Toggle navigation") }}</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a href="/" class="navbar-header navbar-brand">SPFs &quot;SPBM&quot;</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav" role="navigation">
-                <li{{ active('^/$', attribute=True) }}>
-                    <a href="{{ url('overview') }}" class="navbar-link" role="button">
-                        {{ _("Your Society") }}
-                    </a>
-                </li>
-                <li class="dropdown{{ active('workers', 'events') }}">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">{{ _("Bookings") }}<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-header">{{ _("Workers and registrations") }}</li>
-                        <li><a href="{{ url('workers') }}">{{ _("Workers") }}</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li class="dropdown-header">{{ _("Events and registrations") }}</li>
-                        <li><a href="{{ url('events') }}">{{ _("Events") }}</a></li>
-                    </ul>
-                </li>
-                <li{{ active('invoices', attribute=True) }}>
-                    <a href="{{ url('invoices') }}" class="navbar-link" role="button">
-                        {{ _("Invoicing") }}
-                    </a>
-                </li>
-                <li{{ active('wages', attribute=True) }}>
-                    <a href="{{ url('wages') }}" class="navbar-link" role="button">
-                        {{ _("Wages") }}
-                    </a>
-                </li>
-            </ul>
-            {% if user.is_staff -%}
-                <ul class="nav navbar-nav navbar-right" role="navigation">
-                    <li>
-                        <a href="{{ url('admin:index') }}">
-                            <span class="hidden-sm">{{ _("Administration") }} </span><i
-                                class="glyphicon glyphicon-cog"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url('logout') }}" class="navbar-link" title="{{ _("Log out of SPFs SPBM") }}">
-                            <span class="hidden-sm">{{ _("Logout") }} </span><i class="glyphicon glyphicon-log-out"></i>
-                        </a>
-                    </li>
-                </ul>
-            {%- endif %}
-            <p class="navbar-text navbar-right">
-                <small>{{ user.spfuser.society.shortname }}</small>
-                {{ user }}
-            </p>
-        </div>
-    </div>
-</nav>
+{# Include the navigation! #}
+{%- include 'base-navigation.jinja' %}
 <div class="container">
     {% if title -%}
         <div class="page-header">
@@ -106,10 +43,37 @@
     {%- endif %}
 
     {%- block content %}
-        Content here!
+        <div class="alert alert-info">
+            {% trans trimmed %}
+                <strong>Empty page!</strong> Please contact the mailing list, as this page is incorrectly empty.
+            {% endtrans %}
+        </div>
     {% endblock -%}
 
 </div>
+<footer>
+    <div class="container">
+        <p>
+            <a href="https://github.com/SPF-UiO/spbm" title="{{ _("Go to our source code repository") }}">
+                GitHub</a>
+            ·
+            <a href="https://confluence.cyb.no/display/SPF/Kontaktpunkt"
+               title="{{ _("Go to our public contact page") }}">
+                {{ _("Knowledge base") }}</a>
+            ·
+            <a href="mailto:spf-styret@studorg.uio.no" title="E-mail the board for wage issues and similarly">
+                {{ _("Board mailing list") }}</a>
+        </p>
+        <p>
+            Studentkjellernes personalforening. <br/>
+            {% trans trimmed %}
+                For technical issues, limitations, feedback or other suggestions, please go to our issue tracker. For
+                wage,
+                worker or invoicing related issues, please contact the mailing list.
+            {% endtrans %}
+        </p>
+    </div>
+</footer>
 {# Load various libraries and similarly. #}
 <script src="{{ static("js/jquery-3.1.1.min.js") }}"></script>
 <script src="{{ static("js/bootstrap.min.js") }}"></script>

@@ -1,10 +1,21 @@
 /*
  * Custom changes & adaptations for the magic that is the SPMB.
  */
-
 body {
-   /* due to fixed navbar */
-   padding-top: 70px;
+    /* due to fixed navbar */
+    padding-top: 70px;
+}
+
+body > .container {
+    min-height: 100%;
+}
+
+body > footer {
+    margin-top: 40px;
+    padding: 30px 0;
+    width: 100%;
+    opacity: 0.8;
+    background-color: #f3f3f3;
 }
 
 /*
@@ -63,3 +74,14 @@ Vertical spacing when stacking forms
         margin-bottom: 0;
     }
 }
+
+/*
+Dashboard/KPI panel
+ */
+.dash-indicator {
+    font-size: 4em;
+    line-height: 0.6;
+    display: block;
+    margin: 0.5em 0 0;
+}
+

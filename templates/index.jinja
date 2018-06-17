@@ -1,7 +1,40 @@
 {% extends "base.jinja" %}
-{% set title = _('Society overview') %}
+{% set title = _('Overview') %}
 
+
+
+{% macro indicator(title, kpi, change, time) %}
+    <div class="col-lg-4">
+        <h3>{{ title }}</h3>
+        <span class="dash-indicator">
+                    {{ kpi }}
+                </span>
+        <small>{{ _("%(change)s%% since %(time)s", change=change| intcomma | localize, time=time) }}</small>
+    </div>
+{% endmacro %}
 {% block content %}
-    <p>{{ _("You're logged into an account associated with ") }} {{ society.name }} ({{ society.shortname }})</p>
-    <p>{{ _('As of right now, this page exactly doesn\'t really do anything, so take a look at the navigation bar!') }}</p>
+    <h2>{{ _("Overall") }}</h2>
+    <div class="container text-center">
+        <div class="row">
+            {%- for i in dashboard %}
+                {{ indicator(i.title, i.kpi, i.change, i.time) }}
+            {% endfor -%}
+        </div>
+    </div>
+
+    <h2>{{ _("Your Society") }}</h2>
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-lg-4">
+                <h3>{{ _("Society") }}</h3>
+                <span class="dash-indicator">
+                    {{ society }}
+                </span>
+                <small>selected society</small>
+            </div>
+        </div>
+    </div>
+
+
+
 {% endblock %}

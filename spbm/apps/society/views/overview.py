@@ -1,19 +1,11 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Sum, F
+from django.db import models
 from django.views.generic import TemplateView
+from django.utils.translation import ugettext as _
 
-from spbm.helpers.auth import user_allowed_society, user_society
-
-
-@login_required
-def index(request):
-    society = request.user.spfuser.society
-    if not user_allowed_society(request.user, society):
-        return render(request, "errors/unauthorized.jinja")
-
-    return render(request, "index.jinja",
-                  {'society': society, 'cur_page': 'society'})
+from spbm.apps.society.models import Event, Invoice
+from spbm.helpers.auth import user_society
 
 
 class Overview(LoginRequiredMixin, TemplateView):
@@ -24,10 +16,54 @@ class Overview(LoginRequiredMixin, TemplateView):
     template_name = 'index.jinja'
 
     def get_context_data(self, **kwargs):
-        society = user_society(self.request)
         context = super().get_context_data(**kwargs)
+
         context.update({
-            'society': society,
+            'society': user_society(self.request),
+            'dashboard': get_dashboard_information()
         })
 
         return context
+
+
+def get_dashboard_information():
+    invoices = Invoice.objects.all().order_by('-period')
+    this_period = invoices[0]
+    last_period = invoices[1]
+
+    events = Event.objects.all()
+    events_last_period = events.filter(invoice=last_period)
+    events_this_period = events.filter(invoice=this_period)
+
+    wages_this_period = (events.filter(invoice=this_period)
+        .aggregate(wages=Sum(F('shifts__hours') * F('shifts__wage'),
+                             output_field=models.DecimalField(decimal_places=2))))['wages']
+    wages_last_period = (events.filter(invoice=last_period)
+        .aggregate(wages=Sum(F('shifts__hours') * F('shifts__wage'),
+                             output_field=models.DecimalField(decimal_places=2))))['wages']
+
+    workers_this_period = (events.filter(invoice=last_period).select_related('shifts__worker')
+        .distinct('shifts__worker')).count()
+    workers_last_period = (events.filter(invoice=last_period).select_related('shifts__worker')
+        .distinct('shifts__worker')).count()
+
+    return [
+        {'title': _("Events"),
+         'kpi': events_this_period.count(),
+         'change': change(events_last_period.count(), events_this_period.count()),
+         'time': _("last period")},
+
+        {'title': _("Wages"),
+         'kpi': wages_this_period,
+         'change': change(wages_last_period, wages_this_period),
+         'time': _("last period")},
+
+        {'title': _("Payroll Workers"),
+         'kpi': workers_this_period,
+         'change': change(workers_last_period, workers_this_period),
+         'time': _("last term")},
+    ]
+
+
+def change(before, after):
+    return ((before / after) - 1) * 100.00
