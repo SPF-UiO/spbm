@@ -3,37 +3,48 @@
 
 
 
-{% macro indicator(title, kpi, change, time) %}
-    <div class="col-lg-4">
+{% macro indicator(title, detail, description, alert=None, url=None) %}
+    {% if url and alert != 'success' %}<a href="{{ url }}" title="{{ _("Go to %(page)s", page=title | lower) }}">{% endif -%}
+    <div class="col-sm-6 col-md-4 dash-block alert {%- if alert %} alert-{{ alert }} {%- endif %}">
         <h3>{{ title }}</h3>
         <span class="dash-indicator">
-                    {{ kpi }}
+                    {{ detail | safe }}
                 </span>
-        <small>{{ _("%(change)s%% since %(time)s", change=change| intcomma | localize, time=time) }}</small>
+        <small>{{ description }}</small>
     </div>
+    {%- if url and alert != 'success' %}</a>{% endif %}
 {% endmacro %}
+
+{% macro kpi(title, kpi, change, time, url=None) %}
+    {{ indicator(title, "%d" | format(kpi) | intcomma,
+            _("%(change)s%% since %(time)s", change=change| intcomma | localize, time=time), url=url) }}
+{% endmacro %}
+
 {% block content %}
-    <h2>{{ _("Overall") }}</h2>
+    {% set d = dashboard %}
+    <h2>{{ _("Quick Period Glance") }}</h2>
     <div class="container text-center">
         <div class="row">
-            {%- for i in dashboard %}
-                {{ indicator(i.title, i.kpi, i.change, i.time) }}
+            {{ indicator(_("Society"), society, _("Your associated society")) }}
+            {%- for i in d.actionable %}
+            {% if i.kpi %}
+            {% set kpi = "%d" | format(i.kpi) | intcomma %}
+            {% set alert = 'warning' %}
+            {%- else -%}
+            {%- set kpi %}
+            <small class="">{{ _("None") }}</small>
+            <small class="sr-only">{{ _("No issues.") }}</small>
+            {% endset -%}
+            {% set alert = 'success' %}
+            {%- endif -%}
+            {{ indicator(i.title, kpi, i.detail, url=i.url, alert=alert) }}
+            {% endfor -%}
+            {%- for i in d.general -%}
+                {{ kpi(i.title, i.kpi, "%d"| format(i.change), i.time, url=i.url) }}
             {% endfor -%}
         </div>
     </div>
 
-    <h2>{{ _("Your Society") }}</h2>
-    <div class="container text-center">
-        <div class="row">
-            <div class="col-lg-4">
-                <h3>{{ _("Society") }}</h3>
-                <span class="dash-indicator">
-                    {{ society }}
-                </span>
-                <small>selected society</small>
-            </div>
-        </div>
-    </div>
 
 
 
