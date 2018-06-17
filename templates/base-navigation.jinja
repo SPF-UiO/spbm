@@ -66,8 +66,10 @@
                 </li>
             </ul>
             <p class="navbar-text navbar-right hidden-sm">
-                <small>{{ user.spfuser.society.shortname }}</small>
-                {{ user }}
+                <span title="{{ user.spfuser }}">
+                    <small>{{ user.spfuser.society.shortname }}</small>
+                    {{ user }}
+                </span>
             </p>
         </div>
     </div>

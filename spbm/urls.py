@@ -13,7 +13,8 @@ urlpatterns = [url(r'^admin/', admin.site.urls),
                ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Django Debug Toolbar, and other debug-related URLconfs
-if settings.DEBUG:
+if settings.DEBUG:  # pragma: no cover
     import debug_toolbar
+
     urlpatterns = [url(r'^__debug__/', include(debug_toolbar.urls)),
                    ] + urlpatterns

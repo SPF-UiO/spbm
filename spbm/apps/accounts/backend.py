@@ -2,7 +2,7 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
 
 
-class SPFBackend(object):
+class SPFBackend:
     """
     Custom authentication backend for some SPF requirements, so to speak.
 
@@ -16,7 +16,7 @@ class SPFBackend(object):
               timing attacks to brute-force a correct and valid username.
     """
 
-    def authenticate(self, username=None, password=None):
+    def authenticate(self, request, username=None, password=None):
         try:
             user = User.objects.get(username__iexact=username)
             pwd_valid = user.check_password(password)
