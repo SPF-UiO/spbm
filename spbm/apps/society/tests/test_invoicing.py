@@ -2,12 +2,12 @@ from django.contrib.auth.models import User, Permission
 from django.test import TestCase
 from django.urls import reverse
 
-from . import test_fixtures, SPFTest
+from . import test_fixtures, SPFTestMixin
 from ..models import Invoice, Society, Event
 from ...accounts.models import SpfUser
 
 
-class InvoicingTests(SPFTest, TestCase):
+class InvoicingTests(SPFTestMixin, TestCase):
     fixtures = test_fixtures
 
     def setUp(self):

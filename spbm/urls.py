@@ -5,6 +5,10 @@ from django.contrib import admin
 
 from spbm.apps.society.views import PermissionDeniedView
 
+"""
+This 
+"""
+
 handler403 = PermissionDeniedView.as_view()
 
 urlpatterns = [url(r'^admin/', admin.site.urls),
@@ -12,7 +16,7 @@ urlpatterns = [url(r'^admin/', admin.site.urls),
                url(r'^', include('spbm.apps.society.urls')),
                ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# Django Debug Toolbar, and other debug-related URLconfs
+# Django Debug Toolbar, and other debug-related URLconfs (should they be added)
 if settings.DEBUG:  # pragma: no cover
     import debug_toolbar
 

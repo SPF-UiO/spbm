@@ -3,7 +3,7 @@ from django.db import migrations, models
 from django.db.models import Count
 
 
-def create_employment(apps, schema_editor):
+def create_employment(apps, schema_editor):  # pragma: no cover
     """ One-way employment creation from workers """
 
     Worker = apps.get_model("society", "Worker")

@@ -4,16 +4,17 @@ from django.urls import reverse
 
 from spbm.apps.accounts.models import SpfUser
 from spbm.apps.society.models import Society, Worker
-from . import test_fixtures, SPFTest
+from . import test_fixtures, SPFTestMixin
 
 
-class WorkerTests(SPFTest, TestCase):
+class WorkerTests(SPFTestMixin, TestCase):
     fixtures = test_fixtures
 
     @classmethod
     def setUpTestData(cls):
         cls.test = True
         cls.society_name = 'CYB'
+        cls.society = Society.objects.get(shortname=cls.society_name)
         cls.last_fixtures_worker = Worker.objects.last()
 
     def setUp(self):
@@ -109,3 +110,24 @@ class WorkerTests(SPFTest, TestCase):
         self.assertEqual(first_added_worker, second_added_worker,
                          "Worker created despite having a duplicate national ID.")
         self.assertEqual(first_post.status_code, 200)
+        self.assertEqual(second_post.status_code, 200)
+
+    def test_workers_by_national_id(self):
+        tests = [
+            ["new worker", "no worker with that national ID", '22121935434'],
+            ["existing, same society", "already associated with your society", '01020332324'],
+            ["existing, different society", "has been successfully associated as employed", '01020399631']
+        ]
+        # Test that the third number isn't already associated
+        to_be_associated = tests[2][2]
+        self.assertTrue(Worker.objects.get(person_id=to_be_associated).societies.count() == 1)
+
+        self.user.user_permissions.add(Permission.objects.get(codename='add_employment'))
+        for test in tests:
+            with self.subTest("testing adding {type}".format(type=test[0])):
+                post = self.client.post(reverse('workers-overview', args=[self.society_name]),
+                                        data={'person_id': test[2]}, follow=True)
+                self.assertMessagesContains(post, test[1])
+
+                if test[2] == to_be_associated:
+                    self.assertIsNotNone(Worker.objects.get(person_id=to_be_associated).societies.count() == 2)

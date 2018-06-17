@@ -1,9 +1,19 @@
-from django.test import SimpleTestCase
+from django.test import TestCase
 from django.urls import reverse
 
+from ...society.tests import set_up_superuser, test_fixtures
 
-class URLTests(SimpleTestCase):
+
+class URLTests(TestCase):
+    fixtures = test_fixtures
     HTTP_OK = 200
+
+    @classmethod
+    def setUpTestData(cls):
+        set_up_superuser(cls)
+
+    def setUp(self):
+        self.client.force_login(self.user)
 
     def test_section_url_names(self):
         """

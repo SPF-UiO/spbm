@@ -1,5 +1,5 @@
 from django.contrib import messages as msg
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
@@ -25,14 +25,13 @@ def redirect_society(request):
 class IndexWorker(LoginRequiredMixin, FormMixin, TemplateView):
     template_name = 'workers/index.jinja'
     form_class = WorkerPersonIDForm
-    # show "Permission denied" rather than redirect to login page
-    raise_exception = True
+    raise_exception = True  # show "Permission denied" rather than redirect to login page
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        if not request.user.has_perms(['society.add_worker', 'society.add_employment']):
+        if not request.user.has_perm('society.add_employment'):
             return self.handle_no_permission()
         form = self.get_form()
         if form.is_valid():
@@ -44,7 +43,7 @@ class IndexWorker(LoginRequiredMixin, FormMixin, TemplateView):
         # Get the society from the keyword arguments, via URLconf
         society = get_object_or_404(Society, shortname=self.kwargs['society_name'])
 
-        workers = Worker.objects.filter(employment__society=society)\
+        workers = Worker.objects.filter(employment__society=society) \
             .select_related().order_by("norlonn_number").distinct()
         context = super().get_context_data()
         context.update({
@@ -55,6 +54,9 @@ class IndexWorker(LoginRequiredMixin, FormMixin, TemplateView):
         return context
 
     def form_valid(self, form):
+        """
+        Evaluate the add-worker-by-national-ID form, and redirect appropriately.
+        """
         worker = Worker.objects.filter(person_id=form.cleaned_data['person_id']).first()
         society = user_society(self.request)
         if worker and society in worker.societies.all():
