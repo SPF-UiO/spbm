@@ -36,8 +36,6 @@ invoicing_urls = [
     re_path(r'^$', invoicing.InvoicingView.as_view(), name="invoices"),
     re_path(r'^$', invoicing.InvoicingView.as_view(), name="invoicing"),
     re_path(r'^view/' + society_match + r'(?P<date>\d{4}-\d{2}-\d{2})/$', invoicing.view_invoice, name='invoice-view'),
-    re_path(r'^view/' + society_match + r'(?P<date>\d{4}-\d{2}-\d{2}).pdf$', invoicing.generate_pdf,
-            name='invoice-view-pdf'),
 ]
 
 wages_urls = [

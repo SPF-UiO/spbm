@@ -27,12 +27,12 @@ class InvoicingTests(SPFTestMixin, TestCase):
 
     def test_view_an_invoice(self):
         """
-        Show an invoice in HTML-style.
+        Show an invoice in HTML-style and PDF.
         """
-        response = self.client.get(reverse('invoice-view', kwargs={'society_name': 'CYB', 'date': '2016-07-17'}))
-        self.assertTrue(response.status_code, 200)
+        html_invoice = self.client.get(reverse('invoice-view', kwargs={'society_name': 'CYB', 'date': '2016-07-17'}))
+        self.assertTrue(html_invoice.status_code, self.HTTP_OK)
         # Is there a mention of the SPF-fee?
-        self.assertContains(response, "SPF")
+        self.assertContains(html_invoice, "SPF")
 
     def test_get_unpaid_invoices(self):
         """
@@ -69,7 +69,7 @@ class InvoicingTests(SPFTestMixin, TestCase):
         # Is the invoice paid?
         self.assertEqual(unpaid_invoice.paid, True)
         # Do we get redirected?
-        self.assertEqual(marking_paid_response.status_code, 302)
+        self.assertEqual(marking_paid_response.status_code, self.HTTP_FOUND)
 
     def test_mark_invoice_as_paid_denied(self):
         """
@@ -79,7 +79,7 @@ class InvoicingTests(SPFTestMixin, TestCase):
                                                  {'action': 'mark_paid',
                                                   'inv_id': 2})
         self.assertEqual(Invoice.objects.get(pk=2).paid, False)
-        self.assertEqual(marking_paid_response.status_code, 403)
+        self.assertEqual(marking_paid_response.status_code, self.HTTP_FORBIDDEN)
 
     def test_unprocessed_events_count(self):
         """
@@ -105,7 +105,7 @@ class InvoicingTests(SPFTestMixin, TestCase):
         listing = self.client.get(reverse('invoices'))
 
         self.assertEqual(listing.context['unprocessed_events'], 0)
-        self.assertEqual(closed_period.status_code, 302)
+        self.assertEqual(closed_period.status_code, self.HTTP_FOUND)
 
     def test_close_period_denied(self):
         """
@@ -114,7 +114,7 @@ class InvoicingTests(SPFTestMixin, TestCase):
         closed_period = self.client.post(reverse('invoicing'),
                                          {'action': 'close_period'})
 
-        self.assertEqual(closed_period.status_code, 403)
+        self.assertEqual(closed_period.status_code, self.HTTP_FORBIDDEN)
 
     def test_close_period_twice_in_a_day_fail(self):
         """

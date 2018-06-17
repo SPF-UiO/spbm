@@ -21,7 +21,6 @@ from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView
 
 from spbm.helpers.decorators import permission_required
-from spbm.helpers.f60 import f60
 from ..models import Society, Event, Invoice
 
 # TODO Generalize? Import? Something?
@@ -194,59 +193,26 @@ def view_invoice(request, society_name, date):
 
 
 @login_required
-def generate_pdf(request, society_name: str, date: str):
+def generate_pdf(request, society_name: str, date: str):  # pragma: no cover
     """
     Generate a PDF for the given society and invoice/period date.
+
+    This was removed 17th of June 2018, as it had for a longer period no longer been necessary either way,
+    as invoices were sent using other applications and systems, especially for following up.
+
+    This remains here as a note to history, to the messy code before this commit, and as a stub for the day in the
+    future where an API will do this for us.
+
+    For the sake of history, our f60.py was from:
+        https://sourceforge.net/p/finfaktura/code/ci/master/tree/finfaktura/f60.py.
+    (I can't believe it has actually been updated.)
+
+    An alternative implementation seems to be interesting too, although less updated, from 2014:
+        https://github.com/torbjo/f60-giro/tree/master/f60
 
     :param request:
     :param society_name: Short name for the society.
     :param date: The date for which we'll look up the invoice and its events.
     :return:
     """
-    society = get_object_or_404(Society, shortname=society_name)
-    invoice = get_object_or_404(Invoice, society=society, period=date)
-    events = Event.objects.filter(society=society, processed=date)
-
-    filename = os.path.join("static_invoice", society.shortname + "-" + str(date) + ".pdf")
-
-    # If the PDF already exists, let's fetch it
-    if os.path.isfile(filename):
-        return HttpResponse(open(filename, "rb"), content_type="application/pdf")
-
-    pdf_invoice = f60(filename, overskriv=True)
-    pdf_invoice.settKundeinfo(1, society.name)
-    pdf_invoice.settFakturainfo(
-        fakturanr=1,
-        utstedtEpoch=unix_time(events[0].processed),
-        forfallEpoch=unix_time(events[0].processed) + 3600 * 24 * 7,
-        fakturatekst="Faktura fra SPF for utlån.\nFaktura nr " + str(invoice.invoice_number))
-    pdf_invoice.settFirmainfo(
-        {
-            'firmanavn': "Studentkjellernes Personalforening",
-            'kontaktperson': '',
-            'kontonummer': 60940568407,
-            'organisasjonsnummer': 890747272,
-            'adresse': 'Problemveien 13,\nv/ Bunnpris Blindern, Postboks 71',
-            'postnummer': 0o0313,
-            'poststed': 'Oslo',
-            'telefon': '',
-            'epost': 'spf-styret@studorg.uio.no'
-        })
-
-    linjer = []
-    totcost = 0
-    for e in events:
-        hours = e.get_hours()
-        cost = e.get_cost()
-        avg_hourly = cost / hours
-        linjer.append(["" + str(e.date) + ": " + e.name, hours, avg_hourly, 0])
-        totcost += cost
-
-    totcost = totcost.quantize(Decimal(10) ** -2)
-    spf_fee = totcost * Decimal("0.30")
-    linjer.append(["SPF-avgift: " + str(totcost) + "*0.3", 1, spf_fee, 0])
-
-    pdf_invoice.settOrdrelinje(linjer)
-    pdf_invoice.lagEpost()
-
-    return HttpResponse(open(filename, "rb"), content_type="application/pdf")
+    raise NotImplementedError

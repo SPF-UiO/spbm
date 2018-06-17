@@ -19,6 +19,9 @@ class SPFTestMixin(test.SimpleTestCase):
     """
     Helper for tests, use as a mix-in to add any extra assertions.
     """
+    HTTP_OK = 200
+    HTTP_FOUND = 302
+    HTTP_FORBIDDEN = 403
 
     def assertMessagesContains(self, response, needle: str, msg=None):
         if not any(needle in str(x) for x in list(response.context['messages'])):
