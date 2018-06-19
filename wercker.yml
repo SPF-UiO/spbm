@@ -57,8 +57,7 @@ build:
         name: install coverage/coveralls outside of requirements.txt w/wheel
         code: |
           apk add git
-          pip wheel coverage coveralls
-          pip install coverage coveralls
+          pip install coverage coveralls codecov
 
     # A step that executes `pip install` command.
     - pip-install:
@@ -96,6 +95,7 @@ build:
           export CI_BUILD_URL=$WERCKER_BUILD_URL
           info "Report to coveralls"
           COVERALLS_REPO_TOKEN=$COVERALLS_TOKEN coveralls
+          codecov
 
 ################################################################################
 # Deployment pipeline
