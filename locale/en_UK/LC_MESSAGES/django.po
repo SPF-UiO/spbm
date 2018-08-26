@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-08-25 15:03+0000\n"
+"POT-Creation-Date: 2018-08-26 10:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,6 +55,14 @@ msgstr ""
 msgid "%s (for %s) --- Invoice not paid"
 msgstr ""
 
+#: spbm/apps/norlonn/views.py:48 spbm/apps/norlonn/views.py:71
+msgid "Nothing to generate!"
+msgstr ""
+
+#: spbm/apps/norlonn/views.py:51
+msgid "Already exists!"
+msgstr ""
+
 #: spbm/apps/norlonn/views.py:58
 #, python-format
 msgid "ERR: %s - %s --- Lacks norlonn number"
@@ -68,10 +76,6 @@ msgstr ""
 #: spbm/apps/norlonn/views.py:65
 #, python-format
 msgid "OK: %s - %s"
-msgstr ""
-
-#: spbm/apps/norlonn/views.py:71
-msgid "Nothing to generate!"
 msgstr ""
 
 #: spbm/apps/society/apps.py:7
@@ -420,6 +424,10 @@ msgstr ""
 
 #: templates/base.jinja:62
 msgid "Knowledge base"
+msgstr ""
+
+#: templates/base.jinja:64
+msgid "E-mail the board for wage issues and similarly"
 msgstr ""
 
 #: templates/base.jinja:65

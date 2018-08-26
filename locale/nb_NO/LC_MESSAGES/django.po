@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SPF SPBM v0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-08-25 15:03+0000\n"
+"POT-Creation-Date: 2018-08-26 10:59+0000\n"
 "PO-Revision-Date: 2016-12-23 03:34+GMT1\n"
 "Last-Translator: Thor K. Høgås <thor@roht.no>\n"
 "Language: Norwegian bokmål\n"
@@ -53,7 +53,7 @@ msgstr "Arbeider %s (ifm. %s) mangler Norlønn-nummer!"
 msgid "%s (for %s) --- Invoice not paid"
 msgstr "%s (ifm. %s) --- Ubetalt faktura"
 
-#: spbm/apps/norlonn/views.py:48
+#: spbm/apps/norlonn/views.py:48 spbm/apps/norlonn/views.py:71
 msgid "Nothing to generate!"
 msgstr "Ingenting å generere!"
 
@@ -434,7 +434,7 @@ msgstr "Gå til vårt offentlige kontaktpunkt"
 msgid "Knowledge base"
 msgstr "Kunnskapsbase"
 
-#:templates/base.jinja:64
+#: templates/base.jinja:64
 msgid "E-mail the board for wage issues and similarly"
 msgstr "Send epost til styret angående lønningsproblemer eller liknende."
 
@@ -444,7 +444,9 @@ msgstr "Styrets epostliste"
 
 #: templates/base.jinja:69
 msgid "For technical issues, limitations, feedback or other suggestions, please go to our issue tracker. For wage, worker or invoicing related issues, please contact the mailing list."
-msgstr "Ved tekniske problemer eller begresnsninger, eller dersom du har andre tilbakemeldinger, vennligst gå til vår issue tracker. For problemer relatert til lønning, arbeidere eller faktura, vennligst kontakt epostlisten."
+msgstr ""
+"Ved tekniske problemer eller begresnsninger, eller dersom du har andre tilbakemeldinger, vennligst gå til vår issue tracker. For problemer relatert til lønning, arbeidere eller faktura, vennligst "
+"kontakt epostlisten."
 
 #: templates/delete.jinja:3
 #, fuzzy, python-format
@@ -636,7 +638,7 @@ msgstr "Arrangement"
 msgid "View the details of the event"
 msgstr "Vis detaljene til arrangementet"
 
-#: templates/events/index.jinja:53 templates/events/view.jinja:
+#: templates/events/index.jinja:53 templates/events/view.jinja:2
 msgid "View event"
 msgstr "Vis arrangementet"
 
@@ -840,7 +842,8 @@ msgid ""
 "There are some errors present. Please fix the errors before you attempt generating a report, as to avoid workers missing out on their wages. If the errors are associated with a different society "
 "than yours, get in touch with them over the mailing list."
 msgstr ""
-"Det er noen feil med arbeidere eller faktura. Rett på disse feilene før du forsøker å opprette en rapport, slik at ingen arbeidere går glipp av lønnen sin. Hvis feilene er assosiert med en annen forening, så anbefales at det at du <strong>kontakter dem</strong> med e-postlisten."
+"Det er noen feil med arbeidere eller faktura. Rett på disse feilene før du forsøker å opprette en rapport, slik at ingen arbeidere går glipp av lønnen sin. Hvis feilene er assosiert med en annen "
+"forening, så anbefales at det at du <strong>kontakter dem</strong> med e-postlisten."
 
 #: templates/norlonn/index.jinja:40
 msgid "Generate new wage report"
