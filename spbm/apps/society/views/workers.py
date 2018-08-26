@@ -143,7 +143,7 @@ class DeleteWorker(LoginAndPermissionRequiredMixin, DeleteView):
                and user_allowed_society(self.request.user, self.get_object().societies)
 
 
-""" 
+"""
 Workflow for adding a user, which ties into CreateWorker.
 """
 

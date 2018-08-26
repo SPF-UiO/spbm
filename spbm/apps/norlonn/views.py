@@ -45,10 +45,10 @@ def generate_report(request):
     shifts = Shift.objects.filter(norlonn_report__isnull=True, event__processed__isnull=False)
 
     if not shifts.exists():
-        return HttpResponse("Nothing to generate!")
+        return HttpResponse(_("Nothing to generate!"))
 
     if NorlonnReport.objects.filter(date=timezone.now()).exists():
-        return HttpResponse("Already exists!")
+        return HttpResponse(_("Already exists!"))
 
     report = NorlonnReport(date=timezone.now())
     report.save()
