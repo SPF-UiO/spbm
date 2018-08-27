@@ -98,7 +98,7 @@ msgstr "forkortet navn"
 
 #: spbm/apps/society/models.py:32
 msgid "invoice e-mail"
-msgstr "fakturaepost"
+msgstr "faktura-e-post"
 
 #: spbm/apps/society/models.py:34
 msgid "default wage per hour"
@@ -181,7 +181,6 @@ msgid "User which closed the period the invoice belongs to."
 msgstr "Bruker som lukket perioden som fakturaen er en del av."
 
 #: spbm/apps/society/models.py:166
-#, fuzzy
 msgid "Invoice #{id}: {period} {society}"
 msgstr "Faktura #%(id)s: %(date)s %(society)s"
 
@@ -262,12 +261,10 @@ msgid "National social security ID, 11 digits."
 msgstr "Fødselsnummer, 11 siffer."
 
 #: spbm/apps/society/forms/workers.py:14
-#, fuzzy
 msgid "Bank account"
 msgstr "Kontonummer"
 
 #: spbm/apps/society/forms/workers.py:15
-#, fuzzy
 msgid "Bank account number, 11 digits."
 msgstr "Norsk bankkontonummer, uten punktum, 11 siffer."
 
@@ -304,7 +301,6 @@ msgid "You've successfully marked {invoice} as paid."
 msgstr "Du har vellykket markert {invoice} som betalt."
 
 #: spbm/apps/society/views/invoicing.py:181
-#, fuzzy
 msgid "SPF fee: {percent:.1%} of NOK {event_cost}"
 msgstr "SPF-avgift: {percent}% av {event_cost}"
 
@@ -313,7 +309,6 @@ msgid "Events"
 msgstr "Arrangementer"
 
 #: spbm/apps/society/views/overview.py:64 spbm/apps/society/views/overview.py:70 spbm/apps/society/views/overview.py:76
-#, fuzzy
 msgid "last period"
 msgstr "forrige periode"
 
@@ -354,17 +349,14 @@ msgid "There is no worker with that national ID. You may create one now."
 msgstr "Det finnes ingen arbeider med det fødselsnummeret. Du kan opprette en nå."
 
 #: spbm/apps/society/views/workers.py:83
-#, fuzzy
 msgid "You do not have the required permission to create workers."
 msgstr "Du har ikke de nødvendige rettighetene til å opprette arbeidere."
 
 #: spbm/apps/society/views/workers.py:118
-#, fuzzy
 msgid "You do not have the permission to edit workers belonging to other societies."
 msgstr "Du har ikke de nødvendige rettighetene til å redigere arbeidere som tilhører andre foreninger."
 
 #: spbm/apps/society/views/workers.py:127
-#, fuzzy
 msgid "You do not have the permission to view workers belonging to other societies."
 msgstr "Du har ikke de nødvendige rettighetene til å vise arbeidere som tilhører andre foreninger"
 
@@ -385,7 +377,6 @@ msgid "Events and registrations"
 msgstr "Arrangementer og registreringer"
 
 #: templates/base-navigation.jinja:38
-#, fuzzy
 msgid "Invoicing and payment statuses"
 msgstr "Faktura- og lønnsdetaljer"
 
@@ -398,9 +389,8 @@ msgid "Wage checklist and wage system export"
 msgstr ""
 
 #: templates/base-navigation.jinja:55
-#, fuzzy
 msgid "Go to administration panel"
-msgstr "Administrasjon"
+msgstr "Gå til administrasjonspanelet"
 
 #: templates/base-navigation.jinja:57
 msgid "Administration"
@@ -416,7 +406,7 @@ msgstr "Logg ut"
 
 #: templates/base.jinja:47
 msgid "<strong>Empty page!</strong> Please contact the mailing list, as this page is incorrectly empty."
-msgstr "<strong>Tom side!</strong> Vennligst kontakt epostlisten."
+msgstr "<strong>Tom side!</strong> Kontakt e-postlisten."
 
 #: templates/base.jinja:57
 msgid "Go to our source code repository"
@@ -436,40 +426,39 @@ msgstr "Kunnskapsbase"
 
 #: templates/base.jinja:64
 msgid "E-mail the board for wage issues and similarly"
-msgstr "Send epost til styret angående lønningsproblemer eller liknende."
+msgstr "Send e-post til styret angående lønningsproblemer eller liknende."
 
 #: templates/base.jinja:65
 msgid "Board mailing list"
-msgstr "Styrets epostliste"
+msgstr "Styrets e-postliste"
 
 #: templates/base.jinja:69
 msgid "For technical issues, limitations, feedback or other suggestions, please go to our issue tracker. For wage, worker or invoicing related issues, please contact the mailing list."
 msgstr ""
-"Ved tekniske problemer eller begresnsninger, eller dersom du har andre tilbakemeldinger, vennligst gå til vår issue tracker. For problemer relatert til lønning, arbeidere eller faktura, vennligst "
-"kontakt epostlisten."
+"Ved tekniske problemer eller dersom du har andre tilbakemeldinger, gå til vår issue tracker. For problemer relatert til lønning, arbeidere eller faktura, kontakt e-postlisten."
 
 #: templates/delete.jinja:3
-#, fuzzy, python-format
+#, python-format
 msgid "Confirm deletion of %(type)s"
-msgstr "Bekreft sletting av arrangement"
+msgstr "Bekreft sletting av %(type)s"
 
 #: templates/delete.jinja:11
 msgid "Confirm deletion"
 msgstr "Bekreft sletting"
 
 #: templates/delete.jinja:15
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure that you wish to delete the %(type)s %(instance)s?"
-msgstr "Er du helt sikker på at du ønsker å slette arrangementet %(event)s?"
+msgstr "Er du helt sikker på at du ønsker å slette %(type)s %(instance)s?"
 
 #: templates/delete.jinja:20
 msgid "Cancel deleting and take me back"
 msgstr "Avbryt sletting og ta meg tilbake"
 
 #: templates/delete.jinja:22
-#, fuzzy, python-format
+#, python-format
 msgid "Delete the %(type)s"
-msgstr "Slett arrangementet"
+msgstr "Slett %(type)s"
 
 #: templates/index.jinja:7
 #, python-format
@@ -482,14 +471,12 @@ msgid "%(change)s%% since %(time)s"
 msgstr "%(change)s siden %(time)s"
 
 #: templates/index.jinja:25
-#, fuzzy
 msgid "Quick Period Glance"
-msgstr "Periodedato"
+msgstr "Overblikk over periode"
 
 #: templates/index.jinja:28
-#, fuzzy
 msgid "Your associated society"
-msgstr "Foreningen"
+msgstr "Foreningen du er tilknyttet"
 
 #: templates/index.jinja:35
 msgid "None"
@@ -872,9 +859,8 @@ msgid "Successful elements"
 msgstr "Vellykkede elementer"
 
 #: templates/workers/add.jinja:3 templates/workers/associate.jinja:2
-#, fuzzy
 msgid "Associate existing worker"
-msgstr "Avbryt redigering"
+msgstr "Tilknytt eksisterende arbeider"
 
 #: templates/workers/add.jinja:5 templates/workers/create.jinja:2 templates/workers/index.jinja:30
 msgid "Add worker"
@@ -894,12 +880,10 @@ msgid "Associate %(worker)s with %(society)s"
 msgstr "Tilknytt %(worker)s med %(society)s"
 
 #: templates/workers/create.jinja:17
-#, fuzzy
 msgid "Create worker"
 msgstr "Opprett arbeider"
 
 #: templates/workers/create.jinja:20
-#, fuzzy
 msgid "Cancel creating this worker"
 msgstr "Avbryt oppretting"
 
@@ -924,28 +908,24 @@ msgid "Enter a national ID to find an existing worker, or to create a new one."
 msgstr "Skriv inn et fødselsnummer for å finne en eksisterende arbeider eller opprette en ny."
 
 #: templates/workers/index.jinja:11
-#, fuzzy
 msgid "You do not have the permission to associate or add new workers."
 msgstr "Du har ikke de nødvendige rettighetene til å legge til nye arbeidere."
 
 #: templates/workers/index.jinja:19
-#, fuzzy
 msgid "National ID number..."
 msgstr "Fødselsnummer"
 
 #: templates/workers/index.jinja:23
-#, fuzzy
 msgid "Find or add worker"
-msgstr "Legg til arbeider"
+msgstr "Finn eller legg til arbeider"
 
 #: templates/workers/index.jinja:29
 msgid "Go directly to the creation form"
 msgstr "Gå direkte til oppretting av ny arbeider."
 
 #: templates/workers/index.jinja:46
-#, fuzzy
 msgid "Current workers"
-msgstr "Eksisterende rapportfeil"
+msgstr "Eksisterende arbeidere"
 
 #: templates/workers/index.jinja:51 templates/workers/index.jinja:75 templates/workers/view.jinja:34
 msgid "Address"
@@ -961,15 +941,13 @@ msgstr "Oversikt over inaktive arbeidere"
 
 #: templates/workers/index.jinja:98
 msgid "Your society doesn't seem to have any inactive workers. That's great! :-)"
-msgstr "Det ser ut til at foreningen din ikke har noen inaktive arbedere. Så flott! :-)"
+msgstr "Det ser ut til at foreningen din ikke har noen inaktive arbeidere. Så flott! :-)"
 
 #: templates/workers/view.jinja:2
-#, fuzzy
 msgid "Worker"
-msgstr "Arbeidere"
+msgstr "Arbeider"
 
 #: templates/workers/view.jinja:22
-#, fuzzy
 msgid "Delete worker"
 msgstr "Rediger arbeider"
 
@@ -978,28 +956,24 @@ msgid "Personalia"
 msgstr "Personalia"
 
 #: templates/workers/view.jinja:35
-#, fuzzy
 msgid "Societies"
 msgstr "Foreninger"
 
 #: templates/workers/view.jinja:36
-#, fuzzy
 msgid "Norlønn number"
 msgstr "Norlønn-nummer"
 
 #: templates/workers/view.jinja:43
-#, fuzzy
 msgid "Employee details"
-msgstr "Arrangementdetaljer"
+msgstr "Ansattdetaljer"
 
 #: templates/workers/view.jinja:45
 msgid "<em>What do you want to see here?</em>"
 msgstr ""
 
 #: templates/workers/view.jinja:52
-#, fuzzy
 msgid "Shifts"
-msgstr "skift"
+msgstr "Skift"
 
 #~ msgid "Bookings"
 #~ msgstr "Utlån / utleie"
