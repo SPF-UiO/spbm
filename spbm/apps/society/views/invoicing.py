@@ -48,9 +48,8 @@ class InvoicingView(LoginRequiredMixin, TemplateView):
         last_invoice = Invoice.objects.last()
         if last_invoice is None:
             last_period = datetime.date(today.year,
-                                        today.month if today.day <= settings.SPBM['dates'][
-                                            'invoicing'] else today.month + relativedelta(months=1),
-                                        today.day)
+                                        today.month,
+                                        settings.SPBM['dates']['invoicing'])
             next_period = last_period + relativedelta(months=1)
         else:
             last_period = last_invoice.period
