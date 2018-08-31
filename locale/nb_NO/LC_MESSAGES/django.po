@@ -1,14 +1,15 @@
 # SPFs SPBM Norsk versjon.
-# Copyright (C) 2016
+# Copyright (C) 2018
 # This file is distributed under the same license as the SPF package.
-# Thor K. Høgås <thor@roht.no>, 2016.
+# Thor K. Høgås <thor@roht.no>, 2016-2018.
+# Susanne M. Tande, 2018.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: SPF SPBM v0.1\n"
-"Report-Msgid-Bugs-To: thor@roht.no\n"
-"POT-Creation-Date: 2017-07-19 18:55+0000\n"
-"PO-Revision-Date: 2016-12-23 03:34+GMT1\n"
+"Project-Id-Version: SPF SPBM v0.2\n"
+"Report-Msgid-Bugs-To: spf-styret@ADDRESS\n"
+"POT-Creation-Date: 2018-08-26 10:59+0000\n"
+"PO-Revision-Date: 2018-08-31 03:34+GMT1\n"
 "Last-Translator: Thor K. Høgås <thor@roht.no>\n"
 "Language: Norwegian bokmål\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +24,7 @@ msgstr "SPF-bruker"
 msgid "SPF-users"
 msgstr "SPF-brukere"
 
-#: spbm/apps/accounts/models.py:12 templates/events/view.jinja:34 templates/invoices/index.jinja:142
+#: spbm/apps/accounts/models.py:12 templates/events/view.jinja:34 templates/index.jinja:28 templates/invoices/index.jinja:142
 msgid "Society"
 msgstr "Forening"
 
@@ -33,7 +34,7 @@ msgstr "Foreningen innad i SPF som denne brukeren har som primærtilknytning."
 
 #: spbm/apps/accounts/models.py:16
 msgid "SPF-member connected to {society}"
-msgstr "SPF-medlem tilknyttet til {society}"
+msgstr "SPF-medlem tilknyttet {society}"
 
 #: spbm/apps/norlonn/models.py:14
 msgid "norlønn report"
@@ -43,311 +44,488 @@ msgstr "norlønn-rapport"
 msgid "norlønn reports"
 msgstr "norlønn-rapporter"
 
-#: spbm/apps/norlonn/views.py:26
+#: spbm/apps/norlonn/views.py:29
 #, python-format
 msgid "Worker %s (for %s) lacks norlonn number!"
 msgstr "Arbeider %s (ifm. %s) mangler Norlønn-nummer!"
 
-#: spbm/apps/norlonn/views.py:29
+#: spbm/apps/norlonn/views.py:32
 #, python-format
 msgid "%s (for %s) --- Invoice not paid"
 msgstr "%s (ifm. %s) --- Ubetalt faktura"
 
-#: spbm/apps/norlonn/views.py:55
+#: spbm/apps/norlonn/views.py:48 spbm/apps/norlonn/views.py:71
+msgid "Nothing to generate!"
+msgstr "Ingenting å generere!"
+
+#: spbm/apps/norlonn/views.py:51
+msgid "Already exists!"
+msgstr "Finnes allerede!"
+
+#: spbm/apps/norlonn/views.py:58
 #, python-format
 msgid "ERR: %s - %s --- Lacks norlonn number"
 msgstr "ERR: %s - %s --- Mangler Norlønn-nummer!"
 
-#: spbm/apps/norlonn/views.py:59
+#: spbm/apps/norlonn/views.py:62
 #, python-format
 msgid "ERR: %s - %s --- Invoice not paid"
 msgstr "ERR: %s - %s --- Ubetalt faktura"
 
-#: spbm/apps/norlonn/views.py:62
+#: spbm/apps/norlonn/views.py:65
 #, python-format
 msgid "OK: %s - %s"
 msgstr "OK: %s - %s"
-
-#: spbm/apps/norlonn/views.py:68
-msgid "Nothing to generate!"
-msgstr "Ingenting å generere!"
 
 #: spbm/apps/society/apps.py:7
 msgid "SPBM"
 msgstr "SPBM"
 
-#: spbm/apps/society/models.py:21 spbm/apps/society/models.py:52 spbm/apps/society/models.py:100 spbm/apps/society/models.py:154
+#: spbm/apps/society/models.py:24 spbm/apps/society/models.py:122 spbm/apps/society/models.py:190
 msgid "society"
 msgstr "forening"
 
-#: spbm/apps/society/models.py:22
+#: spbm/apps/society/models.py:25
 msgid "societies"
 msgstr "foreninger"
 
-#: spbm/apps/society/models.py:25 spbm/apps/society/models.py:59 spbm/apps/society/models.py:157
+#: spbm/apps/society/models.py:28 spbm/apps/society/models.py:54 spbm/apps/society/models.py:193
 msgid "name"
 msgstr "navn"
 
-#: spbm/apps/society/models.py:27
+#: spbm/apps/society/models.py:30
 msgid "abbreviated name"
 msgstr "forkortet navn"
 
-#: spbm/apps/society/models.py:29
+#: spbm/apps/society/models.py:32
 msgid "invoice e-mail"
-msgstr "fakturaepost"
+msgstr "faktura-e-post"
 
-#: spbm/apps/society/models.py:31
+#: spbm/apps/society/models.py:34
 msgid "default wage per hour"
 msgstr "standardlønn per time"
 
-#: spbm/apps/society/models.py:32
+#: spbm/apps/society/models.py:35
 msgid "logo"
 msgstr "logo"
 
-#: spbm/apps/society/models.py:44 spbm/apps/society/models.py:233
+#: spbm/apps/society/models.py:47 spbm/apps/society/models.py:277
 msgid "worker"
 msgstr "arbeider"
 
-#: spbm/apps/society/models.py:45
+#: spbm/apps/society/models.py:48
 msgid "workers"
 msgstr "arbeidere"
 
-#: spbm/apps/society/models.py:56
-msgid "active"
-msgstr "aktiv"
-
-#: spbm/apps/society/models.py:57
-msgid "Check off if the worker is still actively working."
-msgstr "Kun kryss av om arbeideren fortsatt jobber aktivt."
-
-#: spbm/apps/society/models.py:60
+#: spbm/apps/society/models.py:55
 msgid "Full name, with first name first."
 msgstr "Fullt navn, med fornavnet først."
 
-#: spbm/apps/society/models.py:62
+#: spbm/apps/society/models.py:57
 msgid "address"
-msgstr "addresse"
+msgstr "adresse"
 
-#: spbm/apps/society/models.py:63
+#: spbm/apps/society/models.py:58
 msgid "Full address including postal code and area."
 msgstr "Full bostedsadresse, inkl. postkode og område."
 
-#: spbm/apps/society/models.py:66
+#: spbm/apps/society/models.py:62
 msgid "account no."
-msgstr "kontonr."
+msgstr "kontonummer"
 
-#: spbm/apps/society/models.py:67
+#: spbm/apps/society/models.py:63
 msgid "Norwegian bank account number, no periods, 11 digits."
 msgstr "Norsk bankkontonummer, uten punktum, 11 siffer."
 
-#: spbm/apps/society/models.py:70
+#: spbm/apps/society/models.py:68
 msgid "person ID"
 msgstr "fødselsnummer"
 
-#: spbm/apps/society/models.py:74
+#: spbm/apps/society/models.py:72
 msgid "norl&oslash;nn number"
 msgstr "norlønn-nummer"
 
-#: spbm/apps/society/models.py:75
+#: spbm/apps/society/models.py:73
 msgid "Employee number in the wage system, Norl&oslash;nn. <strong>Must</strong> exist and be correct!"
 msgstr "Asattnummeret i lønnssystemet Norlønn. <strong>Må</strong> eksistere og være korrekt satt opp!"
 
-#: spbm/apps/society/models.py:91 spbm/apps/society/models.py:180
+#: spbm/apps/society/models.py:98
+msgid "active"
+msgstr "aktiv"
+
+#: spbm/apps/society/models.py:99
+msgid "Check off if the worker is still actively working."
+msgstr "Kun kryss av om arbeideren fortsatt jobber aktivt."
+
+#: spbm/apps/society/models.py:108 spbm/apps/society/models.py:218
 msgid "invoice"
 msgstr "faktura"
 
-#: spbm/apps/society/models.py:92
+#: spbm/apps/society/models.py:109
 msgid "invoices"
 msgstr "fakturaer"
 
-#: spbm/apps/society/models.py:102
+#: spbm/apps/society/models.py:124
 msgid "invoice number"
 msgstr "fakturanummer"
 
-#: spbm/apps/society/models.py:104
+#: spbm/apps/society/models.py:126
 msgid "period"
 msgstr "periode"
 
-#: spbm/apps/society/models.py:106
+#: spbm/apps/society/models.py:128
 msgid "invoice paid"
 msgstr "faktura er betalt"
 
-#: spbm/apps/society/models.py:108
+#: spbm/apps/society/models.py:130
 msgid "User which closed the period the invoice belongs to."
 msgstr "Bruker som lukket perioden som fakturaen er en del av."
 
-#: spbm/apps/society/models.py:147
+#: spbm/apps/society/models.py:166
+msgid "Invoice #{id}: {period} {society}"
+msgstr "Faktura #%(id)s: %(date)s %(society)s"
+
+#: spbm/apps/society/models.py:177
 msgid "event"
 msgstr "arrangement"
 
-#: spbm/apps/society/models.py:148
+#: spbm/apps/society/models.py:178
 msgid "events"
 msgstr "arrangementer"
 
-#: spbm/apps/society/models.py:158
+#: spbm/apps/society/models.py:194
 msgid "Name or title describing the event."
 msgstr "Navn eller tittel som beskriver arrangementet."
 
-#: spbm/apps/society/models.py:159
+#: spbm/apps/society/models.py:195
 msgid "event date"
 msgstr "arrangementdato"
 
-#: spbm/apps/society/models.py:160
+#: spbm/apps/society/models.py:196
 msgid "The date of the event in the format of <em>YYYY-MM-DD</em>."
 msgstr "Arrangementdato på formen av <em>ÅÅÅÅ-MM-DD</em> eller <em>DD-MM-ÅÅÅÅ</em>."
 
-#: spbm/apps/society/models.py:163
+#: spbm/apps/society/models.py:199
 msgid "registered"
 msgstr "registrert"
 
-#: spbm/apps/society/models.py:164
+#: spbm/apps/society/models.py:200
 msgid "Date of event registration."
 msgstr "Registreringsdato til arrangementet."
 
-#: spbm/apps/society/models.py:171
+#: spbm/apps/society/models.py:208
 msgid "processed"
 msgstr "behandlet"
 
-#: spbm/apps/society/models.py:193 templates/events/index.jinja:28 templates/events/view.jinja:36
+#: spbm/apps/society/models.py:231 templates/events/index.jinja:28 templates/events/view.jinja:36
 msgid "Total hours"
 msgstr "Sum timer"
 
-#: spbm/apps/society/models.py:204 templates/events/index.jinja:29 templates/events/view.jinja:37 templates/invoices/view.jinja:37
+#: spbm/apps/society/models.py:242 templates/events/index.jinja:29 templates/events/view.jinja:37 templates/invoices/view.jinja:37
 msgid "Total cost"
 msgstr "Sum kostnad"
 
-#: spbm/apps/society/models.py:225
+#: spbm/apps/society/models.py:264
 msgid "shift"
 msgstr "skift"
 
-#: spbm/apps/society/models.py:226
+#: spbm/apps/society/models.py:265
 msgid "shifts"
 msgstr "skift"
 
-#: spbm/apps/society/models.py:236
+#: spbm/apps/society/models.py:280
 msgid "wage"
 msgstr "timelønn"
 
-#: spbm/apps/society/models.py:240
+#: spbm/apps/society/models.py:284
 msgid "hours"
 msgstr "timer"
 
-#: spbm/apps/society/models.py:247
+#: spbm/apps/society/models.py:291
 msgid "norl&oslash;nn report"
 msgstr "norlønn-rapport"
 
-#: spbm/apps/society/models.py:254
+#: spbm/apps/society/models.py:301
 msgid "Worker on shift does not belong to the same society as the event."
 msgstr "Valgt arbeider tilhører ikke samme forening som arrangementet."
 
-#: spbm/apps/society/models.py:256
+#: spbm/apps/society/models.py:303
 msgid "You must select a worker for this shift."
 msgstr "Du må velge en arbeider for dette skiftet."
 
-#: spbm/apps/society/forms/worker.py:14 templates/workers/index.jinja:22 templates/workers/index.jinja:45
+#: spbm/apps/society/forms/workers.py:9 templates/workers/index.jinja:16 templates/workers/index.jinja:53 templates/workers/index.jinja:77 templates/workers/view.jinja:38
 msgid "National ID"
-msgstr "Personnummer"
+msgstr "Fødselsnummer"
 
-#: spbm/apps/society/forms/worker.py:15
+#: spbm/apps/society/forms/workers.py:10
 msgid "National social security ID, 11 digits."
 msgstr "Fødselsnummer, 11 siffer."
 
-#: spbm/apps/society/views/events.py:54
+#: spbm/apps/society/forms/workers.py:14
+msgid "Bank account"
+msgstr "Kontonummer"
+
+#: spbm/apps/society/forms/workers.py:15
+msgid "Bank account number, 11 digits."
+msgstr "Norsk bankkontonummer, uten punktum, 11 siffer."
+
+#: spbm/apps/society/views/events.py:56
 msgid "You are not allowed to create events due to lacking permissions."
 msgstr "Du har ikke mulighet til å opprette arrangementer på grunn av manglende tillatelser."
 
-#: spbm/apps/society/views/events.py:81
+#: spbm/apps/society/views/events.py:83
 msgid "You are not allowed to edit events due to lacking permissions."
 msgstr "Du har ikke mulighet til å redigere arrangementer på grunn av manglende tillatelser."
 
-#: spbm/apps/society/views/invoicing.py:55
+#: spbm/apps/society/views/invoicing.py:59
 msgid "You <strong>should not</strong> close a period twice in a month without good reason!"
 msgstr "Du <strong>burde ikke</strong> lukke en periode to ganger i løpet av en måned uten særskilt god grunn!"
 
-#: spbm/apps/society/views/invoicing.py:77
+#: spbm/apps/society/views/invoicing.py:90
 msgid "You do not have the required permission to close billing periods."
 msgstr "Du har ikke de nødvendige rettighetene til å lukke fakturaperioder."
 
-#: spbm/apps/society/views/invoicing.py:113
+#: spbm/apps/society/views/invoicing.py:126
 msgid "You have successfully closed the invoicing period."
 msgstr "Du har vellykket lukket fakturaperioden."
 
-#: spbm/apps/society/views/invoicing.py:116
+#: spbm/apps/society/views/invoicing.py:129
 msgid "You cannot close a period twice in a day!"
 msgstr "Du kan ikke lukke en periode to ganger på en og samme dag!"
 
-#: spbm/apps/society/views/invoicing.py:122
+#: spbm/apps/society/views/invoicing.py:135
 msgid "You do not have the required permission to mark invoices as paid."
 msgstr "Du har ikke de nødvendige rettighetene for å markere fakturaer som betalt."
 
-#: spbm/apps/society/views/invoicing.py:131
+#: spbm/apps/society/views/invoicing.py:144
 msgid "You've successfully marked {invoice} as paid."
 msgstr "Du har vellykket markert {invoice} som betalt."
 
-#: spbm/apps/society/views/invoicing.py:167
-#, python-format
-msgid "SPF fee: {percent}% of {event_cost}"
-msgstr "SPF-avgift: {percent}% of {event_cost}"
+#: spbm/apps/society/views/invoicing.py:181
+msgid "SPF fee: {percent:.1%} of NOK {event_cost}"
+msgstr "SPF-avgift: {percent}% av {event_cost}"
 
-#: templates/base.jinja:27
-msgid "Toggle navigation"
-msgstr "Vis/skjul navigasjon"
-
-#: templates/base.jinja:38
-msgid "Your Society"
-msgstr "Foreningen"
-
-#: templates/base.jinja:43
-msgid "Bookings"
-msgstr "Utlån / utleie"
-
-#: templates/base.jinja:45
-msgid "Workers and registrations"
-msgstr "Arbeidere og registreringer"
-
-#: templates/base.jinja:46 templates/events/index.jinja:30 templates/workers/index.jinja:2
-msgid "Workers"
-msgstr "Arbeidere"
-
-#: templates/base.jinja:48
-msgid "Events and registrations"
-msgstr "Arrangementer og registreringer"
-
-#: templates/base.jinja:49 templates/events/index.jinja:2
+#: spbm/apps/society/views/overview.py:61 templates/base-navigation.jinja:33 templates/events/index.jinja:2
 msgid "Events"
 msgstr "Arrangementer"
 
-#: templates/base.jinja:54
-msgid "Invoicing"
-msgstr "Fakturering"
+#: spbm/apps/society/views/overview.py:64 spbm/apps/society/views/overview.py:70 spbm/apps/society/views/overview.py:76
+msgid "last period"
+msgstr "forrige periode"
 
-#: templates/base.jinja:59
+#: spbm/apps/society/views/overview.py:67 templates/base-navigation.jinja:48
 msgid "Wages"
 msgstr "Lønn"
 
-#: templates/base.jinja:67
+#: spbm/apps/society/views/overview.py:73 templates/base-navigation.jinja:26 templates/events/index.jinja:30 templates/workers/index.jinja:2
+msgid "Workers"
+msgstr "Arbeidere"
+
+#: spbm/apps/society/views/overview.py:89
+msgid "Your Blocked Wages"
+msgstr "Dine blokkerte lønninger"
+
+#: spbm/apps/society/views/overview.py:91
+msgid "Wages blocked by unpaid invoices"
+msgstr "Lønninger blokkert på grunn av ubetalte fakturaer"
+
+#: spbm/apps/society/views/overview.py:95
+msgid "Your Missing Norlønn-IDs"
+msgstr "Dine manglende Nordlønn-nummer"
+
+#: spbm/apps/society/views/overview.py:97
+msgid "Workers whose pay will not be exported"
+msgstr "Arbedere med lønn som ikke blir eksportert"
+
+#: spbm/apps/society/views/workers.py:64
+msgid "{worker} is already associated with your society {society}."
+msgstr "{worker} er allerede tilknyttet foreningen din {society}"
+
+#: spbm/apps/society/views/workers.py:71
+msgid "The worker {worker} has been successfully associated as employed with {society}."
+msgstr "Arbeideren {worker} har vellykket blitt tilknyttet {society}"
+
+#: spbm/apps/society/views/workers.py:76
+msgid "There is no worker with that national ID. You may create one now."
+msgstr "Det finnes ingen arbeider med det fødselsnummeret. Du kan opprette en nå."
+
+#: spbm/apps/society/views/workers.py:83
+msgid "You do not have the required permission to create workers."
+msgstr "Du har ikke de nødvendige rettighetene til å opprette arbeidere."
+
+#: spbm/apps/society/views/workers.py:118
+msgid "You do not have the permission to edit workers belonging to other societies."
+msgstr "Du har ikke de nødvendige rettighetene til å redigere arbeidere som tilhører andre foreninger."
+
+#: spbm/apps/society/views/workers.py:127
+msgid "You do not have the permission to view workers belonging to other societies."
+msgstr "Du har ikke de nødvendige rettighetene til å vise arbeidere som tilhører andre foreninger"
+
+#: templates/base-navigation.jinja:6
+msgid "Toggle navigation"
+msgstr "Vis/skjul navigasjon"
+
+#: templates/base-navigation.jinja:18 templates/index.jinja:2
+msgid "Overview"
+msgstr "Oversikt"
+
+#: templates/base-navigation.jinja:23
+msgid "Workers and registrations"
+msgstr "Arbeidere og registreringer"
+
+#: templates/base-navigation.jinja:30
+msgid "Events and registrations"
+msgstr "Arrangementer og registreringer"
+
+#: templates/base-navigation.jinja:38
+msgid "Invoicing and payment statuses"
+msgstr "Faktura- og lønnsdetaljer"
+
+#: templates/base-navigation.jinja:41
+msgid "Invoicing"
+msgstr "Fakturering"
+
+#: templates/base-navigation.jinja:45
+msgid "Wage checklist and wage system export"
+msgstr ""
+
+#: templates/base-navigation.jinja:55
+msgid "Go to administration panel"
+msgstr "Gå til administrasjonspanelet"
+
+#: templates/base-navigation.jinja:57
 msgid "Administration"
 msgstr "Administrasjon"
 
-#: templates/base.jinja:72
+#: templates/base-navigation.jinja:62
 msgid "Log out of SPFs SPBM"
 msgstr "Logg ut av SPFs SPBM"
 
-#: templates/base.jinja:73
+#: templates/base-navigation.jinja:64
 msgid "Logout"
 msgstr "Logg ut"
 
-#: templates/index.jinja:2
-msgid "Society overview"
-msgstr "Foreningsoversikt"
+#: templates/base.jinja:47
+msgid "<strong>Empty page!</strong> Please contact the mailing list, as this page is incorrectly empty."
+msgstr "<strong>Tom side!</strong> Kontakt e-postlisten."
 
-#: templates/index.jinja:5
-msgid "You're logged into an account associated with:"
-msgstr "Du er logget på en konto assosiert med:"
+#: templates/base.jinja:57
+msgid "Go to our source code repository"
+msgstr "Gå til kildekoden"
 
-#: templates/index.jinja:6
-msgid "As of right now, this page exactly doesn't really do anything, so take a look at the navigation bar!."
+#: templates/base.jinja:58
+msgid "Source code"
+msgstr "Kildekode"
+
+#: templates/base.jinja:61
+msgid "Go to our public contact page"
+msgstr "Gå til vårt offentlige kontaktpunkt"
+
+#: templates/base.jinja:62
+msgid "Knowledge base"
+msgstr "Kunnskapsbase"
+
+#: templates/base.jinja:64
+msgid "E-mail the board for wage issues and similarly"
+msgstr "Send e-post til styret angående lønningsproblemer eller liknende."
+
+#: templates/base.jinja:65
+msgid "Board mailing list"
+msgstr "Styrets e-postliste"
+
+#: templates/base.jinja:69
+msgid "For technical issues, limitations, feedback or other suggestions, please go to our issue tracker. For wage, worker or invoicing related issues, please contact the mailing list."
 msgstr ""
+"Ved tekniske problemer eller dersom du har andre tilbakemeldinger, gå til vår issue tracker. For problemer relatert til lønning, arbeidere eller faktura, kontakt e-postlisten."
+
+#: templates/delete.jinja:3
+#, python-format
+msgid "Confirm deletion of %(type)s"
+msgstr "Bekreft sletting av %(type)s"
+
+#: templates/delete.jinja:11
+msgid "Confirm deletion"
+msgstr "Bekreft sletting"
+
+#: templates/delete.jinja:15
+#, python-format
+msgid "Are you sure that you wish to delete the %(type)s %(instance)s?"
+msgstr "Er du helt sikker på at du ønsker å slette %(type)s %(instance)s?"
+
+#: templates/delete.jinja:20
+msgid "Cancel deleting and take me back"
+msgstr "Avbryt sletting og ta meg tilbake"
+
+#: templates/delete.jinja:22
+#, python-format
+msgid "Delete the %(type)s"
+msgstr "Slett %(type)s"
+
+#: templates/index.jinja:7
+#, python-format
+msgid "Go to %(page)s"
+msgstr "Gå til %(page)s"
+
+#: templates/index.jinja:20
+#, python-format
+msgid "%(change)s%% since %(time)s"
+msgstr "%(change)s siden %(time)s"
+
+#: templates/index.jinja:25
+msgid "Quick Period Glance"
+msgstr "Overblikk over periode"
+
+#: templates/index.jinja:28
+msgid "Your associated society"
+msgstr "Foreningen du er tilknyttet"
+
+#: templates/index.jinja:35
+msgid "None"
+msgstr "Ingen"
+
+#: templates/index.jinja:36
+msgid "No issues."
+msgstr "Ingen problemer."
+
+#: templates/events/view.jinja:33 templates/utils.jinja:6 templates/workers/index.jinja:50 templates/workers/index.jinja:74 templates/workers/view.jinja:33
+msgid "Name"
+msgstr "Navn"
+
+#: templates/utils.jinja:7
+msgid "Hourly"
+msgstr "Timespris"
+
+#: templates/utils.jinja:8
+msgid "Hours"
+msgstr "Timer"
+
+#: templates/invoices/view.jinja:50 templates/utils.jinja:9
+msgid "Sum"
+msgstr "Sum"
+
+#: templates/utils.jinja:10
+msgid "Payrolled"
+msgstr "Utbetalt"
+
+#: templates/events/index.jinja:40 templates/events/view.jinja:37 templates/invoices/index.jinja:108 templates/invoices/index.jinja:167 templates/invoices/view.jinja:45
+#: templates/invoices/view.jinja:51 templates/utils.jinja:20 templates/utils.jinja:22
+#, python-format
+msgid "NOK %(cost)s"
+msgstr "Kr. %(cost)s"
+
+#: templates/events/index.jinja:39 templates/events/view.jinja:36 templates/utils.jinja:21
+#, python-format
+msgid "%(hours)sh"
+msgstr "%(hours)st"
+
+#: templates/utils.jinja:30 templates/utils.jinja:32
+msgid "Not payrolled"
+msgstr "Ennå ikke utbetalt"
+
+#: templates/utils.jinja:42
+#, python-format
+msgid "There aren't any registered shifts <em>yet</em>. How about <a href=\"%(event_add)s\" class=\"alert-link\">adding an event</a>?"
+msgstr "Det er ingen registrerte skift <em>ennå</em>. Hva med å <a href=\"%(event_add)s\" class=\"alert-link\">legge til et arrangement</a>?"
 
 #: templates/accounts/login.jinja:4 templates/accounts/login.jinja:12
 msgid "Sign in"
@@ -399,30 +577,9 @@ msgstr "Legg til arrangement"
 msgid "Create event"
 msgstr "Opprett arrangementet"
 
-#: templates/events/add.jinja:9 templates/events/add.jinja:10
+#: templates/events/add.jinja:9 templates/events/add.jinja:10 templates/workers/create.jinja:19
 msgid "Cancel creating this event"
 msgstr "Avbryt opprettelse"
-
-#: templates/events/delete.jinja:2
-msgid "Confirm deletion of event"
-msgstr "Bekreft sletting av arrangement"
-
-#: templates/events/delete.jinja:10
-msgid "Confirm deletion"
-msgstr "Bekreft sletting"
-
-#: templates/events/delete.jinja:14
-#, python-format
-msgid "Are you sure that you wish to delete the event %(event)s?"
-msgstr "Er du helt sikker på at du ønsker å slette arrangementet %(event)s?"
-
-#: templates/events/delete.jinja:17
-msgid "Cancel deleting and take me back"
-msgstr "Avbryt sletting og take meg tilbake"
-
-#: templates/events/delete.jinja:19
-msgid "Delete the event"
-msgstr "Slett arrangementet"
 
 #: templates/events/edit.jinja:2 templates/events/index.jinja:60 templates/events/view.jinja:19
 msgid "Edit event"
@@ -465,17 +622,6 @@ msgstr "Dato"
 msgid "Event"
 msgstr "Arrangement"
 
-#: templates/events/index.jinja:39 templates/events/utils.jinja:16 templates/events/view.jinja:36
-#, python-format
-msgid "%(hours)sh"
-msgstr "%(hours)st"
-
-#: templates/events/index.jinja:40 templates/events/utils.jinja:15 templates/events/utils.jinja:17 templates/events/view.jinja:37 templates/invoices/index.jinja:108 templates/invoices/index.jinja:167
-#: templates/invoices/view.jinja:47 templates/invoices/view.jinja:53
-#, python-format
-msgid "NOK %(cost)s"
-msgstr "Kr. %(cost)s"
-
 #: templates/events/index.jinja:51
 msgid "View the details of the event"
 msgstr "Vis detaljene til arrangementet"
@@ -488,32 +634,9 @@ msgstr "Vis arrangementet"
 msgid "Edit the event, such as date, workers, and more"
 msgstr "Rediger arrangementets detaljer, som dato, skiftarbeidere, og mer"
 
-#: templates/events/utils.jinja:5 templates/events/view.jinja:33 templates/workers/index.jinja:19 templates/workers/index.jinja:42
-msgid "Name"
-msgstr "Navn"
-
-#: templates/events/utils.jinja:6
-msgid "Hourly"
-msgstr "Timespris"
-
-#: templates/events/utils.jinja:7
-msgid "Hours"
-msgstr "Timer"
-
-#: templates/events/utils.jinja:8 templates/invoices/view.jinja:52
-msgid "Sum"
-msgstr "Sum"
-
-#: templates/events/utils.jinja:9
-msgid "Payrolled"
-msgstr "Utbetalt"
-
-#: templates/events/utils.jinja:25 templates/events/utils.jinja:27
-msgid "Not payrolled"
-msgstr "Ennå ikke utbetalt"
-
 #. small title for viewing an event
-#: templates/events/view.jinja:4
+#. small title for viewing a worker
+#: templates/events/view.jinja:4 templates/workers/view.jinja:4
 #, python-format
 msgid "Viewing %(name)s (#%(id)i)"
 msgstr "Viser %(name)s (#%(id)i)"
@@ -632,11 +755,11 @@ msgstr "Betalt?"
 msgid "Actions"
 msgstr "Handlinger"
 
-#: templates/invoices/index.jinja:170 templates/workers/index.jinja:32
+#: templates/invoices/index.jinja:170 templates/workers/index.jinja:63 templates/workers/index.jinja:87
 msgid "Yes"
 msgstr "Ja"
 
-#: templates/invoices/index.jinja:172 templates/workers/index.jinja:32
+#: templates/invoices/index.jinja:172 templates/workers/index.jinja:63 templates/workers/index.jinja:87
 msgid "No"
 msgstr "Nei"
 
@@ -647,14 +770,6 @@ msgstr "Vis detaljene til fakturaen"
 #: templates/invoices/index.jinja:180
 msgid "View invoice"
 msgstr "Vis faktura"
-
-#: templates/invoices/index.jinja:183
-msgid "View PDF"
-msgstr "Vis PDF"
-
-#: templates/invoices/index.jinja:185
-msgid "View invoice PDF"
-msgstr "Vis PDF av fakturaen"
 
 #: templates/invoices/view.jinja:2
 #, python-format
@@ -679,7 +794,7 @@ msgstr "Periode lukket av %(user)s"
 #: templates/invoices/view.jinja:30
 #, python-format
 msgid "Overview over events and costs associated with invoice number %(id)d."
-msgstr "Oversikt over arrangement og kostnader assosiert med fakturanr. %(id)d."
+msgstr "Oversikt over arrangement og kostnader assosiert med fakturanummer %(id)d."
 
 #: templates/invoices/view.jinja:34
 msgid "Description"
@@ -693,7 +808,7 @@ msgstr "Antall"
 msgid "Unit cost"
 msgstr "Enhetskostnad"
 
-#: templates/invoices/view.jinja:59
+#: templates/invoices/view.jinja:57
 msgid "Return to invoice overview"
 msgstr "Gå tilbake til fakturaoversikten"
 
@@ -715,7 +830,7 @@ msgid ""
 "There are some errors present. Please fix the errors before you attempt generating a report, as to avoid workers missing out on their wages. If the errors are associated with a different society "
 "than yours, get in touch with them over the mailing list."
 msgstr ""
-"Det er noen feil med arbeidere eller faktura. Rett på disse feilene før du forsøker å opprette en rapport, slik at ingen arbeidere går glipp av deres lønn.Hvis feilene er assosiert med en annen "
+"Det er noen feil med arbeidere eller faktura. Rett på disse feilene før du forsøker å opprette en rapport, slik at ingen arbeidere går glipp av lønnen sin. Hvis feilene er assosiert med en annen "
 "forening, så anbefales at det at du <strong>kontakter dem</strong> med e-postlisten."
 
 #: templates/norlonn/index.jinja:40
@@ -744,7 +859,36 @@ msgstr "Rapportelementer med feil"
 msgid "Successful elements"
 msgstr "Vellykkede elementer"
 
-#: templates/workers/edit.jinja:2
+#: templates/workers/add.jinja:3 templates/workers/associate.jinja:2
+msgid "Associate existing worker"
+msgstr "Tilknytt eksisterende arbeider"
+
+#: templates/workers/add.jinja:5 templates/workers/create.jinja:2 templates/workers/index.jinja:30
+msgid "Add worker"
+msgstr "Legg til arbeider"
+
+#: templates/workers/add.jinja:22
+msgid "Create new or associate with existing worker"
+msgstr "Legg til ny eller tilknytt eksisterende arbeider"
+
+#: templates/workers/associate.jinja:6
+msgid "This is the worker associated with the given national ID-number."
+msgstr "Dette er arbeideren med det oppgitte fødselsnummeret."
+
+#: templates/workers/associate.jinja:26
+#, python-format
+msgid "Associate %(worker)s with %(society)s"
+msgstr "Tilknytt %(worker)s med %(society)s"
+
+#: templates/workers/create.jinja:17
+msgid "Create worker"
+msgstr "Opprett arbeider"
+
+#: templates/workers/create.jinja:20
+msgid "Cancel creating this worker"
+msgstr "Avbryt oppretting"
+
+#: templates/workers/edit.jinja:2 templates/workers/view.jinja:18
 msgid "Edit worker"
 msgstr "Rediger arbeider"
 
@@ -760,29 +904,98 @@ msgstr "Avbryt redigering"
 msgid "Cancel editing & changes"
 msgstr "Avbryt redigering & endringer"
 
-#: templates/workers/index.jinja:5
-msgid "Add new worker"
-msgstr "Legg til ny arbeider"
+#: templates/workers/index.jinja:8
+msgid "Enter a national ID to find an existing worker, or to create a new one."
+msgstr "Skriv inn et fødselsnummer for å finne en eksisterende arbeider eller opprette en ny."
 
 #: templates/workers/index.jinja:11
-msgid "Add worker"
-msgstr "Legg til arbeider"
+msgid "You do not have the permission to associate or add new workers."
+msgstr "Du har ikke de nødvendige rettighetene til å legge til nye arbeidere."
 
-#: templates/workers/index.jinja:15
-msgid "List of workers"
-msgstr "Oversikt over arbeidere"
+#: templates/workers/index.jinja:19
+msgid "National ID number..."
+msgstr "Fødselsnummer"
 
-#: templates/workers/index.jinja:20 templates/workers/index.jinja:43
+#: templates/workers/index.jinja:23
+msgid "Find or add worker"
+msgstr "Finn eller legg til arbeider"
+
+#: templates/workers/index.jinja:29
+msgid "Go directly to the creation form"
+msgstr "Gå direkte til oppretting av ny arbeider."
+
+#: templates/workers/index.jinja:46
+msgid "Current workers"
+msgstr "Eksisterende arbeidere"
+
+#: templates/workers/index.jinja:51 templates/workers/index.jinja:75 templates/workers/view.jinja:34
 msgid "Address"
 msgstr "Adresse"
 
-#: templates/workers/index.jinja:21 templates/workers/index.jinja:44
+#: templates/workers/index.jinja:52 templates/workers/index.jinja:76 templates/workers/view.jinja:37
 msgid "Account No."
-msgstr "Kontonr."
+msgstr "Kontonummer"
 
-#: templates/workers/index.jinja:38
+#: templates/workers/index.jinja:69
 msgid "List of inactive workers"
 msgstr "Oversikt over inaktive arbeidere"
+
+#: templates/workers/index.jinja:98
+msgid "Your society doesn't seem to have any inactive workers. That's great! :-)"
+msgstr "Det ser ut til at foreningen din ikke har noen inaktive arbeidere. Så flott! :-)"
+
+#: templates/workers/view.jinja:2
+msgid "Worker"
+msgstr "Arbeider"
+
+#: templates/workers/view.jinja:22
+msgid "Delete worker"
+msgstr "Slett arbeider"
+
+#: templates/workers/view.jinja:30
+msgid "Personalia"
+msgstr "Personalia"
+
+#: templates/workers/view.jinja:35
+msgid "Societies"
+msgstr "Foreninger"
+
+#: templates/workers/view.jinja:36
+msgid "Norlønn number"
+msgstr "Norlønn-nummer"
+
+#: templates/workers/view.jinja:43
+msgid "Employee details"
+msgstr "Ansattdetaljer"
+
+#: templates/workers/view.jinja:45
+msgid "<em>What do you want to see here?</em>"
+msgstr ""
+
+#: templates/workers/view.jinja:52
+msgid "Shifts"
+msgstr "Skift"
+
+#~ msgid "Bookings"
+#~ msgstr "Utlån / utleie"
+
+#~ msgid "Society overview"
+#~ msgstr "Foreningsoversikt"
+
+#~ msgid "You're logged into an account associated with:"
+#~ msgstr "Du er logget på en konto assosiert med:"
+
+#~ msgid "View PDF"
+#~ msgstr "Vis PDF"
+
+#~ msgid "View invoice PDF"
+#~ msgstr "Vis PDF av fakturaen"
+
+#~ msgid "Add new worker"
+#~ msgstr "Legg til ny arbeider"
+
+#~ msgid "List of workers"
+#~ msgstr "Oversikt over arbeidere"
 
 #~ msgid "Total"
 #~ msgstr "Totalt"
@@ -799,26 +1012,17 @@ msgstr "Oversikt over inaktive arbeidere"
 #~ msgid "The society"
 #~ msgstr "Foreningen"
 
-#~ msgid "Overview"
-#~ msgstr "Oversikt"
-
 #~ msgid "Registrating"
 #~ msgstr "Registrering"
 
 #~ msgid "Reporting"
 #~ msgstr "Rapportering"
 
-#~ msgid "Period date"
-#~ msgstr "Periodedato"
-
 #~ msgid "Invoice no."
 #~ msgstr "Fakturanr."
 
 #~ msgid "Society - period"
 #~ msgstr "Forening - periode"
-
-#~ msgid "Norlønn Reports"
-#~ msgstr "Norlønn-rapporter"
 
 #~ msgid "{cost}"
 #~ msgstr "kr. {cost:f}"
