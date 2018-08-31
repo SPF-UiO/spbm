@@ -469,7 +469,7 @@ msgstr "Gå til %(page)s"
 #: templates/index.jinja:20
 #, python-format
 msgid "%(change)s%% since %(time)s"
-msgstr "%(change)s siden %(time)s"
+msgstr "%(change)s%% siden %(time)s"
 
 #: templates/index.jinja:25
 msgid "Quick Period Glance"
