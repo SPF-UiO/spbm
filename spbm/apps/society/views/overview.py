@@ -1,11 +1,12 @@
 from decimal import Decimal
+from typing import List
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Sum, F, Min
 from django.db import models
+from django.db.models import Sum, F, Min
 from django.urls import reverse
-from django.views.generic import TemplateView
 from django.utils.translation import ugettext as _
+from django.views.generic import TemplateView
 
 from spbm.apps.society.models import Event, Invoice, Worker
 from spbm.helpers.auth import user_society
@@ -32,10 +33,12 @@ class Overview(LoginRequiredMixin, TemplateView):
         return context
 
     def get_general_status_blocks(self):
-        # FIXME: There *might* not be two invoices, you know.
+        # Get the invoices, but make sure it's not empty -- if we're getting the last one we need there to be something
         invoices = Invoice.objects.all().order_by('-period')
+        last_period = invoices[0] if len(invoices) != 0 else None
+
+        # FIXME: society invoices are currently not in use
         society_invoices = invoices.filter(society=user_society(self.request))
-        last_period = invoices[0]
 
         events = Event.objects.all().select_related('shifts__worker')
         events_last_period = events.filter(invoice=last_period)
@@ -57,7 +60,7 @@ class Overview(LoginRequiredMixin, TemplateView):
         workers_last_period = (events_last_period
                                .values('shifts__worker')).annotate(shifts=Min('shifts__worker')).count()
 
-        return [
+        return self._sanitise_blocks([
             {'title': _("Events"),
              'kpi': events_this_period.count(),
              'change': change(events_last_period.count(), events_this_period.count()),
@@ -75,7 +78,7 @@ class Overview(LoginRequiredMixin, TemplateView):
              'change': change(workers_last_period, workers_this_period),
              'time': _("last period"),
              'url': reverse('workers')},
-        ]
+        ])
 
     def get_actionable_blocks(self):
         blocked_wages = (Event.objects
@@ -85,7 +88,7 @@ class Overview(LoginRequiredMixin, TemplateView):
         missing_ids = (Worker.objects
                        .filter(employment__society=user_society(self.request), norlonn_number__isnull=True).count())
 
-        return [
+        return self._sanitise_blocks([
             {'title': _("Your Blocked Wages"),
              'kpi': blocked_wages if blocked_wages else None,
              'detail': _("Wages blocked by unpaid invoices"),
@@ -96,8 +99,19 @@ class Overview(LoginRequiredMixin, TemplateView):
              'kpi': missing_ids if missing_ids else None,
              'detail': _("Workers whose pay will not be exported"),
              'url': reverse('workers')}
-        ]
+        ])
+
+    @staticmethod
+    def _sanitise_blocks(blocks: List[dict]) -> List[dict]:
+        """ Quick sanitising of two variable values in returned dict """
+        for block in blocks:
+            kpi = block.get('kpi') if block.get('kpi') is not None else 0
+            # change = block.get('change') if block.get('change') is not Noneblock.setdefault('change', None)
+            block.update(kpi=kpi)
+
+        return blocks
 
 
 def change(before: Decimal, after: Decimal):
-    return Decimal(((before / after) - 1)) * Decimal(100.00)
+    return Decimal(((before / after) - 1)) * Decimal(100.00) \
+        if after != 0 and before is not None and after is not None else None

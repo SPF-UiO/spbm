@@ -1,11 +1,11 @@
 from decimal import Decimal
 
+from django.conf import settings
 from django.contrib.auth.models import User, AbstractUser
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
-from django.conf import settings
 from django.db import models
-from django.db.models import Sum, Avg, F
+from django.db.models import Sum, F
 from django.urls import reverse
 from django.utils import six
 from django.utils.functional import lazy
@@ -31,7 +31,7 @@ class Society(models.Model):
     invoice_email = models.EmailField(default="",
                                       verbose_name=_('invoice e-mail'))
     default_wage = models.DecimalField(max_digits=10, decimal_places=2,
-                                       verbose_name=_('default wage per hour'))
+                                       default=Decimal("160"), verbose_name=_('default wage per hour'))
     logo = models.FileField(null=True, blank=True, verbose_name=_('logo'))
 
     def __str__(self):

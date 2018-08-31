@@ -15,8 +15,8 @@
     {%- if url and alert != 'success' %}</a>{% endif %}
 {% endmacro %}
 
-{% macro kpi(title, kpi, change, time, url=None) %}
-    {{ indicator(title, "%d" | format(kpi) | intcomma,
+{% macro kpi(title, value, change, time, url=None) %}
+    {{ indicator(title, "%d" | format(value) | intcomma,
             _("%(change)s%% since %(time)s", change=change| intcomma | localize, time=time), url=url) }}
 {% endmacro %}
 
@@ -26,6 +26,7 @@
     <div class="container text-center">
         <div class="row">
             {{ indicator(_("Society"), society, _("Your associated society")) }}
+
             {%- for i in d.actionable %}
             {% if i.kpi %}
             {% set kpi = "%d" | format(i.kpi) | intcomma %}
@@ -39,8 +40,13 @@
             {%- endif -%}
             {{ indicator(i.title, kpi, i.detail, url=i.url, alert=alert) }}
             {% endfor -%}
+
             {%- for i in d.general -%}
-                {{ kpi(i.title, i.kpi, "%d"| format(i.change), i.time, url=i.url) }}
+                {% if i.change is none %}
+                    {{ kpi(i.title, i.kpi, _("N/A"), i.time, url=i.url) }}
+                {% else %}
+                    {{ kpi(i.title, i.kpi, "%d"| format(i.change), i.time, url=i.url) }}
+                {% endif %}
             {% endfor -%}
         </div>
     </div>

@@ -37,6 +37,10 @@ def set_up_superuser(self: test.SimpleTestCase) -> None:
     # Create the user and add the needed permissions
     self.user = User(username='superfury', is_superuser=True)
     self.user.save()
+
     # set him as part of a society, then force login
-    self.spf_user = SpfUser(user=self.user, society=Society.objects.get(pk=1))
+    # [0] gets the found or created society -- details not important
+    target_society = Society.objects.get_or_create(name="Cybernetisk Selskab", shortname='CYB')[0]
+
+    self.spf_user = SpfUser(user=self.user, society=target_society)
     self.spf_user.save()

@@ -1,5 +1,4 @@
 import datetime
-import os.path
 import time
 from decimal import Decimal
 
@@ -10,8 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError, models
 from django.db import transaction
-from django.db.models import Max, Count, Sum, Avg, F, Value, ExpressionWrapper
-from django.http import HttpResponse
+from django.db.models import Max, Sum, F, ExpressionWrapper
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils import timezone
@@ -45,10 +43,19 @@ class InvoicingView(LoginRequiredMixin, TemplateView):
     template_name = "invoices/index.jinja"
 
     def get_context_data(self, **kwargs):
-        last_period = Invoice.objects.last().period
         today = datetime.date.today()
-        next_period = datetime.date(last_period.year, last_period.month,
-                                    settings.SPBM['dates']['invoicing']) + relativedelta(months=1)
+
+        last_invoice = Invoice.objects.last()
+        if last_invoice is None:
+            last_period = datetime.date(today.year,
+                                        today.month if today.day <= settings.SPBM['dates'][
+                                            'invoicing'] else today.month + relativedelta(months=1),
+                                        today.day)
+            next_period = last_period + relativedelta(months=1)
+        else:
+            last_period = last_invoice.period
+            next_period = datetime.date(last_period.year, last_period.month,
+                                        settings.SPBM['dates']['invoicing']) + relativedelta(months=1)
 
         # Fixes the no events in period problem
         if not (Event.objects.filter(processed__isnull=True).count()):

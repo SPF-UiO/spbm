@@ -22,4 +22,26 @@ class URLTests(TestCase):
         views = ['overview', 'workers', 'events', 'invoices', 'wages', 'admin:index']
         for view in views:
             with self.subTest(msg="testing {view}".format(view=view)):
-                self.assertEqual(self.client.get(reverse(view), follow=True).status_code, self.HTTP_OK)
+                result = self.client.get(reverse(view), follow=True)
+                self.assertEqual(result.status_code, self.HTTP_OK)
+
+
+class URLTestsWithoutFixtures(TestCase):
+    HTTP_OK = 200
+
+    @classmethod
+    def setUpTestData(cls):
+        set_up_superuser(cls)
+
+    def setUp(self):
+        self.client.force_login(self.user)
+
+    def test_section_url_names(self):
+        """
+        Test that we can access the normal sections by their section names, and that they work.
+        """
+        views = ['overview', 'workers', 'events', 'invoices', 'wages', 'admin:index']
+        for view in views:
+            with self.subTest(msg="testing {view}".format(view=view)):
+                result = self.client.get(reverse(view), follow=True)
+                self.assertEqual(result.status_code, self.HTTP_OK)
