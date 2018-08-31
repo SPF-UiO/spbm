@@ -1,14 +1,15 @@
 # SPFs SPBM Norsk versjon.
-# Copyright (C) 2016
+# Copyright (C) 2018
 # This file is distributed under the same license as the SPF package.
-# Thor K. Høgås <thor@roht.no>, 2016.
+# Thor K. Høgås <thor@roht.no>, 2016-2018.
+# Susanne M. Tande, 2018.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: SPF SPBM v0.1\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"Project-Id-Version: SPF SPBM v0.2\n"
+"Report-Msgid-Bugs-To: spf-styret@ADDRESS\n"
 "POT-Creation-Date: 2018-08-26 10:59+0000\n"
-"PO-Revision-Date: 2016-12-23 03:34+GMT1\n"
+"PO-Revision-Date: 2018-08-31 03:34+GMT1\n"
 "Last-Translator: Thor K. Høgås <thor@roht.no>\n"
 "Language: Norwegian bokmål\n"
 "MIME-Version: 1.0\n"
@@ -949,7 +950,7 @@ msgstr "Arbeider"
 
 #: templates/workers/view.jinja:22
 msgid "Delete worker"
-msgstr "Rediger arbeider"
+msgstr "Slett arbeider"
 
 #: templates/workers/view.jinja:30
 msgid "Personalia"
