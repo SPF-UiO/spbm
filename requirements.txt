@@ -26,4 +26,5 @@ uwsgi==2.0.15
 ## Other external dependencies
 # Sane relative dates
 python-dateutil==2.7.3
+typing==3.6.6
 
