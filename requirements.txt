@@ -3,7 +3,7 @@ Django==2.0.6
 django-debug-toolbar==1.9.1
 
 # PostgreSQL-connector, not required for development
-psycopg2==2.7.5
+psycopg2-binary==2.7.5
 
 # Jinja2 improved translation tags & i18n
 django-jinja==2.4.1
@@ -26,5 +26,6 @@ uwsgi==2.0.15
 ## Other external dependencies
 # Sane relative dates
 python-dateutil==2.7.3
+# typing for python 3.4 and earlier
 typing==3.6.6
 
