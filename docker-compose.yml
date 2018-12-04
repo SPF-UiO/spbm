@@ -6,14 +6,16 @@ version: '3.7'
 # files to enable development.
 
 services:
-  api:
-    image: cybernetisk/spbm:latest
+  spbm:
+    container_name: spbm
     build: .
-    command: ./manage.py runserver #0.0.0.0:8000
+    expose:
+      - 8000
+    restart: always
+    command: ./scripts/update.sh
     init: true
     volumes:
       - .:/app
-      - ./container/entrypoint-dev.sh:/entrypoint.sh
       # We mount a volume on /home/app so that we can
       # install additional packages and keep them across
       # the docker containers.
@@ -22,7 +24,7 @@ services:
       - apphome:/home/app
       # For Mac compatibility. See entrypoint for details.
       - roothome:/root
-    entrypoint: /entrypoint.sh
+        #entrypoint: /entrypoint.sh
     environment:
       # Make pip use --user by default.
       PIP_USER: '1'

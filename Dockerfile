@@ -14,9 +14,10 @@ RUN set -eux; \
     ; \
     mkdir -p /app; \
     mkdir -p /usr/src/static; \
+    mkdir -p /app/logs; \
     addgroup -g 1000 app; \
     adduser -D -G app -u 1000 app; \
-    chown app:app /app /usr/src/static
+    chown app:app /app /usr/src/static /app/logs
 
 WORKDIR /app
 USER app
@@ -32,7 +33,7 @@ RUN pip install --user --no-cache-dir -r requirements.txt
 
 COPY . /app
 COPY container/start.sh /start.sh
-COPY container/gunicorn.conf /gunicorn.conf
+#COPY container/gunicorn.conf /gunicorn.conf
 
 EXPOSE 8000
 
