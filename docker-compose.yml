@@ -1,0 +1,35 @@
+---
+version: '3.7'
+
+# This is a development version which enables the application to run
+# using the production-ready image, while still using local application
+# files to enable development.
+
+services:
+  api:
+    image: cybernetisk/spbm:latest
+    build: .
+    command: ./manage.py runserver #0.0.0.0:8000
+    init: true
+    volumes:
+      - .:/app
+      - ./container/entrypoint-dev.sh:/entrypoint.sh
+      # We mount a volume on /home/app so that we can
+      # install additional packages and keep them across
+      # the docker containers.
+      # NOTE: This volume needs to be deleted to pick up
+      # new packages built in the Dockerfile!
+      - apphome:/home/app
+      # For Mac compatibility. See entrypoint for details.
+      - roothome:/root
+    entrypoint: /entrypoint.sh
+    environment:
+      # Make pip use --user by default.
+      PIP_USER: '1'
+    ports:
+      - 8000:8000
+    user: root
+
+volumes:
+  apphome:
+  roothome:
