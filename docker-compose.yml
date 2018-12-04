@@ -1,7 +1,7 @@
 ---
 version: '3.7'
 
-# This is a development version which enables the application to run
+# This is NOT a development version which enables the application to run
 # using the production-ready image, while still using local application
 # files to enable development.
 
@@ -10,10 +10,8 @@ services:
     container_name: spbm
     build: .
     expose:
-      - 8000
+      - 3031
     restart: always
-    command: ./scripts/update.sh
-    init: true
     volumes:
       - .:/app
       # We mount a volume on /home/app so that we can
@@ -24,14 +22,32 @@ services:
       - apphome:/home/app
       # For Mac compatibility. See entrypoint for details.
       - roothome:/root
-        #entrypoint: /entrypoint.sh
     environment:
-      # Make pip use --user by default.
-      PIP_USER: '1'
+      - VIRTUAL_PROTO=uwsgi
+      - VIRTUAL_HOST=localhost,app.spf.no
+      - VIRTUAL_PORT=3031
+      - LETSENCRYPT_TEST=true
+
+  nginx-proxy:
+    container_name: nginx
+    image: jwilder/nginx-proxy
     ports:
-      - 8000:8000
-    user: root
+      - 80:80
+      - 443:443
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - cert-volume:/etc/nginx/certs:ro
+      - vhost-volume:/etc/nginx/vhost.d
+      - html-volume:/usr/share/nginx/html
+    environment:
+      - ENABLE_IPV6=true
+    labels:
+      - 'com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true'
 
 volumes:
   apphome:
   roothome:
+  cert-volume:
+  vhost-volume:
+  html-volume:
