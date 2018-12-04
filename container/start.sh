@@ -15,14 +15,5 @@
 #    #--home=$SRC/.virtualenv/ \
 #
 
-exec uwsgi --chdir=/app \
-    --module spbm.wsgi:application \
-    --master --pidfile=/tmp/spf-uwsgi.pid \
-    --http=0.0.0.0:8000 \
-    --processes=1 \
-    --harakiri=20 \
-    --max-requests=5000 \
-    --vacuum \
-    --touch-reload=/app/spbm/wsgi.py
-    #--home=$SRC/.virtualenv/ \
+exec uwsgi --ini uwsgi.ini
 
