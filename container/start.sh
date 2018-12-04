@@ -15,5 +15,5 @@
 #    #--home=$SRC/.virtualenv/ \
 #
 
-exec uwsgi --ini uwsgi.ini
+exec uwsgi --ini container/uwsgi.ini
 
