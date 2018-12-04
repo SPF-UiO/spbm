@@ -10,7 +10,6 @@ RUN set -eux; \
       libxml2-dev \
       libxslt-dev \
       postgresql-dev \
-      su-exec \
       xmlsec-dev
 
 RUN pip wheel -r requirements.txt --wheel-dir=/tmp/wheels/
@@ -23,6 +22,10 @@ COPY --from=python-base /tmp/wheels /tmp/wheels
 
 # Simplified installation
 RUN set -eux; \
+	apk add --no-cache \
+      su-exec \
+      libxml2 \
+	; \
 	chmod 777 -R /tmp/wheels; \
     mkdir -p /app; \
     mkdir -p /usr/src/static; \
@@ -42,9 +45,8 @@ COPY requirements.txt /app/
 RUN pip install --user --no-index --no-cache -r requirements.txt --find-links=/tmp/wheels/
 
 COPY . /app
-COPY container/start.sh /start.sh
 
-EXPOSE 8000
+EXPOSE 3031
 
-CMD ["/start.sh"]
+CMD ["/app/container/start.sh"]
 
