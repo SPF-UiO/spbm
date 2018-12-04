@@ -23,8 +23,8 @@ USER app
 ENV PATH="/home/app/.local/bin:$PATH"
 
 # handle saml-stuff first because it takes very long to install (compile)
-COPY requirements_saml.txt /app
-RUN pip install --user --no-cache-dir -r requirements_saml.txt
+#COPY requirements_saml.txt /app
+#RUN pip install --user --no-cache-dir -r requirements_saml.txt
 
 COPY requirements.txt /app/
 RUN pip install --user --no-cache-dir -r requirements.txt
