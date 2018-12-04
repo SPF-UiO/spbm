@@ -3,6 +3,7 @@ FROM python:3.6-alpine3.7
 # postgresql-dev required to build psycopg2 with pip
 RUN set -eux; \
     apk add --no-cache \
+      linux-headers\
       ca-certificates \
       build-base \
       libxml2-dev \
