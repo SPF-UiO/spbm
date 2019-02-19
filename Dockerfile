@@ -1,52 +1,25 @@
-# First stage of multi-stage build: building wheels
-FROM python:3.6-alpine as python-base
-COPY requirements.txt .
-# postgresql-dev required to build psycopg2 with pip
-RUN set -eux; \
-    apk add --no-cache \
-	  linux-headers \
-      ca-certificates \
-      build-base \
-      libxml2-dev \
-      libxslt-dev \
-      postgresql-dev \
-      xmlsec-dev
+FROM debian:jessie
+LABEL maintainer "adriah@cyb.no"
 
-RUN pip wheel -r requirements.txt --wheel-dir=/tmp/wheels/
-
-
-# Final stage of multi-stage build: the app itself
-FROM python:3.6-alpine
-# Copy over our compiled packages into the image
-COPY --from=python-base /tmp/wheels /tmp/wheels
-
-# Simplified installation
-RUN set -eux; \
-	apk add --no-cache \
-      su-exec \
-      libxml2 \
-	; \
-	chmod 777 -R /tmp/wheels; \
-    mkdir -p /app; \
-    mkdir -p /usr/src/static; \
-    mkdir -p /app/logs; \
-    addgroup -g 1000 app; \
-    adduser -D -G app -u 1000 app; \
-    chown app:app /app /usr/src/static /app/logs
-
-USER app
-WORKDIR /app
-
-ENV PATH="/home/app/.local/bin:$PATH"
-
-COPY requirements.txt /app/
-# TODO: See if we can copy the installed python packages from first stage to this one 
-#		without dealing with any wheels at all besides in the first stage
-RUN pip install --user --no-index --no-cache -r requirements.txt --find-links=/tmp/wheels/
+RUN apt-get update && apt-get install -y libxslt-dev libxml2-dev libmysqlclient-dev python3 python-dev python3-pip git build-essential libxml2 wget gettext curl uwsgi-plugin-python libpq-dev libxmlsec1-dev
 
 COPY . /app
 
+WORKDIR /app
+
+RUN pip3 install -r requirements.txt
+
+RUN mkdir -p /app; \
+    mkdir -p /usr/src/static; \
+    mkdir -p /app/logs; \
+    groupadd -g 1000 app; \
+    useradd -g app -u 1000 app; \
+    chown app:app /app /usr/src/static /app/logs
+
+USER app
+
+RUN pip3 install -r requirements.txt
+
 EXPOSE 3031
 
-CMD ["/app/container/start.sh"]
-
+CMD ["/app/scripts/run_production.sh", "-fg"]

@@ -10,8 +10,9 @@ services:
     container_name: spbm
     build: .
     expose:
-      - 3031
+      - 8435
     restart: always
+    init: true
     volumes:
       - .:/app
       # We mount a volume on /home/app so that we can
@@ -24,9 +25,11 @@ services:
       - roothome:/root
     environment:
       - VIRTUAL_PROTO=uwsgi
-      - VIRTUAL_HOST=localhost,app.spf.no
-      - VIRTUAL_PORT=3031
+      - VIRTUAL_HOST=app.spf.no,localhost
+      - VIRTUAL_PORT=8435
       - LETSENCRYPT_TEST=true
+      - LETSENCRYPT_HOST=app.spf.no,localhost
+      - LETSENCRYPT_EMAIL=spf-styret@studorg.uio.no
 
   nginx-proxy:
     container_name: nginx
@@ -45,9 +48,27 @@ services:
     labels:
       - 'com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true'
 
+        #  nginx-companion:
+        #    container_name: nginx-letsencrypt
+        #    depends_on:
+        #      - nginx-proxy
+        #    restart: always
+        #    image: jrcs/letsencrypt-nginx-proxy-companion
+        #    volumes:
+        #      - /var/run/docker.sock:/var/run/docker.sock:ro
+        #      - cert-volume:/etc/nginx/certs:rw
+        #      - vhost-volume:/etc/nginx/vhost.d
+        #      - html-volume:/usr/share/nginx/html
+
+networks:
+  default:
+    external:
+      name: spf
+
 volumes:
   apphome:
   roothome:
   cert-volume:
   vhost-volume:
   html-volume:
+  nginx:
