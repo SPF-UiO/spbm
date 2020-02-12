@@ -7,28 +7,19 @@ version: '3.7'
 
 services:
   spbm:
-    container_name: spbm
     build: .
     expose:
       - 8435
-    restart: always
-    init: true
+    #restart: always
     volumes:
-      - .:/app
-      # We mount a volume on /home/app so that we can
-      # install additional packages and keep them across
-      # the docker containers.
-      # NOTE: This volume needs to be deleted to pick up
-      # new packages built in the Dockerfile!
-      - apphome:/home/app
-      # For Mac compatibility. See entrypoint for details.
-      - roothome:/root
+      # Share static files with nginx proxy
+      - static-volume:/usr/src/static
     environment:
       - VIRTUAL_PROTO=uwsgi
-      - VIRTUAL_HOST=app.spf.no,localhost
+      - VIRTUAL_HOST=app.spf.no
       - VIRTUAL_PORT=8435
       - LETSENCRYPT_TEST=true
-      - LETSENCRYPT_HOST=app.spf.no,localhost
+      - LETSENCRYPT_HOST=app.spf.no
       - LETSENCRYPT_EMAIL=spf-styret@studorg.uio.no
 
   nginx-proxy:
@@ -40,8 +31,10 @@ services:
     restart: always
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./container/nginx.vhost.default:/etc/nginx/vhost.d/default
       - cert-volume:/etc/nginx/certs:ro
       - vhost-volume:/etc/nginx/vhost.d
+      - static-volume:/usr/src/static
       - html-volume:/usr/share/nginx/html
     environment:
       - ENABLE_IPV6=true
@@ -60,15 +53,12 @@ services:
         #      - vhost-volume:/etc/nginx/vhost.d
         #      - html-volume:/usr/share/nginx/html
 
-networks:
-  default:
-    external:
-      name: spf
-
 volumes:
-  apphome:
-  roothome:
+  # Used to share static files with nginx directly
+  static-volume:
+  # Used to synchcronise Let's Encrypt certificates
   cert-volume:
+  # Used to synchcronise Let's Encrypt vhost configurations
   vhost-volume:
+  # Used to perform Let's Encrypt certificate requests and confirmation
   html-volume:
-  nginx:

@@ -1,0 +1,31 @@
+---
+version: '3.7'
+
+# This is NOT a development version which enables the application to run
+# using the production-ready image, while still using local application
+# files to enable development.
+
+services:
+  spbm:
+    volumes:
+      # Development mounting of development folder
+      - .:/usr/src/app
+      # For Mac compatibility. See entrypoint for details.
+      - roothome:/root
+    environment:
+      - SPBM_DEBUG=1
+      - SPBM_OTHERS=1
+      - VIRTUAL_PROTO=uwsgi
+      - VIRTUAL_HOST=localhost
+      - VIRTUAL_PORT=8435
+      - LETSENCRYPT_TEST=true
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - 80:80
+    environment:
+      - ENABLE_IPV6=true
+
+volumes:
+  roothome:
