@@ -15,6 +15,7 @@ __pycache__
 # Ignore site files created/uploaded 
 static_files/*
 media_files/*
+static_invoice/*
 
 # Ignore all and any compiled translations
 *.mo
