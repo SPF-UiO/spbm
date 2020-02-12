@@ -47,9 +47,13 @@ build:
           pip install virtualenv 
 
     # A step that sets up the python virtual environment
-    - virtualenv:
+    - script:
         name: setup virtual environment
-        install_wheel: True # Enable wheel to speed up builds (experimental)
+        code: |
+          virtualenv /root/venv
+          export WERCKER_WHEEL_DIR=/pipeline/cache/pip-wheels
+          export PIP_FIND_LINKS=$WERCKER_CACHE_DIR/pip-wheels
+          export PIP_USE_WHEEL=true
 
 
     # Installing the CI requirements, incl. coveralls and coverage
