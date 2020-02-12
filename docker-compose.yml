@@ -13,7 +13,7 @@ services:
     #restart: always
     volumes:
       # Share static files with nginx proxy
-      - static-volume:/usr/src/static
+      - static-volume:/usr/src/app/static_files
     environment:
       - VIRTUAL_PROTO=uwsgi
       - VIRTUAL_HOST=app.spf.no
