@@ -69,8 +69,8 @@ DATABASES = {
 ROOT_URLCONF = 'spbm.urls'
 WSGI_APPLICATION = 'spbm.wsgi.application'
 
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = bool(os.environ.get("SPBM_CSRF_COOKIE_SECURE", default=True))
+SESSION_COOKIE_SECURE = bool(os.environ.get("SPBM_SESSION_COOKIE_SECURE", default=True))
 
 # Application definition
 INSTALLED_APPS = (
