@@ -10,7 +10,6 @@ services:
     environment:
       - SPBM_ALLOWED_HOSTS=spf.cyb.no,app.spf.no
       - SPBM_DB_ENGINE=django.db.backends.postgresql
-      - VIRTUAL_PROTO=uwsgi
       - VIRTUAL_HOST=app.spf.no
       - VIRTUAL_PORT=8435
       - LETSENCRYPT_TEST=true
