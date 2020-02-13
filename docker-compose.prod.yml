@@ -24,8 +24,6 @@ services:
   postgres:
     volumes:
       - ~/persistent/spbm-db:/var/lib/postgresql/data
-    # "Sane" defaults that are overwritten
-    env_file:
 
 
 #  nginx-companion:
