@@ -1,6 +1,8 @@
 # Things that do not belong in any build of SPBM
 # - they're not relevant in a container
 scripts/
+# - any json files for whatever reason
+*.json
 
 # Ignore build cache
 __pycache__
