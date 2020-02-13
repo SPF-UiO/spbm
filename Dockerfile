@@ -21,8 +21,11 @@ RUN useradd app &&\
 
 USER app
 
-EXPOSE 8435
+EXPOSE 8000
+
+# Stops Python from buffering strings
+ENV PYTHONUNBUFFERED 1
 
 ENTRYPOINT ["container/entrypoint.sh"]
 
-CMD ["uwsgi",  "--ini", "container/uwsgi.ini"]
+CMD ["gunicorn", "-c", "container/gunicorn.conf.py", "spbm.wsgi:application"]

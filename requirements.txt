@@ -28,3 +28,7 @@ uwsgi==2.0.15
 python-dateutil==2.7.3
 # typing for python 3.4 and earlier
 typing==3.6.6
+
+# Add gunicorn
+gunicorn==20.0.4
+meinheld==1.0.1
