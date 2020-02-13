@@ -14,6 +14,9 @@ services:
     container_name: app
     image: spbm
     build: .
+    depends_on:
+      - nginx-proxy
+      - postgres
     expose:
       - 8000
     volumes:
