@@ -27,12 +27,15 @@ from django_jinja.builtins import DEFAULT_EXTENSIONS
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+# Environment specific settings
+################################################################################
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("SPBM_DEBUG", default=0))
 
 # SECURITY WARNING: When Debug is False, ALLOWED_HOSTS must be configured 
 # correctly.
-ALLOWED_HOSTS = os.environ.get("SPBM_ALLOWED_HOSTS").split(",")
+ALLOWED_HOSTS = os.environ.get("SPBM_ALLOWED_HOSTS", default="").split(",")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -42,9 +45,32 @@ ALLOWED_HOSTS = os.environ.get("SPBM_ALLOWED_HOSTS").split(",")
 #               into the Docker container instead
 SECRET_KEY = os.environ.get("SPBM_SECRET_KEY", default='s_#vkn6zj^713q2x37dajjp44*mr9q**j)p!3o#z4a&jynt3-a')
 
-INTERNAL_IPS = ['127.0.0.1']
+# Define internal IP addresses.
+INTERNAL_IPS = os.environ.get("SPBM_INTERNAL_IPS", default='127.0.0.1').split(",")
+
+# SECURITY WARNING: Prevents other hosts from making unsafe requests.
+CSRF_TRUSTED_ORIGINS = os.environ.get("SPBM_CSRF_TRUSTED_ORIGINS", default='').split(",")
+
+# Database
+# https://docs.djangoproject.com/en/dev/ref/databases/
+DATABASES = {
+    'default': {
+        'ENGINE': os.environ.get("SPBM_DB_ENGINE", default='django.db.backends.sqlite3'),
+        'NAME': os.environ.get("SPBM_DB_NAME", default=os.path.join(BASE_DIR, 'db.sqlite3')),
+        'HOST': os.environ.get("SPBM_DB_HOST", default=None),
+        'PORT': os.environ.get("SPBM_DB_PORT", default=None),
+        'USER': os.environ.get("SPBM_DB_USER", default=None),
+        'PASSWORD': os.environ.get("SPBM_DB_PASSWORD", default=None),
+    }
+}
+
+# Application related settings
+################################################################################
 ROOT_URLCONF = 'spbm.urls'
 WSGI_APPLICATION = 'spbm.wsgi.application'
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 # Application definition
 INSTALLED_APPS = (
@@ -77,17 +103,9 @@ MIDDLEWARE = (
     'debug_toolbar.middleware.DebugToolbarMiddleware'
 )
 
-# Database
-# https://docs.djangoproject.com/en/1.10/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 
 # Internationalization
-# https://docs.djangoproject.com/en/1.10/topics/i18n/
+# https://docs.djangoproject.com/en/dev/topics/i18n/
 LANGUAGE_CODE = 'en-gb'
 TIME_ZONE = 'UTC'
 USE_I18N = True
