@@ -21,6 +21,7 @@ SPBM = {
 }
 
 import os
+import ast
 
 # We need the default extensions
 from django_jinja.builtins import DEFAULT_EXTENSIONS
@@ -69,8 +70,10 @@ DATABASES = {
 ROOT_URLCONF = 'spbm.urls'
 WSGI_APPLICATION = 'spbm.wsgi.application'
 
-CSRF_COOKIE_SECURE = bool(os.environ.get("SPBM_CSRF_COOKIE_SECURE", default=True))
-SESSION_COOKIE_SECURE = bool(os.environ.get("SPBM_SESSION_COOKIE_SECURE", default=True))
+CSRF_COOKIE_SECURE = ast.literal_eval(os.environ.get("SPBM_CSRF_COOKIE_SECURE", default='True'))
+SESSION_COOKIE_SECURE = ast.literal_eval(os.environ.get("SPBM_SESSION_COOKIE_SECURE", default='True'))
+
+X_FRAME_OPTIONS = 'DENY'
 
 # Application definition
 INSTALLED_APPS = (
