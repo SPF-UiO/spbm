@@ -1,17 +1,21 @@
 FROM python:3.6-slim-buster
 LABEL maintainer="Thor K. Høgås <thor@roht.no>"
 
+ENV APP_DIR /usr/src/app
+
 RUN apt update && apt install -y build-essential gettext
 
-WORKDIR /usr/src/app
+WORKDIR $APP_DIR
 
-COPY . ./
+COPY requirements.txt $APP_DIR
 
 RUN pip install --no-cache-dir -r requirements.txt
 
+COPY . $APP_DIR
+
 RUN useradd app &&\
     useradd uwsgi &&\
-    mkdir -p logs &&\
+    mkdir -p $APP_DIR/logs &&\
     python manage.py collectstatic --no-input --clear &&\
     python manage.py compilemessages
 
