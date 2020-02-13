@@ -1,11 +1,11 @@
 """
-Django settings for spf_web project.
+Django settings for SPBM project.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/1.10/topics/settings/
+https://docs.djangoproject.com/en/2.1/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.10/ref/settings/
+https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 """
@@ -27,17 +27,21 @@ from django_jinja.builtins import DEFAULT_EXTENSIONS
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = int(os.environ.get("SPBM_DEBUG", default=0))
+
+# SECURITY WARNING: When Debug is False, ALLOWED_HOSTS must be configured 
+# correctly.
+ALLOWED_HOSTS = os.environ.get("SPBM_ALLOWED_HOSTS").split(",")
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 's_#vkn6zj^713q2x37dajjp44*mr9q**j)p!3o#z4a&jynt3-a'
+# Note to self: this is overriden using local_settings.py, but may be moved 
+#               into the Docker container instead
+SECRET_KEY = os.environ.get("SPBM_SECRET_KEY", default='s_#vkn6zj^713q2x37dajjp44*mr9q**j)p!3o#z4a&jynt3-a')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-# When Debug is False, ALLOWED_HOSTS must be configured correctly.
-ALLOWED_HOSTS = []
 INTERNAL_IPS = ['127.0.0.1']
 ROOT_URLCONF = 'spbm.urls'
 WSGI_APPLICATION = 'spbm.wsgi.application'
@@ -84,7 +88,7 @@ DATABASES = {
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
-LANGUAGE_CODE = 'en-uk'
+LANGUAGE_CODE = 'en-gb'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True

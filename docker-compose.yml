@@ -15,6 +15,7 @@ services:
       # Share static files with nginx proxy
       - static-volume:/usr/src/app/static_files
     environment:
+      - SPBM_ALLOWED_HOSTS=spf.cyb.no,app.spf.no
       - VIRTUAL_PROTO=uwsgi
       - VIRTUAL_HOST=app.spf.no
       - VIRTUAL_PORT=8435
