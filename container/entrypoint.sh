@@ -1,12 +1,10 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
-# Correct virtualenv for execution
-#source .virtualenv/bin/activate
+if [[ ! "$DEBUG" ]]; then
+  echo "Migrating database due to SPBM_DEBUG being false"
+  python manage.py showmigrations --plan
+  python manage.py migrate
+fi
 
-#python manage.py flush --no-input
-python manage.py migrate
-python manage.py collectstatic --no-input --clear
-python manage.py compilemessages
-
-# Execute uwsgi for hosting/running the server
-uwsgi --ini container/uwsgi.ini
+# Normally execute uwsgi for hosting/running the server
+exec "$@"
