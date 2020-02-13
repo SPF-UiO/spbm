@@ -1,0 +1,42 @@
+---
+version: '3.7'
+
+# This is a PRODUCTION override file for docker-compose. Use with
+#   docker-compose -f docker-compose.yml -f docker-compose.prod.yml <args>
+
+services:
+  spbm:
+    restart: always
+    environment:
+      - SPBM_ALLOWED_HOSTS=spf.cyb.no,app.spf.no
+      - SPBM_DB_ENGINE=django.db.backends.postgresql
+      - VIRTUAL_PROTO=uwsgi
+      - VIRTUAL_HOST=app.spf.no
+      - VIRTUAL_PORT=8435
+      - LETSENCRYPT_TEST=true
+      - LETSENCRYPT_HOST=app.spf.no
+      - LETSENCRYPT_EMAIL=spf-styret@studorg.uio.no
+
+  nginx-proxy:
+    labels:
+      - 'com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true'
+
+  postgres:
+    volumes:
+      - ~/persistent/spbm-db:/var/lib/postgresql/data
+    # "Sane" defaults that are overwritten
+    env_file:
+
+
+#  nginx-companion:
+#    container_name: nginx-letsencrypt
+#    depends_on:
+#      - nginx-proxy
+#    restart: always
+#    image: jrcs/letsencrypt-nginx-proxy-companion
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock:ro
+#      - cert-volume:/etc/nginx/certs:rw
+#      - vhost-volume:/etc/nginx/vhost.d
+#      - html-volume:/usr/share/nginx/html
+
