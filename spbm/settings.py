@@ -46,8 +46,12 @@ ALLOWED_HOSTS = os.environ.get("SPBM_ALLOWED_HOSTS", default="").split(",")
 #               into the Docker container instead
 SECRET_KEY = os.environ.get("SPBM_SECRET_KEY", default='s_#vkn6zj^713q2x37dajjp44*mr9q**j)p!3o#z4a&jynt3-a')
 
-# Define internal IP addresses.
-INTERNAL_IPS = os.environ.get("SPBM_INTERNAL_IPS", default='127.0.0.1').split(",")
+# SECURITY WARNING: Enables debug toolbar if debug is enabled.
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": "debug_toolbar.middleware.show_toolbar"
+    if int(os.environ.get("SPBM_DEBUG", default=0))
+    else lambda _: True
+}
 
 # SECURITY WARNING: Prevents other hosts from making unsafe requests.
 CSRF_TRUSTED_ORIGINS = os.environ.get("SPBM_CSRF_TRUSTED_ORIGINS", default='').split(",")
