@@ -62,3 +62,13 @@ jobs:
       testResultsFiles: "**/TEST-*.xml"
       testRunTitle: 'Python $(PYTHON_VERSION)'
     condition: succeededOrFailed()
+
+- deployment: deployToTest
+  displayName: "Deploy to test"
+  environment: 'test'
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+          - script: |
+              echo "Pretending to deploy to something"
