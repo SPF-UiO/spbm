@@ -11,12 +11,46 @@ For funksjonalitetsønsker, problemer, og spørsmål kan du [opprette et issue h
 *For feature requests, problems, and questions, please [create an issue here on GitHub][new issue].*
 
 
-Contributing
-------------
-Any help is much appreciated. Take a look at our issues in the [issue tracker], and go crazy.
+## Getting Started
+
+You need *Docker* and *Docker Compose* to get started locally. You may use *Docker* on its own, but it'll require setting the containers up manually.
+
+To get started with a Gunicorn-based development environment with live reloads use `docker-compose`:
+
+```sh
+$ docker-compose up
+```
+
+You'll get a local development environment with SPBM, NGINX and PostgreSQL.
+
+If you'd rather use the built-in Django development server you may do so.
+
+```sh
+$ docker-compose run spbm python manage.py runserver 0.0.0.0:8000
+```
+
+Use `docker-compose` to perform other typical things while developing, such as migrating or loading.
+
+```sh
+$ docker-compose run spbm python manage.py migrate
+$ docker-compose run spbm python manage.py showmigrations --plan
+$ docker-compose run spbm python manage.py loaddata
+$ docker-compose run spbm python manage.py ...
+```
+
+You may also use *Poetry* and a *virtualenv* for smoother development, but be careful and test your changes using the Docker container too to ensure that everything works the way it should.
+
+### Production
+
+Make sure to override default environment variables for SPBM, and PostgreSQL if you're using Docker Compose.
+
+```sh
+$ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
+```
 
 Hacking away
 ------------
+
 ### Getting started with i18n
 
 
@@ -40,9 +74,16 @@ Hacking away
     $ ./manage.py compilemessages
     ```
 
+
 ### Deployment
+
 See `scripts/run_production.sh` for the most important steps that take place upon deployment. 
 This is combined with the awesome power of our `werker.yml` file, which is our CI of choice as of today.
+
+Contributing
+------------
+
+Any help is much appreciated. Take a look at our issues in the [issue tracker], and go crazy.
 
 [issue tracker]: https://github.com/SPF-UiO/spbm/issues
 [new issue]: https://github.com/SPF-UiO/spbm/issues/new
