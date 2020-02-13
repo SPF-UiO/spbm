@@ -15,13 +15,13 @@ services:
     image: spbm
     build: .
     expose:
-      - 8435
+      - 8000
     volumes:
       # Share static files with nginx proxy
       - static-volume:/usr/src/app/static_files
     environment:
-      - VIRTUAL_PROTO=uwsgi
-      - VIRTUAL_PORT=8435
+      - VIRTUAL_PROTO=http
+      - VIRTUAL_PORT=8000
     env_file:
       - ./container/spbm.env
   postgres:
