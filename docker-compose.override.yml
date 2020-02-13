@@ -1,0 +1,20 @@
+---
+version: '3.7'
+
+# This is the development override docker-compose file, overriding settings
+# from the base compose file.
+
+services:
+  spbm:
+    volumes:
+      # Development mounting of development folder
+      - .:/usr/src/app
+    env_file:
+      - ./container/spbm.dev.env
+  postgres:
+    volumes:
+      - db-volume:/var/lib/postgresql/data
+
+volumes:
+  # Local persistent Docker volume for the database
+  db-volume:

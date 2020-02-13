@@ -1,28 +1,39 @@
 ---
 version: '3.7'
 
-# This is NOT a development version which enables the application to run
-# using the production-ready image, while still using local application
-# files to enable development.
+# This is the BASE docker-compose file, specifying the baseline settings for
+# SPBM. When executing "docker-compose up" this file and the override file
+# docker-compose.override.yml will be loaded which overrides certain parts.
+#
+# For a production environment you must manually specify the production
+# compose file and the base with:
+#   docker-compose -f docker-compose.yml -f docker-compose.prod.yml <args>
 
 services:
   spbm:
+    container_name: app
+    image: spbm
     build: .
     expose:
       - 8435
-    #restart: always
     volumes:
       # Share static files with nginx proxy
       - static-volume:/usr/src/app/static_files
     environment:
-      - SPBM_ALLOWED_HOSTS=spf.cyb.no,app.spf.no
       - VIRTUAL_PROTO=uwsgi
-      - VIRTUAL_HOST=app.spf.no
       - VIRTUAL_PORT=8435
-      - LETSENCRYPT_TEST=true
-      - LETSENCRYPT_HOST=app.spf.no
-      - LETSENCRYPT_EMAIL=spf-styret@studorg.uio.no
-
+    env_file:
+      - ./container/spbm.env
+  postgres:
+    container_name: psql
+    # Note that psycopg2 is the main requirement for PSQL support, not Django
+    # itself per se. Thus, to upgrade PostgreSQL check psycopg2 support.
+    image: postgres:10.11
+    ports:
+      - 5432:5432
+    # "Sane" defaults that are overwritten
+    env_file:
+      - ./container/postgres.env
   nginx-proxy:
     container_name: nginx
     image: jwilder/nginx-proxy
@@ -39,8 +50,6 @@ services:
       - html-volume:/usr/share/nginx/html
     environment:
       - ENABLE_IPV6=true
-    labels:
-      - 'com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true'
 
         #  nginx-companion:
         #    container_name: nginx-letsencrypt
