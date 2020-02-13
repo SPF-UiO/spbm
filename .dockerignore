@@ -1,3 +1,7 @@
+# Things that do not belong in any build of SPBM
+# - they're not relevant in a container
+scripts/
+
 # Ignore build cache
 __pycache__
 *.pyc
