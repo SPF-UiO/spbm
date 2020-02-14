@@ -176,6 +176,7 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 # Provided to support django.contrib.admin
+                'django.contrib.messages.context_processors.messages',
                 'django.contrib.auth.context_processors.auth',
             ],
         },
