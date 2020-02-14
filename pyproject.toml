@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "spbm"
+version = "0.1.0"
+description = "The Student Personnel Booking Manager"
+authors = ["Thor K. H. <thor@roht.no>"]
+
+[tool.poetry.urls]
+repository = "https://github.com/SPF-UiO/spbm"
+"Bug Tracker" = "https://github.com/SPF-UiO/spbm/issues"
+
+[tool.poetry.dependencies]
+python = ">=3.6,<3.10"
+Django = "~2.2.28"
+django-debug-toolbar = "^1.11.1"
+psycopg2 = {version = "~2.7.5", optional = true}
+django-jinja = "~2.4"
+jinja2 = "~2.11"
+puente = "~0.5"
+markupsafe = "^1.1"
+pytz = "^2018.04"
+django-localflavor = "~2.1"
+django-widget-tweaks = "~1.4.2"
+django-extra-views = "~0.10.0"
+python-dateutil = "^2.7.3"
+typing = "^3.6.6"
+gunicorn = "^20.0.4"
+meinheld = "^1.0.1"
+uwsgi = {version = "^2.0.15", optional = true}
+inotify = {version = "^0.2.10", optional = true}
+mysqlclient = {version = "^1.4.6", optional = true}
+
+[tool.poetry.extras]
+uwsgi = ["uwsgi"]
+pgsql = ["psycopg2"]
+mariadb = ["mysqlclient"]
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
