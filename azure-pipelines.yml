@@ -12,13 +12,11 @@ trigger:
 pr:
 - master
 
-name: "Contineous Integration"
-
 jobs:
 - job: buildAndTestSPBM
   displayName: "Build SPBM w/"
   pool:
-    vmImage: 'ubuntu-latest'
+    vmImage: 'ubuntu-18.04'
   strategy:
     matrix:
       "Python 3.6":
@@ -67,12 +65,20 @@ jobs:
     condition: succeededOrFailed()
 
 - deployment: buildDockerContainer
+  pool:
+    vmImage: 'ubuntu-18.04'
   environment: "test"
   displayName: "Build & Publish Docker Container"
+  workspace:
+    clean: outputs
   strategy:
    runOnce:
      deploy:
        steps:
+        - script: |
+            pwd
+            ls -la
+          displayName: "Current working directory status"
         - task: Docker@2
           displayName: "Build plain Docker container"
           inputs:
