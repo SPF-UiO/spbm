@@ -25,8 +25,6 @@ jobs:
         PYTHON_VERSION: '3.6'
       "Python 3.7":
         PYTHON_VERSION: '3.7'
-      "Python 3.8":
-        PYTHON_VERSION: '3.8'
     maxParallel: 3
   steps:
   - task: UsePythonVersion@0
@@ -79,13 +77,13 @@ jobs:
           displayName: "Build plain Docker container"
           inputs:
             command: 'build'
-            Dockerfile: '**/Dockerfile'
+            Dockerfile: 'Dockerfile'
         - task: DockerCompose@0
           displayName: "Build with docker-compose"
           inputs:
             containerregistrytype: 'Container Registry'
             dockerRegistryEndpoint: 'Docker Hub'
-            dockerComposeFile: '**/docker-compose.yml'
+            dockerComposeFile: 'docker-compose.yml'
             additionalDockerComposeFiles: 'docker-compose.prod.yml'
             action: 'Build services'
             includeSourceTags: true
