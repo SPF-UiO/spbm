@@ -76,10 +76,11 @@ jobs:
    runOnce:
      deploy:
        steps:
+        - checkout: self
         - script: |
             pwd
             ls -la
-            cd ${Build.SourcesDirectory}
+            cd $(Build.SourcesDirectory)
             pwd
             ls -la
           displayName: "Current working directory status"
