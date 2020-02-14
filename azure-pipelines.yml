@@ -69,6 +69,7 @@ jobs:
     condition: succeededOrFailed()
 
 - deployment: buildDockerContainer
+  environment: "test"
   displayName: "Build & Publish Docker Container"
   strategy:
    runOnce:
