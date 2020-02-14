@@ -12,7 +12,7 @@ trigger:
 pr:
 - master
 
-name: "CI/CD Pipeline"
+name: "Contineous Integration"
 
 jobs:
 - job: buildAndTestSPBM
