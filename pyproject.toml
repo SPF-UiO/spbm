@@ -38,6 +38,11 @@ pgsql = ["psycopg2"]
 mariadb = ["mysqlclient"]
 
 [tool.poetry.dev-dependencies]
+taskipy = "^1.1.3"
+
+[tool.taskipy.tasks]
+dev = "SPBM_DEBUG=1 python -Wa ./manage.py runserver"
+test = "python -Wa ./manage.py test"
 
 [build-system]
 requires = ["poetry>=0.12"]
