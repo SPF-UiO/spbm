@@ -3,15 +3,20 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
+variables:
+  DOCKER_BUILDKIT: 1
+
 trigger:
 - master
 
 pr:
 - master
 
+name: "CI/CD Pipeline"
+
 jobs:
 - job: buildAndTestSPBM
-  displayName: "Build and test SPBM"
+  displayName: "Build SPBM w/"
   pool:
     vmImage: 'ubuntu-latest'
   strategy:
@@ -20,6 +25,8 @@ jobs:
         PYTHON_VERSION: '3.6'
       "Python 3.7":
         PYTHON_VERSION: '3.7'
+      "Python 3.8":
+        PYTHON_VERSION: '3.8'
     maxParallel: 3
   steps:
   - task: UsePythonVersion@0
@@ -60,3 +67,25 @@ jobs:
       testResultsFiles: "**/TEST-*.xml"
       testRunTitle: 'Python $(PYTHON_VERSION)'
     condition: succeededOrFailed()
+
+- deployment: buildDockerContainer
+  displayName: "Build & Publish Docker Container"
+  strategy:
+   runOnce:
+     deploy:
+       steps:
+        - task: Docker@2
+          displayName: "Build plain Docker container"
+          inputs:
+            command: 'build'
+            Dockerfile: '**/Dockerfile'
+        - task: DockerCompose@0
+          displayName: "Build with docker-compose"
+          inputs:
+            containerregistrytype: 'Container Registry'
+            dockerRegistryEndpoint: 'Docker Hub'
+            dockerComposeFile: '**/docker-compose.yml'
+            additionalDockerComposeFiles: 'docker-compose.prod.yml'
+            action: 'Build services'
+            includeSourceTags: true
+            includeLatestTag: true
