@@ -48,9 +48,11 @@ SECRET_KEY = os.environ.get("SPBM_SECRET_KEY", default='s_#vkn6zj^713q2x37dajjp4
 
 # SECURITY WARNING: Enables debug toolbar if debug is enabled.
 DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK": "debug_toolbar.middleware.show_toolbar"
-    if int(os.environ.get("SPBM_DEBUG", default=0))
-    else lambda _: True
+    # Per the source this only checks for REMOTE_ADDR matching INTERNAL_IPS,
+    # followed by checking DEBUG. As we want to ignore the IPS and show it if
+    # DEBUG is enabled, we replace it with the value of DEBUG.
+    # https://github.com/recamshak/django-debug-panel/blob/master/debug_panel/middleware.py#L15
+    "SHOW_TOOLBAR_CALLBACK": lambda _: bool(DEBUG)
 }
 
 # SECURITY WARNING: Prevents other hosts from making unsafe requests.
