@@ -1,12 +1,11 @@
-from django.contrib.auth.models import User, Permission
-from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.models import Permission
+from django.http import HttpResponseRedirect
 from django.test import TestCase
 from django.urls import reverse
 
-from spbm.apps.accounts.models import SpfUser
 from spbm.apps.norlonn.models import NorlonnReport
-from spbm.apps.society.models import Society, Worker
-from . import test_fixtures, SPFTestMixin
+from spbm.apps.society.models import Worker
+from . import test_fixtures, SPFTestMixin, set_up_user
 
 
 class WagesTests(SPFTestMixin, TestCase):
@@ -14,15 +13,12 @@ class WagesTests(SPFTestMixin, TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.society_name = 'CYB'
         cls.existing_report = '2016-07-17'
-        cls.society = Society.objects.get(shortname=cls.society_name)
+        cls.export_permission = Permission.objects.get(codename="export_report")
+        cls.generate_permission = Permission.objects.get(codename="generate_report")
+        set_up_user(cls, superuser=False)
 
     def setUp(self):
-        self.user = User()
-        self.user.save()
-        self.spf_user = SpfUser(user=self.user, society=Society.objects.get(shortname=self.society_name))
-        self.spf_user.save()
         self.client.force_login(self.user)
 
     def test_wage_views(self):
@@ -44,29 +40,30 @@ class WagesTests(SPFTestMixin, TestCase):
 
     def test_generate_report_no_get(self):
         """ Verify that attempting to GET does not create a report """
-        self.user.user_permissions.add(Permission.objects.get(codename='generate_report'))
+        reports_before = NorlonnReport.objects.count()
+        self.user.user_permissions.add(self.generate_permission)
         self.assertIsInstance(self.client.get(reverse('wages-generate_report')), HttpResponseRedirect)
-        self.assertTrue(NorlonnReport.objects.count() == 1, "Report was generated")
+        self.assertEqual(NorlonnReport.objects.count(), reports_before, "Number of reports has changed")
 
     def test_generate_and_export_report(self):
         """
         Test generation of report and that it yields correct output together with exporting.
         """
         current_report = NorlonnReport.objects.first()
-        self.user.user_permissions.add(Permission.objects.get(codename='export_report'))
+        self.user.user_permissions.add(self.export_permission)
         report_response = self.client.get(reverse('wages-export_report', args=[self.existing_report]))
-        self.assertEqual(report_response.content, bytes(";101;H1;100;390000;", encoding='utf8'))
+        self.assertEqual(report_response.content, b";101;H1;100;390000;")
         self.assertEqual(report_response.status_code, self.HTTP_OK)
 
         # Generate the new one
-        self.user.user_permissions.add(Permission.objects.get(codename='generate_report'))
+        self.user.user_permissions.add(self.generate_permission)
         generate_response = self.client.post(reverse('wages-generate_report'))
         self.assertTemplateUsed(generate_response, 'norlonn/report.jinja')
 
         new_report = NorlonnReport.objects.last()
         self.assertNotEqual(current_report, new_report, "Report was not generated")
         export_new = self.client.get(reverse('wages-export_report', args=[NorlonnReport.objects.last().date]))
-        self.assertEqual(export_new.content, bytes(";101;H1;100;234000;", encoding='utf8'))
+        self.assertEqual(export_new.content, b";101;H1;100;234000;")
 
         # Can we generate a new one right afterwards? No, because there's no new payrolls we can do anything with
         no_valid = self.client.post(reverse('wages-generate_report'), follow=True)
@@ -79,7 +76,3 @@ class WagesTests(SPFTestMixin, TestCase):
         lucky_james.save()
         same_date = self.client.post(reverse('wages-generate_report'), follow=True)
         self.assertMessagesContains(same_date, "payroll already exists")
-
-
-
-
