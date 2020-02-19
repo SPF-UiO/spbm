@@ -22,21 +22,21 @@ To get started with a Gunicorn-based development environment with live reloads u
 $ docker-compose up
 ```
 
-You'll get a local development environment with SPBM, NGINX and PostgreSQL.
+You'll get a local development environment with SPBM, NGINX and PostgreSQL (available at [`localhost:80`](http://localhost:80)).
 
-If you'd rather use the built-in Django development server you may do so.
+If you'd rather use the built-in Django development server (at [`localhost:8000`](http://localhost:8000)) you may do so.
 
 ```sh
-$ docker-compose run spbm python manage.py runserver 0.0.0.0:8000
+$ docker-compose run spbm ./manage.py runserver 0.0.0.0:8000
 ```
 
 Use `docker-compose` to perform other typical things while developing, such as migrating or loading.
 
 ```sh
-$ docker-compose run spbm python manage.py migrate
-$ docker-compose run spbm python manage.py showmigrations --plan
-$ docker-compose run spbm python manage.py loaddata
-$ docker-compose run spbm python manage.py ...
+$ docker-compose run spbm ./manage.py showmigrations --plan
+$ docker-compose run spbm ./manage.py migrate
+$ docker-compose run spbm ./manage.py loaddata User SpfUser Society Invoice Worker Employment Event NorlonnReport Shift
+$ docker-compose run spbm ./manage.py ...
 ```
 
 You may also use *Poetry* and a *virtualenv* for smoother development, but be careful and test your changes using the Docker container too to ensure that everything works the way it should.
@@ -49,16 +49,12 @@ Make sure to override default environment variables for SPBM, and PostgreSQL if 
 $ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
 ```
 
-Hacking away
-------------
-
-### Getting started with i18n
-
+### Translations and i18n
 
 1. Make sure to add strings using `ugettext` and similarly, such as `ugettext_lazy` in models. 
    For more information, see Django's own documentation on how to mark strings as localiseable.
 
-2. Once strings have been added, update the locales with the following combo.
+2. Once strings have been added in the code, extract and combine the strings into the locale's `PO` files:
 
     ```sh
     $ ./manage.py extract && ./manage.py merge
@@ -66,7 +62,7 @@ Hacking away
     
     This will extract all the localizable strings into `locale/templates`, followed by a merge with `locale/xx_XX`.
     Both `extract` and `merge` are provided by `puente`.  
-    :warning: **Do not use Django's `makemessages`!**
+    *Do not use Django's `makemessages`!*
 
 3. Once you've translated the strings in `locale/xx_XX/django.po`, you'll want to *compile* the strings.
     You'll want to do this every time you're working locally and you want to see the changes. 
@@ -75,11 +71,6 @@ Hacking away
     $ ./manage.py compilemessages
     ```
 
-
-### Deployment
-
-See `scripts/run_production.sh` for the most important steps that take place upon deployment. 
-This is combined with the awesome power of our `werker.yml` file, which is our CI of choice as of today.
 
 Contributing
 ------------
