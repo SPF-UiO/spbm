@@ -3,6 +3,7 @@ SPFs "SPBM"
 
 [![Build Status](https://dev.azure.com/thoor/SPBM/_apis/build/status/SPF-UiO.spbm?branchName=master "Azure Pipelines status")](https://dev.azure.com/thoor/SPBM/_build/latest?definitionId=1&branchName=master)
 [![coverage status](https://coveralls.io/repos/github/SPF-UiO/spbm/badge.svg?branch=master "Test coverage status")](https://coveralls.io/github/SPF-UiO/spbm?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/51ad586a4da8782c4834/maintainability "CodeClimate maintainability score")](https://codeclimate.com/github/SPF-UiO/spbm/maintainability)
 
 Her er koden for *Studentkjellernes personalforening* sitt nåværende nettbaserte system for grovhåndtering av diverse utlån og leier av lokaler, studentansatte, fakturering av medlemsforeninger, samt lønnsrapportering for utbetaling av lønn.  
 *This is the code for the *Student basement pubs society* current web-based system for roughly managing our various bookings and rentals of our collective premises, student employees, invoicing our member societies, as well as wage reporting to facilitate payroll.*
