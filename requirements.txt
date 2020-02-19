@@ -1,5 +1,5 @@
 # Main framework
-Django==2.1.15
+Django==2.2.10
 django-debug-toolbar==1.9.1
 
 # PostgreSQL-connector, not required for development
