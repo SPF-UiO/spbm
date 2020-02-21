@@ -4,98 +4,206 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 variables:
+  # SPBM in the pipeline
+  # - wheel: Azure Pipelines recommendation
+  # - coverage[toml]: coverage that can read pyproject.toml
+  # - unittest-xml-reporting: XML from Django manage.py test
+  SPBM_TEST_REQUIREMENTS: >-
+    wheel coverage[toml] unittest-xml-reporting
+
+  # Cache variables
+  PIP_CACHE_DIR: /home/vsts/.cache/pip
+  # Other variables
   DOCKER_BUILDKIT: 1
+  GIT_COMMIT_SHA: $(Build.SourceVersion)
+  GIT_BRANCH: $(Build.SourceBranch)
+  CI_BRANCH: $(Build.SourceBranch)
+  CI_BUILD_NUMBER: $(Build.BuildNumber)
+  CI_BUILD_URL: https://dev.azure.com/thoor/SPBM/_build/results?buildId=$(Build.BuildId)
+  CI_NAME: "Azure Pipelines"
 
 trigger:
-- master
+  - master
 
 pr:
-- master
+  - master
 
-jobs:
-- job: buildAndTestSPBM
-  displayName: "Build SPBM w/"
-  pool:
-    vmImage: 'ubuntu-18.04'
-  strategy:
-    matrix:
-      "Python 3.6":
-        PYTHON_VERSION: '3.6'
-      "Python 3.7":
-        PYTHON_VERSION: '3.7'
-    maxParallel: 3
-  steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '$(PYTHON_VERSION)'
-      architecture: 'x64'
+pool:
+  vmImage: "ubuntu-18.04"
 
-  - task: PythonScript@0
-    displayName: 'Export project path'
-    inputs:
-      scriptSource: 'inline'
-      script: |
-        """Search all subdirectories for `manage.py`."""
-        from glob import iglob
-        from os import path
-        # Python >= 3.5
-        manage_py = next(iglob(path.join('**', 'manage.py'), recursive=True), None)
-        if not manage_py:
-            raise SystemExit('Could not find a Django project')
-        project_location = path.dirname(path.abspath(manage_py))
-        print('Found Django project in', project_location)
-        print('##vso[task.setvariable variable=projectRoot]{}'.format(project_location))
+stages:
+  - stage: build
+    displayName: "Build"
+    jobs:
+      - job: preNotifyCodeServices
+        displayName: "Pre-notify QA"
+        steps:
+          - script: |
+              curl -fsSL https://codeclimate.com/downloads/test-reporter/test-reporter-0.6.3-linux-amd64 -o cc-test-reporter && chmod +x ./cc-test-reporter
+              ./cc-test-reporter before-build
+            displayName: "Notify services before build"
+            env:
+              CC_TEST_REPORTER_ID: $(CC_TEST_REPORTER_ID)
 
-  - script: |
-      python -m pip install --upgrade pip setuptools wheel
-      pip install -r requirements.txt
-      pip install unittest-xml-reporting
-    displayName: 'Install prerequisites'
-    failOnStderr: true
+      - job: test
+        displayName: "Test:"
+        dependsOn: preNotifyCodeServices
+        strategy:
+          matrix:
+            "Python 3.6":
+              PYTHON_VERSION: "3.6"
+            "Python 3.7":
+              PYTHON_VERSION: "3.7"
+            "Python 3.8":
+              PYTHON_VERSION: "3.8"
+          maxParallel: 3
+        steps:
+          - task: UsePythonVersion@0
+            displayName: "Select Python version"
+            inputs:
+              versionSpec: "$(PYTHON_VERSION)"
+              architecture: "x64"
 
-  - script: |
-      pushd '$(projectRoot)'
-      python manage.py test --testrunner xmlrunner.extra.djangotestrunner.XMLTestRunner --no-input
-    displayName: 'Run tests'
+          - task: Cache@2
+            inputs:
+              key: 'pip_home | "$(PYTHON_VERSION)" | requirements.txt'
+              restoreKeys: |
+                pip_home | "$(PYTHON_VERSION)"
+                pip_home
+              path: $(PIP_CACHE_DIR)
 
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFiles: "**/TEST-*.xml"
-      testRunTitle: 'Python $(PYTHON_VERSION)'
-    condition: succeededOrFailed()
+          - script: |
+              # CodeClimate prerequisities
+              curl -fsSL https://codeclimate.com/downloads/test-reporter/test-reporter-0.6.3-linux-amd64 -o cc-test-reporter && chmod +x ./cc-test-reporter
+              # Python project prerequisites: --find-links $(PIP_CACHE_FOLDER) 
+              pip install --upgrade $(SPBM_TEST_REQUIREMENTS)
+              pip install -r requirements.txt
+            displayName: "Install prerequisites"
+            failOnStderr: true
 
-- deployment: buildDockerContainer
-  dependsOn: buildAndTestSPBM
-  pool:
-    vmImage: 'ubuntu-18.04'
-  environment: "test"
-  displayName: "Build & Publish Docker Container"
-  workspace:
-    clean: outputs
-  strategy:
-   runOnce:
-     deploy:
-       steps:
-        - checkout: self
-        - script: |
-            pwd
-            ls -la
-            cd $(Build.SourcesDirectory)
-            pwd
-            ls -la
-          displayName: "Current working directory status"
-        - task: Docker@2
-          displayName: "Build plain Docker container"
-          inputs:
-            command: 'build'
-            Dockerfile: 'Dockerfile'
-        - task: DockerCompose@0
-          displayName: "Build with docker-compose"
-          inputs:
-            containerregistrytype: 'Container Registry'
-            dockerRegistryEndpoint: 'Docker Hub'
-            dockerComposeFile: 'docker-compose.yml'
-            additionalDockerComposeFiles: 'docker-compose.prod.yml'
-            action: 'Build services'
-            includeSourceTags: true
-            includeLatestTag: true
+          - script: |
+              python -m coverage run --branch ./manage.py test --testrunner xmlrunner.extra.djangotestrunner.XMLTestRunner --no-input
+              python -m coverage report
+              python -m coverage xml
+              mkdir -p coverage && cp .coverage coverage/.coverage.$(Agent.Id)
+            displayName: "Test with coverage"
+
+          - script: |
+              # Run CodeClimate test reporter
+              ./cc-test-reporter format-coverage --output coverage/codeclimate.$(Agent.Id).json
+            displayName: "Format coverage data"
+
+          - publish: coverage
+            artifact: "coverage_$(Agent.Id)"
+            displayName: "Save coverage reports"
+
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFiles: "**/TEST-*.xml"
+              testRunTitle: "Python $(PYTHON_VERSION)"
+              mergeTestResults: true
+            condition: succeededOrFailed()
+
+          - task: PublishCodeCoverageResults@1
+            inputs:
+              summaryFileLocation: coverage.xml
+              codeCoverageTool: cobertura
+
+      - job: postNotifyCodeServices
+        displayName: "Post-notify QA"
+        dependsOn: test
+        condition: succeededOrFailed()
+        steps:
+          - download: current
+            patterns: |
+              **/*.json
+              **/.coverage*
+
+          - task: UsePythonVersion@0
+            displayName: "Select Python version"
+
+          - script: |
+              pip install coverage
+              coverage combine $(Pipeline.Workspace)/coverage_*/.coverage*
+              coverage xml
+              # Update env vars to make sense
+              BRANCH_NAME=$(echo $GIT_BRANCH | cut -d/ -f3-)
+              echo "Correct branch name is $BRANCH_NAME"
+              echo "###vso[task.setvariable variable=CI_BRANCH]$BRANCH_NAME"
+              echo "###vso[task.setvariable variable=GIT_BRANCH]$BRANCH_NAME"
+            displayName: "Combine coverage.py & fix env vars"
+
+          - script: |
+              curl -fsSL https://codeclimate.com/downloads/test-reporter/test-reporter-0.6.3-linux-amd64 -o cc-test-reporter && chmod +x ./cc-test-reporter
+              ./cc-test-reporter sum-coverage $(Pipeline.Workspace)/coverage_*/codeclimate.*.json
+              ./cc-test-reporter upload-coverage
+            env:
+              CC_TEST_REPORTER_ID: $(CC_TEST_REPORTER_ID)
+            displayName: "Notify Code Climate"
+
+          - script: |
+              curl -Ls -o codacy-coverage-reporter "https://dl.bintray.com/codacy/Binaries/7.0.1/codacy-coverage-reporter-linux"
+              chmod +x codacy-coverage-reporter
+              ./codacy-coverage-reporter report -l Python -r coverage.xml
+            env:
+              CODACY_PROJECT_TOKEN: $(CODACY_PROJECT_TOKEN)
+            displayName: "Notify Codacy"
+
+          - script: |
+              bash <(curl -s https://codecov.io/bash) -f coverage.xml
+            env:
+              CODECOV_TOKEN: $(CODECOV_TOKEN)
+            displayName: "Notify Codecov"
+
+          - script: |
+              pip install coveralls
+              coveralls
+            env:
+              COVERALLS_REPO_TOKEN: $(COVERALLS_REPO_TOKEN)
+            displayName: "Notify coveralls"
+
+  - stage: buildContainer
+    displayName: "Build Container"
+    condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+    jobs:
+      - deployment: buildImage
+        environment: Test
+        displayName: "Build Docker Container"
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                - task: Docker@2
+                  displayName: "Build Docker Container"
+                  inputs:
+                    command: "build"
+                    Dockerfile: "Dockerfile"
+                    containerRegistry: "Docker Hub"
+                    tags: |
+                      $(Build.BuildId)
+                      latest
+
+  - stage: publishContainer
+    displayName: "Publish Container"
+    dependsOn: build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    jobs:
+      - deployment: publishImage
+        environment: Production
+        displayName: "Publish on Docker Hub"
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                - task: Docker@2
+                  displayName: "Build & Publish Docker Image"
+                  inputs:
+                    command: "buildAndPush"
+                    Dockerfile: "Dockerfile"
+                    repository: "cybernetisk/spbm"
+                    containerRegistry: "Docker Hub"
+                    tags: |
+                      $(Build.BuildId)
+                      latest
