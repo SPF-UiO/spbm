@@ -2,9 +2,6 @@
 Django==2.2.10
 django-debug-toolbar==1.9.1
 
-# PostgreSQL-connector, not required for development
-psycopg2-binary==2.7.5
-
 # Jinja2 improved translation tags & i18n
 django-jinja==2.4.1
 jinja2==2.11.1
