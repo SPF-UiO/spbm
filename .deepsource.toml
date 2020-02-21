@@ -1,0 +1,18 @@
+version = 1
+
+test_patterns = [
+  "**/tests/*",
+  "**/migrations/*"
+]
+
+exclude_patterns = [
+  "*.min.js",
+  "bootstrap.js"
+]
+
+[[analyzers]]
+name = "python"
+enabled = true
+
+	[analyzers.meta]
+	runtime_version = "3.x.x"
