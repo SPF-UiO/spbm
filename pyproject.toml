@@ -10,17 +10,14 @@ repository = "https://github.com/SPF-UiO/spbm"
 
 [tool.poetry.dependencies]
 python = "^3.6"
-Django = [
-    {version = "~2.1.15", python = ">= 3.6, < 3.8"},
-    {version = "~2.2.8", python = "^3.8"}
-]
-django-debug-toolbar = "^1.9.1"
-psycopg2 = {version = "~2.7.5", optional = true}
-django-jinja = "~2.4"
-jinja2 = "~2.10"
+Django = {version = "~2.2.8", python = "<3.9"}
+django-debug-toolbar = "^2.2"
+psycopg2 = {version = "~2.8.4", optional = true}
+django-jinja = "~2.6"
+jinja2 = "~2.11"
 puente = "~0.5"
 markupsafe = "^1.0"
-pytz = "^2018.04"
+pytz = "^2019.03"
 django-localflavor = "~2.1"
 django-widget-tweaks = "~1.4.2"
 django-extra-views = "~0.10.0"
@@ -29,12 +26,12 @@ typing = "^3.6.6"
 gunicorn = "^20.0.4"
 meinheld = "^1.0.1"
 uwsgi = {version = "^2.0.15", optional = true}
-inotify = {version = "^0.2.10", optional = true}
+inotify = "^0.2.10"
 mysqlclient = {version = "^1.4.6", optional = true}
 
 [tool.poetry.extras]
 uwsgi = ["uwsgi"]
-pgsql = ["psycopg2"]
+psql = ["psycopg2"]
 mariadb = ["mysqlclient"]
 
 [tool.poetry.dev-dependencies]
@@ -43,7 +40,8 @@ taskipy = "^1.1.3"
 [tool.taskipy.tasks]
 dev = "SPBM_DEBUG=1 python -Wa ./manage.py runserver"
 test = "python -Wa ./manage.py test"
+coverage = "python -Wa -m coverage run --branch ./manage.py test"
 
 [build-system]
-requires = ["poetry>=0.12"]
+requires = ["poetry>=1.0.3"]
 build-backend = "poetry.masonry.api"
