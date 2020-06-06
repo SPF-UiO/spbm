@@ -6,7 +6,7 @@ django-debug-toolbar==1.9.1
 django-jinja==2.4.1
 jinja2==2.11.1
 puente==0.5
-markupsafe==1.0
+markupsafe==1.1.1
 pytz==2018.04
 
 ## Other various Django packages
