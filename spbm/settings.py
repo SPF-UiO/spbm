@@ -32,17 +32,22 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 ################################################################################
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(os.environ.get("SPBM_DEBUG", default=0))
+DEBUG = bool(int(os.environ.get("SPBM_DEBUG", default=0)))
 
-# SECURITY WARNING: When Debug is False, ALLOWED_HOSTS must be configured 
+# SECURITY WARNING: When Debug is False, ALLOWED_HOSTS must be configured
 # correctly.
-ALLOWED_HOSTS = os.environ.get("SPBM_ALLOWED_HOSTS", default="").split(",")
+ALLOWED_HOSTS = (
+    os.environ.get("SPBM_ALLOWED_HOSTS").split(",")
+    if os.environ.get("SPBM_ALLOWED_HOSTS")
+    else []
+)
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# Note to self: this is overriden using local_settings.py, but may be moved 
+# Note to self: this is overriden using local_settings.py, but may be moved
 #               into the Docker container instead
 SECRET_KEY = os.environ.get("SPBM_SECRET_KEY", default='s_#vkn6zj^713q2x37dajjp44*mr9q**j)p!3o#z4a&jynt3-a')
 

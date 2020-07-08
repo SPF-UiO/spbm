@@ -2,15 +2,13 @@ from django.contrib.auth.models import User, Permission
 from django.test import TestCase
 from django.urls import reverse
 
-from spbm.helpers.auth import user_society
-from . import test_fixtures
+from . import test_fixtures, SPFTestMixin
 from ..models import Event, Society
 from ...accounts.models import SpfUser
 
 
-class EventLoggedInWithPermissionsTests(TestCase):
+class EventLoggedInWithPermissionsTests(SPFTestMixin, TestCase):
     fixtures = test_fixtures
-    HTTP_OK = 200
 
     @classmethod
     def setUpTestData(cls):
@@ -125,7 +123,7 @@ class EventLoggedInWithPermissionsTests(TestCase):
         self.assertEqual(Event.objects.last(), self.last_event)
 
 
-class EventAdminTests(TestCase):
+class EventAdminTests(SPFTestMixin, TestCase):
     fixtures = test_fixtures
 
     def setUp(self):
@@ -145,7 +143,7 @@ class EventAdminTests(TestCase):
         """
         e = Event.objects.filter(processed__isnull=False).first()
         response = self.client.get(reverse('admin:society_event_change', args=(e.id,)))
-        self.assertTrue(response.status_code, 200)
+        self.assertTrue(response.status_code, self.HTTP_OK)
 
     def test_view_unprocessed_event(self):
         """
@@ -153,7 +151,7 @@ class EventAdminTests(TestCase):
         """
         e = Event.objects.filter(processed__isnull=True).first()
         response = self.client.get(reverse('admin:society_event_change', args=(e.id,)))
-        self.assertTrue(response.status_code, 200)
+        self.assertTrue(response.status_code, self.HTTP_OK)
 
     def test_update_shift_processed_event(self):
         """
@@ -175,11 +173,11 @@ class EventAdminTests(TestCase):
             'shifts-INITIAL_FORMS': 1
         }
         response = self.client.post(reverse('admin:society_event_change', args=(e.id,)), event_data, follow=True)
-        self.assertTrue(response.status_code, 200)
+        self.assertTrue(response.status_code, self.HTTP_OK)
         self.assertEqual(Event.objects.get(pk=e.id).hours, event_data['shifts-0-hours'])
 
 
-class EventLoggedOutTests(TestCase):
+class EventLoggedOutTests(SPFTestMixin, TestCase):
     def test_cannot_access_logged_out(self):
         """
         Verify that endpoints cannot be accessed while logged out.
@@ -194,6 +192,6 @@ class EventLoggedOutTests(TestCase):
                 # Better way to try views with a single parameter?
                 response = self.client.get(reverse(view.name, args=[1]))
             self.assertEqual(response.status_code,
-                             302,
+                             self.HTTP_FOUND,
                              "Did not receive expected HTTP UNAUTHORIZED")
             self.assertTrue("/accounts/login" in response.url)

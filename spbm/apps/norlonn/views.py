@@ -1,9 +1,10 @@
 from decimal import Decimal
 
+from django.contrib import messages as msg
 from django.contrib.auth.decorators import login_required, permission_required
+from django.db import transaction, IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from spbm.helpers.auth import user_society
@@ -35,7 +36,7 @@ def index(request):
 
 
 @login_required
-@permission_required('norlonn.generate_report')
+@permission_required('norlonn.generate_report', raise_exception=True)
 def generate_report(request):
     if request.method != "POST":
         return redirect(index)
@@ -43,15 +44,11 @@ def generate_report(request):
     errors = []
     succ = []
     shifts = Shift.objects.filter(norlonn_report__isnull=True, event__processed__isnull=False)
+    shifts_to_payroll = []
 
     if not shifts.exists():
-        return HttpResponse(_("Nothing to generate!"))
-
-    if NorlonnReport.objects.filter(date=timezone.now()).exists():
-        return HttpResponse(_("Already exists!"))
-
-    report = NorlonnReport(date=timezone.now())
-    report.save()
+        msg.error(request, _("No shifts to generate a payroll report for."))
+        return redirect('wages')
 
     for s in shifts:
         if s.worker.norlonn_number is None:
@@ -63,19 +60,34 @@ def generate_report(request):
             continue
 
         succ.append(_("OK: %s - %s" % (s.worker, s.event)))
-        s.norlonn_report = report
-        s.save()
+        shifts_to_payroll.append(s)
 
-    if len(succ) == 0:
-        report.delete()
-        return HttpResponse(_("Nothing to generate!"))
+    if not shifts_to_payroll:
+        msg.error(request, _("There are no valid shifts that can be added to the payroll report."))
+        return redirect('wages')
+    else:
+        try:
+            with transaction.atomic():
+                report = NorlonnReport()
+                report.save()
+        except IntegrityError:
+            msg.error(request, _("A payroll already exists for the given date."))
+            return redirect('wages')
+        except Exception as e:
+            raise e
+        else:
+            for shift in shifts_to_payroll:
+                with transaction.atomic():
+                    shift.norlonn_report = report
+                    shift.save()
+            msg.success(request, _("Payroll successfully generated! You may now export it to the wage system."))
 
     return render(request, 'norlonn/report.jinja', {'errors': errors, 'success': succ})
 
 
 @login_required
-@permission_required('norlonn.view_report')
-def get_report(request, date):
+@permission_required('norlonn.export_report', raise_exception=True)
+def export_report(request, date):
     nr = get_object_or_404(NorlonnReport, date=date)
     linjer = []
     personshift = {}

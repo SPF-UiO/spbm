@@ -41,7 +41,7 @@ invoicing_urls = [
 wages_urls = [
     path('', wages.index, name="wages"),
     path('generate/', wages.generate_report, name="wages-generate_report"),
-    path('export/<str:date>/', wages.get_report, name="wages-report"),
+    path('export/<str:date>/', wages.export_report, name="wages-export_report"),
 ]
 
 urlpatterns = [
