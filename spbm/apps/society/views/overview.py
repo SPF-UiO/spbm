@@ -36,6 +36,10 @@ class Overview(LoginRequiredMixin, TemplateView):
         # Get the invoices, but make sure it's not empty -- if we're getting the last one we need there to be something
         invoices = Invoice.objects.all().order_by('-period')
         last_period = invoices[0] if len(invoices) != 0 else None
+        if last_period:
+            kpi_start = invoices[0].period
+        else:
+            kpi_start = _("start")
 
         # FIXME: society invoices are currently not in use
         society_invoices = invoices.filter(society=user_society(self.request))
@@ -64,19 +68,19 @@ class Overview(LoginRequiredMixin, TemplateView):
             {'title': _("Events"),
              'kpi': events_this_period.count(),
              'change': change(events_last_period.count(), events_this_period.count()),
-             'time': _("last period"),
+             'time': kpi_start,
              'url': reverse('events')},
 
             {'title': _("Wages"),
              'kpi': wages_this_period,
              'change': change(wages_last_period, wages_this_period),
-             'time': _("last period"),
+             'time': kpi_start,
              'url': reverse('wages')},
 
             {'title': _("Workers"),
              'kpi': workers_this_period,
              'change': change(workers_last_period, workers_this_period),
-             'time': _("last period"),
+             'time': kpi_start,
              'url': reverse('workers')},
         ])
 
