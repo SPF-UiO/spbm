@@ -41,9 +41,6 @@ class Overview(LoginRequiredMixin, TemplateView):
         else:
             kpi_start = _("start")
 
-        # FIXME: society invoices are currently not in use
-        society_invoices = invoices.filter(society=user_society(self.request))
-
         events = Event.objects.all().select_related('shifts__worker')
         events_last_period = events.filter(invoice=last_period)
         events_this_period = events.filter(invoice=None)
@@ -55,12 +52,8 @@ class Overview(LoginRequiredMixin, TemplateView):
                              .aggregate(wages=Sum(F('shifts__hours') * F('shifts__wage'),
                                                   output_field=models.DecimalField(decimal_places=2))))['wages']
 
-        # workers_this_period = (events.filter(invoice=last_period).select_related('shifts__worker')
-        #                        .distinct('shifts__worker')).count()
         workers_this_period = (events_this_period
                                .values('shifts__worker')).annotate(shifts=Min('shifts__worker')).count()
-        # workers_last_period = (events.filter(invoice=last_period).select_related('shifts__worker')
-        #                        .distinct('shifts__worker')).count()
         workers_last_period = (events_last_period
                                .values('shifts__worker')).annotate(shifts=Min('shifts__worker')).count()
 
