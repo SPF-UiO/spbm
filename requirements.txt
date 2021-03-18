@@ -1,5 +1,5 @@
 # Main framework
-Django==2.2.13
+Django==2.2.18
 django-debug-toolbar==1.9.1
 
 # Jinja2 improved translation tags & i18n
