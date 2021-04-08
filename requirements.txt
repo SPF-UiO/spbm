@@ -4,7 +4,7 @@ django-debug-toolbar==1.9.1
 
 # Jinja2 improved translation tags & i18n
 django-jinja==2.4.1
-jinja2==2.11.1
+jinja2==2.11.3
 puente==0.5
 markupsafe==1.1.1
 pytz==2018.04
