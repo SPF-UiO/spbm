@@ -25,6 +25,7 @@ import ast
 
 # We need the default extensions
 from django_jinja.builtins import DEFAULT_EXTENSIONS
+from django.conf import settings
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -55,9 +56,10 @@ SECRET_KEY = os.environ.get("SPBM_SECRET_KEY", default='s_#vkn6zj^713q2x37dajjp4
 DEBUG_TOOLBAR_CONFIG = {
     # Per the source this only checks for REMOTE_ADDR matching INTERNAL_IPS,
     # followed by checking DEBUG. As we want to ignore the IPS and show it if
-    # DEBUG is enabled, we replace it with the value of DEBUG.
+    # DEBUG is enabled, we replace it with the value of settings.DEBUG.
+    # By using settings.DEBUG this works with testserver which falsifies settings.DEBUG.
     # https://github.com/recamshak/django-debug-panel/blob/master/debug_panel/middleware.py#L15
-    "SHOW_TOOLBAR_CALLBACK": lambda _: bool(DEBUG)
+    "SHOW_TOOLBAR_CALLBACK": lambda _: settings.DEBUG
 }
 
 # SECURITY WARNING: Prevents other hosts from making unsafe requests.
