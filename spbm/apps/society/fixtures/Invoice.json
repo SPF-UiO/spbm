@@ -18,5 +18,15 @@
       "period": "2016-07-17",
       "paid": false
     }
+  },
+  {
+    "model": "society.invoice",
+    "pk": 3,
+    "fields": {
+      "society": 2,
+      "invoice_number": 3,
+      "period": "2016-07-17",
+      "paid": true
+    }
   }
 ]
