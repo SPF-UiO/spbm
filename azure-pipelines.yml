@@ -142,7 +142,8 @@ stages:
             displayName: "Notify Code Climate"
 
           - script: |
-              curl -Ls -o codacy-coverage-reporter "https://dl.bintray.com/codacy/Binaries/7.0.1/codacy-coverage-reporter-linux"
+              LATEST_VERSION="$(curl -Ls https://artifacts.codacy.com/bin/codacy-coverage-reporter/latest)"
+              curl -Ls -o codacy-coverage-reporter "https://artifacts.codacy.com/bin/codacy-coverage-reporter/${LATEST_VERSION}/codacy-coverage-reporter-linux"
               chmod +x codacy-coverage-reporter
               ./codacy-coverage-reporter report -l Python -r coverage.xml
             env:
